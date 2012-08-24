@@ -1,0 +1,254 @@
+#! /bin/tcsh
+
+# Author: Tom Weiss
+#
+# The shortcut I use to launch tcsh.
+# C:\cygwin\bin\rxvt.exe -display :0 -fn "Lucida Console-14" -sl 512 -geometry 235x50+0+320 -bg black -fg green -cr red -tn rxvt-cygwin-native -e /usr/bin/tcsh
+#
+
+############
+# My PATHs #
+############
+
+# A note about Window's paths that contain spaces.  I've found that if a path contains spaces,
+# I can use it just fine by escaping the space (example below).  However, there seem to be problems
+# with this if you want the cmd.exe to properly inherit the path if cmd.exe is launched from tcsh.
+# In those cases, the spaces seem to get replaced with semicolons.  To combat this, I've turned to
+# the strategy of replacing such paths with their equivalent 8.3 name.  This can be found by doing
+# dir /x in the cmd.exe.  
+
+# Example:  set path = ($path /cygdrive/c/Program\ Files)
+# Normal example:  set path = ($path /usr/bin)
+set path = .
+set path = ($path /cygdrive/c/python26)
+set path = ($path /cygdrive/c/cygwin/usr/bin)
+set path = ($path /cygdrive/c/cygwin/bin)
+set path = ($path /cygdrive/c/cygwin/usr/X11R6/bin)
+set path = ($path /cygdrive/c/tt/bin)
+set path = ($path /cygdrive/c/tt/ttm)
+set path = ($path /cygdrive/c/Progra~1/process_monitor)
+set path = ($path /cygdrive/c/Progra~2/doxygen/bin)
+set path = ($path /cygdrive/c/Progra~1/MKS-2009/IntegrityClient/bin)
+set path = ($path /cygdrive/c/Progra~2/MKS/IntegrityClient/bin)
+set path = ($path /cygdrive/c/Progra~1/Wireshark)
+set path = ($path /cygdrive/c/Progra~1/MICROS~4/Common/Tools) # C:\Program Files\Microsoft Visual Studio\Common\Tools
+set path = ($path /cygdrive/c/Progra~1/MICROS~2.NET/Common7/IDE)  # C:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE
+set path = ($path /cygdrive/c/Progra~1/MID05A~1/Common7/IDE)  # C:\Program Files\Microsoft Visual Studio 8\Common7\IDE
+set path = ($path /cygdrive/c/Progra~1/ELECTR~1/ElectricCommander/bin)
+set path = ($path /cygdrive/c/WINDOWS/system32)
+set path = ($path /cygdrive/c/WINDOWS/system32/Wbem)
+set path = ($path /cygdrive/t/Development/All/fix_server/sysinternals)
+set path = ($path /cygdrive/t/Development/All/fix_server/scripts)
+set path = ($path /cygdrive/c/Progra~2/Git/bin)
+
+set PYTHONPATH = t:/Development/CoreBuilds/Tools/Scripts
+
+# If TZ is set, then any non-cygwin program launched from cygwin will have an incorrect time
+# if mscrt*.dll is used.  That means Visual Studio, python, etc.  In VS, it's bad since the
+# compile time stamps can get set to the future and cause rebuilds.
+unsetenv TZ
+
+
+# My CYGWIN environment variable is set in Windows because it needs to be read before
+# this file is sourced.
+# setenv CYGWIN 'nodosfilewarning tty'
+
+set	noclobber
+set     autolist
+unset	autologout		#so that tcsh does not log out automatically
+set	prompt = "$HOST %~\n% "
+
+set filec
+set nobeep
+set notify
+setenv LANG C
+umask 2
+set SHELL = "/usr/bin/tcsh"
+
+############
+# My alias'#
+############
+alias rw $HOME/archives/scripts/sh/setxtitle.sh
+alias find /usr/bin/find
+alias ff '/usr/bin/find . -type f -name TAGS -o -name "*.log" -o -name "*.idb" -o -name "*.pch" -o -name "*.sbr" -o -name "*.ipch" -o -name "*.zip" -o -name "*.xml" -o -name "*.exe" -o -name "*.dll" -o -name "*.manifest" -o -name "*.csv" -o -name "*.ilk" -o -name "*.bsc" -o -name "*.map" -o -name "*.sdf" -o -name "*.vsd" -o -name "*.lib" -o -name "*.obj" -o -name "*.pdb" -o -path "*/misc/xerces" -prune -o -path "*/misc/boost" -prune -o -path "*/misc/xmlhelp" -prune -o -path "*/misc/ace" -prune -o -path "*/misc/cppunit" -prune -o -path "*/misc/performance_logger" -prune -o -path "*/misc/pfx" -prune -o -path "*/misc/unittestframework" -prune -o -print0 | xargs -0 grep -nHi -e '
+
+# Visual Studio doesn't like if I copy exe's and then open them
+# in the debugger with a newer timestamp.
+alias examples 'cat ~/development/dev.examples.txt'
+alias cp 'cp -p'
+alias kgw '/usr/bin/ruby T:/Development/All/fix_server/scripts/kill-all-gws.rb -v '
+alias ltt '~/archives/scripts/batch/launchtt.bat &'
+alias logtt 'pushd c:/tt/logfiles'
+alias eltt 'c:/cygwin/bin/emacs -nw ~/archives/scripts/batch/launchtt.bat'
+
+
+alias ping 'c:/Windows/system32/ping.exe'
+alias perms 'chmod a+rwx c:/tt/config/ICE_IPE-Hhostinfo.cfg'
+alias cptt '~/archives/scripts/sh/cptt.sh'
+alias srtt 'c:/WINDOWS/system32/sc.exe query | grep TT | grep DISPLAY_NAME | grep -v HTTP'
+alias starttt 'python T:/Development/All/fix_server/scripts/start-tt-services.py -v'
+alias stoptt 'python T:/Development/All/fix_server/scripts/stop-tt-services.py -v'
+alias cleantt '/usr/bin/ruby T:/Development/All/fix_server/scripts/clean-tt-datfiles.rb -v'
+alias relay 'echo "start C:\\tt\\bin\CME-HFillServer.exe l2c NOSVC";echo "start gw\\tt_relay\7.0\dev\debug\RelayPriceServer.exe l2c NOSVC -e CME-H";echo "start gw\\tt_relay\7.0\dev\debug\RelayOrderServer.exe l2c NOSVC -e CME-H";echo "";echo "start C:\\tt\\bin\\eCBOT-HFillServer.exe l2c NOSVC";echo "start gw\\tt_relay\7.0\dev\debug\RelayPriceServer.exe l2c NOSVC -e eCBOT-H";echo "start gw\\tt_relay\7.0\dev\debug\RelayOrderServer.exe l2c NOSVC -e eCBOT-H"'
+alias vsbtec 'btecLauncher.cmd'
+alias vstocom 'tocomLauncher.cmd'
+alias vsose 'oseLauncher.cmd'
+alias vssgx 'sgxLauncher.cmd'
+alias vscore 'EverythingLauncher.cmd'
+alias vspulse 'pulseLauncher.cmd'
+alias fetch 'python T:/Development/Tools/fetch.py -b'
+alias wiz 'python c:/tt-dev/wiz_sandbox/dev/ec/wiz.py '
+alias sywiz 'si resync -R -S c:/tt-dev/wiz_sandbox/main.pj'
+alias sqehome 'pushd T:/SQE/Users/Tom_Weiss'
+alias drop 'python T:/Development/Tools/drop.py -v '
+alias driver 'python T:/Development/CoreBuilds/Tools/Scripts/driver.py -v '
+alias lsproj 'python T:/Development/CoreBuilds/Tools/Scripts/lsproj.py -f '
+# alias lsproj 'echo TEMPORARY TEST; python c:/tt-dev/scripts/lsproj.py -f '
+alias lsbldcfg 'python T:/Development/CoreBuilds/Tools/Scripts/lsbldcfg.py'
+# alias lsbldcfg 'echo BETA VERSION; python c:/tt-dev/scripts/lsbldcfg.py'
+alias lspkg 'python T:/Development/CoreBuilds/Tools/Scripts/lspkg.py '
+alias lsbc 'python c:/tt-dev/scripts/lsbldcfg.py '
+alias bhh 'python T:/Development/CoreBuilds/Tools/Scripts/bhh.py -v '
+# alias bhh 'python c:/tt-dev/scripts/bhh.py -v '
+alias coxsb 'python T:/Development/CoreBuilds/Tools/Scripts/coxsb.beta.py -v '
+alias fco 'python T:/Development/CoreBuilds/Tools/Scripts/fco.py -v '
+alias pcr 'im viewissue --showChangePackages \!:1 | grep -e "Type\|Summary\|ID\|State\|Assigned User\|Target Version\|Version Fixed\|Relationship\|Ported" | grep -v "Notes Reference" | grep -v "Notes Included"'
+alias mks 'python c:/tt-dev/scripts/mks.py '
+
+alias btecl 'python T:/Development/CoreBuilds/Tools/Scripts/lsproj.py btec_common-7.\!:1;python T:/Development/CoreBuilds/Tools/Scripts/lsproj.py btec_os-7.\!:1;python T:/Development/CoreBuilds/Tools/Scripts/lsproj.py btec_ps-7.\!:1'
+alias tocoml 'python T:/Development/CoreBuilds/Tools/Scripts/lsproj.py tocom_common-7.\!:1;python T:/Development/CoreBuilds/Tools/Scripts/lsproj.py tocom_os-7.\!:1;python T:/Development/CoreBuilds/Tools/Scripts/lsproj.py tocom_ps-7.\!:1'
+alias sgxl 'python T:/Development/CoreBuilds/Tools/Scripts/lsproj.py sgx_common-7.\!:1;python T:/Development/CoreBuilds/Tools/Scripts/lsproj.py sgx_os-7.\!:1;python T:/Development/CoreBuilds/Tools/Scripts/lsproj.py sgx_ps-7.\!:1'
+alias osel 'python T:/Development/CoreBuilds/Tools/Scripts/lsproj.py ose_common-7.\!:1;python T:/Development/CoreBuilds/Tools/Scripts/lsproj.py ose_os-7.\!:1;python T:/Development/CoreBuilds/Tools/Scripts/lsproj.py ose_ps-7.\!:1'
+
+
+
+alias bounce 'python T:/Development/All/fix_server/scripts/bounce.py -v'
+alias hog "pslist.exe | cut -d' ' -f 1 | handle.exe > ./hog.txt; emacs -nw ./hog.txt"
+# alias edhi 'c:/cygwin/bin/emacs -nw `python h:/archives/scripts/python/cfg_help.py | xargs cygpath`'
+alias edhi 'emacs -nw `python t:/SQE/scripts/tt_cfg_file.py hostinfo \!:1`'
+alias esimcfg 'c:/cygwin/bin/emacs -nw c:/pyrate_exes/SimHostInfo.cfg'
+alias dgr 'python c:/tt-dev/scripts/os_rules_report.py -v '
+alias apitstlogin 'gw/ose/7.14/dev/omex/19.3-0500/omn/apisamples/bin/APITSTLogin.exe'
+alias gen_doc 'python T:/Development/CoreBuilds/Tools/Scripts/generate_documentation.py --local '
+
+alias tltt '/bin/ls -tr c:/tt/logfiles/TT*.log | tail -1 | xargs tail -f'
+alias edtt 'c:/cygwin/bin/emacs -nw `/bin/ls -tr c:/tt/logfiles/TT*.log | tail -1 | xargs cygpath`'
+# Good for FIX: alias tlsr '/bin/ls -tr c:/tt/logfiles/*_Send-Recv_* | tail -1 | xargs tail -f | sed "s/\x01/  /g"'  
+alias tlsr '/bin/ls -tr c:/tt/logfiles/*_Send-Recv_* | tail -1 | xargs -i tail -f {} | grep -v BI9'
+alias edsr 'c:/cygwin/bin/emacs -nw `/bin/ls -tr c:/tt/logfiles/*_Send-Recv_* | tail -1 | xargs cygpath`'
+
+
+alias tlord '/bin/ls -tr c:/tt/logfiles/*OrderServer* | tail -1 | xargs tail -f | grep --line-buffered -v "Sts::OnData"'
+alias edord 'c:/cygwin/bin/emacs -nw `/bin/ls -tr c:/tt/logfiles/*OrderServer* | tail -1 | xargs cygpath`'
+alias lsord '/bin/ls -tr c:/tt/logfiles/*OrderServer* | tail -1'
+alias rmord 'rm `/bin/ls -tr c:/tt/logfiles/*OrderServer* | tail -1`'
+
+alias tlprc '/bin/ls -tr c:/tt/logfiles/*PriceServer* | tail -1 | xargs tail -f'
+alias edprc 'c:/cygwin/bin/emacs -nw `/bin/ls -tr c:/tt/logfiles/*PriceServer* | tail -1 | xargs cygpath`'
+alias lsprc '/bin/ls -tr c:/tt/logfiles/*PriceServer* | tail -1'
+
+alias lssr '/bin/ls -tr c:/tt/logfiles/*_Send-Recv* | tail -1'
+
+alias tlpyr '/bin/ls -tr c:/tt/logfiles/*pyrate_* | tail -1 | xargs tail -f'
+alias edpyr 'c:/cygwin/bin/emacs -nw `/bin/ls -tr c:/tt/logfiles/*pyrate_* | tail -1 | xargs cygpath`'
+alias lspyr '/bin/ls -tr c:/tt/logfiles/*pyrate_* | tail -1'
+
+alias tlgsv '/bin/ls -tr c:/tt/logfiles/*GUARDSERVER* | tail -1 | xargs tail -f'
+alias edgsv 'c:/cygwin/bin/emacs -nw `/bin/ls -tr c:/tt/logfiles/*GUARDSERVER* | tail -1 | xargs cygpath`'
+alias lsgsv '/bin/ls -tr c:/tt/logfiles/*GUARDSERVER* | tail -1'
+
+alias tlval '/bin/ls -tr c:/tt/logfiles/*validator* | tail -1 | xargs tail -f'
+alias edval 'c:/cygwin/bin/emacs -nw `/bin/ls -tr c:/tt/logfiles/*validator* | tail -1 | xargs cygpath`'
+alias lsval '/bin/ls -tr c:/tt/logfiles/*validator* | tail -1'
+
+
+alias gg 'cat $HOME/gateway_env.txt'
+alias sg 'python c:/tt-dev/scripts/setgw.py -g '
+alias ou 'python c:/tt-dev/scripts/service_help.py -m start -s order'
+alias od 'python c:/tt-dev/scripts/service_help.py -m stop -s order'
+alias pu 'python c:/tt-dev/scripts/service_help.py -m start -s price'
+alias pd 'python c:/tt-dev/scripts/service_help.py -m stop -s price'
+alias fu 'python c:/tt-dev/scripts/service_help.py -m start -s fill'
+alias fd 'python c:/tt-dev/scripts/service_help.py -m stop -s fill'
+alias pofu 'python c:/tt-dev/scripts/service_help.py -m start -s price; python c:/tt-dev/scripts/service_help.py -m start -s fill; python c:/tt-dev/scripts/service_help.py -m start -s order'
+alias pofd 'python c:/tt-dev/scripts/service_help.py -m stop -s order; python c:/tt-dev/scripts/service_help.py -m stop -s price; python c:/tt-dev/scripts/service_help.py -m stop -s fill'
+alias odd 'python c:/tt-dev/scripts/order-server-down.py'
+alias add 'python T:/Development/All/fix_server/scripts/admin-delete.py '
+alias cd 'cd \!:1; c:/tt-dev/scripts/setxtitle.sh $cwd'
+
+alias h history
+alias hg 'history | grep '
+alias   ls      ls -aFC
+alias	.	pwd
+alias ct cleartool
+alias git 'c:/Progra~2/Git/bin/git.exe '
+
+alias fb 'si viewcp --noshowPropagationInfo --fields=member,location,revision \!:1 | sort | uniq'
+# si viewcp --noshowPropagationInfo --fields=variant,member,project,revision 144461:1 | sort | uniq
+# si viewhistory --gui --devpath BTEC_7.4 --project=/SAN/mks-si/data1/projectsource/gw/om_common/main/dev/common/common.pj trader_config.cpp
+#                                variant            project                                                                member
+# si viewhistory --rfilter=daterange::past:1:months --rfilter=labellike:BTEC\* --devpath BTEC_7.4 --project=/SAN/mks-si/data1/projectsource/gw/om_common/main/dev/orders/orders.pj order_transaction.cpp
+# si co --cpid=:none file
+# si ci --cpid=:none --branch or --nobranch 
+
+alias sinwho 'c:/SysInternals/PsLoggedon.exe \\\\sin-vm-sgx01;c:/SysInternals/PsLoggedon.exe \\\\sin-vm-sgx02;c:/SysInternals/PsLoggedon.exe \\\\sin-vm-sgx03;c:/SysInternals/PsLoggedon.exe \\\\sin-vm-sgx04;c:/SysInternals/PsLoggedon.exe \\\\sin-vm-sgx05;c:/SysInternals/PsLoggedon.exe \\\\sin-vm-sgx06;c:/SysInternals/PsLoggedon.exe \\\\sin-vm-sgx07;c:/SysInternals/PsLoggedon.exe \\\\sin-vm-sgx08;c:/SysInternals/PsLoggedon.exe \\\\sin-vm-sgx09;c:/SysInternals/PsLoggedon.exe \\\\sin-vm-sgx10'
+
+alias edrc 'c:/cygwin/bin/emacs -nw `/bin/ls -tr | tail -1`'
+alias tlrc 'tail -f `/bin/ls -tr | tail -1`'
+alias lsrc '/bin/ls -1tr | tail -1'
+alias ee 'c:/cygwin/bin/emacs -nw'
+alias eef 'c:/cygwin/bin/emacs -nw `/usr/bin/find . -name \!:1` '
+alias c 'c:/emacs-24.1/bin/emacsclientw.exe -n '
+alias cf 'c:/emacs-24.1/bin/emacsclientw.exe -n `/usr/bin/find . -name \!:1` &'
+alias split4emacs '/usr/bin/split --lines=1000000 -d \!:1 \!:1'
+alias xt 'xterm -fg green2 -bg black -ms white  -cr red -fn -adobe-courier-bold-r-normal--12-140-75-75-m-90-hp-roman8 -name harrier46 -geometry 138x55 &'
+alias xt-small 'xterm -fg green2 -bg black -cr red -fn -adobe-courier-bold-r-normal--12-140-75-75-m-90-hp-roman8 -geometry 90x25&'
+alias xt-hm 'xterm -fg green2 -bg black -cr red -fn -adobe-courier-bold-r-normal--12-140-75-75-m-90-hp-roman8 -geometry 135x25 &'
+alias kd "ps -eaf | grep defunct | grep -v grep | cut -d' ' -f4 | xargs kill -9"
+#alias checkin 'ct lsco -me -avobs -cview -s | xargs cleartool ci -nc'
+#alias clean-view 'ct lsprivate | grep -v 'src/core/test/pal' | xargs rm -rf';
+alias rmfills 'rm c:/tt/datfiles/*fills.tbl'
+
+set btec_version=7.16
+alias lcibtec 'setenv TT_BTEC_LABEL BTEC_OS-07.16.00.000;setenv TT_BTEC_VERSION ${btec_version};python T:/Development/CoreBuilds/Tools/Scripts/generate_documentation.py --local -p TT_BTEC_LABEL -r TT_BTEC_VERSION -f BTEC_OS -d gw/btec/${btec_version}/dev/doc/prod.doxygen.cfg'
+
+# Doesn't work due to the spaces.
+# alias edvsm 'c:/emacs-23.1/bin/emacsclientw.exe -n c:/Users/tweiss/Documents/Visual Studio 2010/Addins/VSMenu.cfg'
+
+alias peregrine 'chdir `python c:/tt-dev/scripts/peregrine.py \!:1`'
+alias peregrinep 'python c:/tt-dev/scripts/peregrine.py print'
+alias review 'cscript.exe T:/Development/All/mks-client-scripts/diffcp/diffcp.vbs'
+alias 7z 'c:/Progra~1/7-Zip/7z.exe'
+# Example of how to unset TZ on a per command basis.
+# alias clk 'set TZ_TMP=$TZ;unsetenv TZ;python c:/tt-dev/scripts/world_time.py;setenv TZ $TZ_TMP'
+alias clk 'python c:/tt-dev/scripts/world_time.py'
+
+alias ticket 'echo //chifs02/Group/GSS/CSC\ Log\ Files/\!:1;ls //chifs02/Group/GSS/CSC\ Log\ Files/\!:1;echo //sinfs01/logfiles/\!:1;ls //sinfs01/logfiles/\!:1;echo //ukmirror/Helpdesk/tickets/\!:1;ls //ukmirror/Helpdesk/tickets/\!:1'
+
+
+alias xmlvalidator 'T:/Development/All/GatewayRules/XmlValidator.exe '
+
+set history=400
+set savehist=400
+
+setenv EDITOR 'emacs -nw'
+setenv WINEDITOR 'emacs -nw'
+setenv FCEDIT 'emacs -nw'
+
+
+set terminal = `/usr/bin/tty`
+if ($terminal == "/dev/ttyS2") then
+  vt100
+  echo current terminal type is set to VT100
+endif
+
+# -f for files.
+echo "/home/tweiss1/.tcshrc sourced"
+if( -d c:/tt-dev/ ) then 
+    cd c:/tt-dev/
+else if( -d c:/development/ ) then
+    cd c:/development/
+else if( -d e:/ ) then
+    cd e:/
+endif
+
