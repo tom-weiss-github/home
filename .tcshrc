@@ -161,6 +161,8 @@ alias tlval '/bin/ls -tr c:/tt/logfiles/*validator* | tail -1 | xargs tail -f'
 alias edval 'c:/cygwin/bin/emacs -nw `/bin/ls -tr c:/tt/logfiles/*validator* | tail -1 | xargs cygpath`'
 alias lsval '/bin/ls -tr c:/tt/logfiles/*validator* | tail -1'
 
+alias tlttus '/bin/ls -tr c:/tt/logfiles/*UserSetupServer_20* | tail -1 | xargs tail -f'
+
 
 alias gg 'cat $HOME/gateway_env.txt'
 alias sg 'python c:/tt-dev/scripts/setgw.py -g '
