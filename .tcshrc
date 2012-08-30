@@ -110,7 +110,7 @@ alias lspkg 'python T:/Development/CoreBuilds/Tools/Scripts/lspkg.py '
 alias lsbc 'python c:/tt-dev/scripts/lsbldcfg.py '
 alias bhh 'python T:/Development/CoreBuilds/Tools/Scripts/bhh.py -v '
 # alias bhh 'python c:/tt-dev/scripts/bhh.py -v '
-alias coxsb 'python T:/Development/CoreBuilds/Tools/Scripts/coxsb.beta.py -v '
+alias coxsb 'python T:/Development/CoreBuilds/Tools/Scripts/coxsb.py -v '
 alias fco 'python T:/Development/CoreBuilds/Tools/Scripts/fco.py -v '
 alias pcr 'im viewissue --showChangePackages \!:1 | grep -e "Type\|Summary\|ID\|State\|Assigned User\|Target Version\|Version Fixed\|Relationship\|Ported" | grep -v "Notes Reference" | grep -v "Notes Included"'
 alias mks 'python c:/tt-dev/scripts/mks.py '
@@ -179,7 +179,7 @@ alias pofu 'python c:/tt-dev/scripts/service_help.py -m start -s price; python c
 alias pofd 'python c:/tt-dev/scripts/service_help.py -m stop -s order; python c:/tt-dev/scripts/service_help.py -m stop -s price; python c:/tt-dev/scripts/service_help.py -m stop -s fill'
 alias odd 'python c:/tt-dev/scripts/order-server-down.py'
 alias add 'python T:/Development/All/fix_server/scripts/admin-delete.py '
-alias cd 'cd \!:1; c:/tt-dev/scripts/setxtitle.sh $cwd'
+alias cd 'cd \!:1; c:/tt-dev/home/setxtitle.sh $cwd'
 
 alias h history
 alias hg 'history | grep '
