@@ -303,9 +303,10 @@
 ;; Esc-x yank-rectangle
 
 ;; Bookmark commands
-;; C-x r m set a bookmark at current cursor pos
-;; C-x r b jump to bookmark
-;; C-x r l list bookmarks
+;; Not sure why m, b, and l are the commands, so I call them make, bounce, and list to remember.
+;; C-x r m Make a bookmark at current cursor position.
+;; C-x r b Bounce to a bookmark.
+;; C-x r l List bookmarks.
 
 
 ;; Get help on some function
