@@ -153,6 +153,10 @@
 ;; topmost-intro - This seems to control indent inside a namespace, and
 ;; was producing 3 spaces, but I want 4, so I added one.
 
+;; Changes the default column width used when invoking fill-paragraph,
+;; bound to M-q.
+(setq-default fill-column 100)
+
 ;; c-set-style choices:
 ;; gnu, k&r, bsd, whitesmith, stroustrup, ellemtel, linux, python, java
 ;; If the indent is not working, go to the bad line, and do C-c C-o
