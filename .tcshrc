@@ -148,7 +148,7 @@ alias edprc 'c:/cygwin/bin/emacs -nw `/bin/ls -tr c:/tt/logfiles/*PriceServer* |
 alias lsprc '/bin/ls -tr c:/tt/logfiles/*PriceServer* | tail -1'
 
 alias tlfil '/bin/ls -tr c:/tt/logfiles/*FillServer* | tail -1 | xargs tail -f'
-alias edfil 'c:/cygwin/bin/emacs -nw `/bin/ls -tr c:/tt/logfiles/*OrderServer* | tail -1 | xargs cygpath`'
+alias edfil 'c:/cygwin/bin/emacs -nw `/bin/ls -tr c:/tt/logfiles/*FillServer* | tail -1 | xargs cygpath`'
 alias lsfil '/bin/ls -tr c:/tt/logfiles/*FillServer* | tail -1'
 
 alias lssr '/bin/ls -tr c:/tt/logfiles/*_Send-Recv* | tail -1'
