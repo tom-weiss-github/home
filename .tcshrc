@@ -213,7 +213,7 @@ alias xt-hm 'xterm -fg green2 -bg black -cr red -fn -adobe-courier-bold-r-normal
 alias kd "ps -eaf | grep defunct | grep -v grep | cut -d' ' -f4 | xargs kill -9"
 #alias checkin 'ct lsco -me -avobs -cview -s | xargs cleartool ci -nc'
 #alias clean-view 'ct lsprivate | grep -v 'src/core/test/pal' | xargs rm -rf';
-alias rmfills 'rm -v c:/tt/datfiles/*FillSource*_bof*;rm -v c:/tt/datfiles/*FillSource*_fills*;rm -v c:/tt/datfiles/*PositionByMGT*'
+alias rmfills 'rm -v c:/tt/datfiles/*_bof*;rm -v c:/tt/datfiles/*FillSource*_fills*;rm -v c:/tt/datfiles/*PositionByMGT*'
 
 set btec_version=7.16
 alias lcibtec 'setenv TT_BTEC_LABEL BTEC_OS-07.16.00.000;setenv TT_BTEC_VERSION ${btec_version};python T:/Development/CoreBuilds/Tools/Scripts/generate_documentation.py --local -p TT_BTEC_LABEL -r TT_BTEC_VERSION -f BTEC_OS -d gw/btec/${btec_version}/dev/doc/prod.doxygen.cfg'
