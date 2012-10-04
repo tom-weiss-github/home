@@ -184,6 +184,7 @@
        ;;(set-face-background 'zmacs-region "green") ; When selecting w/ mouse
        ;;(set-face-foreground 'emacs-region "black")
        ;;(set-face-font       'default      "*courier-bold-r*120-100-100*")
+       (set-face-font       'default      "Source Code Pro")
        (set-cursor-color "red")
        (set-mouse-color "green")
        (set-face-background (quote modeline) "thistle4")

@@ -15,6 +15,11 @@
 ;; NOTE:  I observe that if I do find-grep with a file open in the c:/emacs-21.3/bin directory, it seems
 ;; to use window's find and therefore not work.  Not sure why.
 
+;; Useful Commands in the Grep Window (which is in Compilation Mode):
+;; M-g n: Move and visit next error message or match.  I map to F9.
+;; M-g p: Move and visit prevous erroor message or match. 
+;; M-n: Move to next error message or match, but don't visit.
+;; M-p: Move to previous error message or match, but don't visit. 
 
 (load-file "~/.emacs.d/find-best-root.el")
 
