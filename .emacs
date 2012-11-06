@@ -343,4 +343,4 @@
 ;; set mark, move point, do M-x delete-rectangle (or kill-rectangle)
 ;; to paste, go to spot and do M-x yank-rectangle
 
-
+;; To remove ^M characters, use CTRL-Q CTRL-M to specify the ^M character.
