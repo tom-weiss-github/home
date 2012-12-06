@@ -1,0 +1,12 @@
+#! /bin/tcsh
+
+#
+# Author: Tom Weiss
+# RHEL .tcshrc
+#
+
+alias ee 'emacs -nw '
+alias ls 'ls -aFC'
+set prompt="$HOST %~\n% "
+
+setenv EDITOR 'emacs -nw'
