@@ -193,7 +193,7 @@
        (set-face-foreground 'default  "skyblue")
        ;;(set-face-background 'zmacs-region "green") ; When selecting w/ mouse
        ;;(set-face-foreground 'emacs-region "black")
-       (set-face-font       'default      "fixed")
+       (set-face-font       'default      my-os-dependent-font)
        (set-cursor-color "red")
        (set-mouse-color "green")
        (set-face-background (quote modeline) "thistle4")
