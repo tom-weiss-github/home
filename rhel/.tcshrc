@@ -9,6 +9,8 @@ umask 2
 alias ee 'emacs -nw '
 alias ls 'ls -aFC'
 set prompt="$HOST %~\n% "
+alias h history
+alias hg 'history | grep '
 
 setenv EDITOR 'emacs -nw'
 # ALTERNATE_EDITOR causes emacs to be opened if emacsclient is invoked and no instance is running.

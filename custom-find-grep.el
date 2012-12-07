@@ -23,7 +23,8 @@
 
 (load-file "~/.emacs.d/find-best-root.el")
 
-(setq find-program "c:/cygwin/bin/find.exe")
+(if (eq system-type 'windows-nt)
+    (progn (setq find-program "c:/cygwin/bin/find.exe")))
 
 
 ;; Load the grep-apply-setting function.
@@ -42,6 +43,19 @@ SYMBOL should be one of 'grep-command', 'grep-template',
 (grep-apply-setting 'grep-use-null-device nil)
 (grep-apply-setting 'grep-find-use-xargs t)
 
+;; Since this is going to traverse up to find the root of this source tree, I need to provide some 
+;; marker file to denote when the root is reached.  This file may be different on different platforms.
+(if (eq system-type 'windows-nt)
+    (progn (setq marker-file "manifest.json")   
+           (setq find-filters " -type f         -path \"*/misc/xerces\" -prune -o -path \"*/misc/boost\" -prune -o -path \"*/misc/xmlhelp\" -prune -o -path \"*/misc/ace\" -prune -o -path \"*/misc/cppunit\" -prune -o -path \"*/misc/performance_logger\" -prune -o -path \"*/misc/pfx\" -prune -o -path \"*/misc/unittestframework\" -prune -o \"(\" -not -name TAGS -and -not -regex \".*log\" -and -not -regex \".*idb\" -and -not -regex \".*pch\" -and -not -regex \".*sbr\" -and -not -regex \".*ipch\" -and -not -regex \".*zip\" -and -not -regex \".*xml\" -and -not -regex \".*exe\" -and -not -regex \".*dll\" -and -not -regex \".*manifest\" -and -not -regex \".*csv\" -and -not -regex \".*ilk\" -and -not -regex \".*bsc\" -and -not -regex \".*map\" -and -not -regex \".*sdf\" -and -not -regex \".*vsd\" -and -not -regex \".*lib\" -and -not -regex \".*obj\" -and -not -regex \".*pdb\" \")\"  -print0 | xargs -0 grep -nHi -e ")
+           ))
+
+(if (eq system-type 'gnu/linux)
+    (progn (setq marker-file "tweiss-marker-file.txt") 
+           (setq find-filters " -type f -path \"*/client.net\" -prune -o -path \"*/ext\" -prune -o \"(\" -not -name TAGS -and -not -regex \".*log\" -and -not -regex \".*jar\" -and -not -regex \".*pdf\" -and -not -regex \".*dll\" -and -not -regex \".*xml\" -and -not -regex \".*pdb\" -and -not -regex \".*ps1\" -and -not -regex \".*psm1\" -and -not -regex \".*vcproj\" -and -not -regex \".*vcxproj\" -and -not -regex \".*html\" -and -not -regex \".*swg\" -and -not -regex \".*py\" \")\"  -print0 | xargs -0 grep -nHi -e ")
+           ))
+
+
 
 
 ;; The -print0 in find causes it to put NULLs at the end of the file names (which helps with spaces in the names).  The -0 in
@@ -51,9 +65,9 @@ SYMBOL should be one of 'grep-command', 'grep-template',
 (defun fg ()
   "A custom find grep that dynamically sets the search path based on the buffer."
   (interactive)
-  (let ((fg-tt-filters " -type f         -path \"*/misc/xerces\" -prune -o -path \"*/misc/boost\" -prune -o -path \"*/misc/xmlhelp\" -prune -o -path \"*/misc/ace\" -prune -o -path \"*/misc/cppunit\" -prune -o -path \"*/misc/performance_logger\" -prune -o -path \"*/misc/pfx\" -prune -o -path \"*/misc/unittestframework\" -prune -o \"(\" -not -name TAGS -and -not -regex \".*log\" -and -not -regex \".*idb\" -and -not -regex \".*pch\" -and -not -regex \".*sbr\" -and -not -regex \".*ipch\" -and -not -regex \".*zip\" -and -not -regex \".*xml\" -and -not -regex \".*exe\" -and -not -regex \".*dll\" -and -not -regex \".*manifest\" -and -not -regex \".*csv\" -and -not -regex \".*ilk\" -and -not -regex \".*bsc\" -and -not -regex \".*map\" -and -not -regex \".*sdf\" -and -not -regex \".*vsd\" -and -not -regex \".*lib\" -and -not -regex \".*obj\" -and -not -regex \".*pdb\" \")\"  -print0 | xargs -0 grep -nHi -e " ))
+  (let ((fg-tt-filters find-filters ))
     (setq my-find-grep-command "find \"")
-    (setq my-find-grep-command (concat my-find-grep-command (find-best-root "manifest.json")))
+    (setq my-find-grep-command (concat my-find-grep-command (find-best-root marker-file)))
     (setq my-find-grep-command (concat my-find-grep-command "\""))
     (setq my-find-grep-command (concat my-find-grep-command fg-tt-filters))
     (grep-apply-setting 'grep-find-command my-find-grep-command)
