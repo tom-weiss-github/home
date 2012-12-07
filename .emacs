@@ -61,9 +61,9 @@
 ;; These are some packages which allow for cygwin paths in gnu emacs
 ;; and windows paths in cygwin emacs.  The cygwin-mount.el and 
 ;; windows-path.el must be in the $HOME/.emacs.d directory.
+(add-to-list 'load-path "~/.emacs.d")
 (if (eq system-type 'windows-nt)
-    (progn ((add-to-list 'load-path "~/.emacs.d")
-            (require 'windows-path)
+    (progn ((require 'windows-path)
             (windows-path-activate))))
 
 ;; Load the MKS commands.  The ~ is the %HOME%/$HOME
