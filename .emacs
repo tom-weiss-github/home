@@ -61,13 +61,16 @@
 ;; These are some packages which allow for cygwin paths in gnu emacs
 ;; and windows paths in cygwin emacs.  The cygwin-mount.el and 
 ;; windows-path.el must be in the $HOME/.emacs.d directory.
-(add-to-list 'load-path "~/.emacs.d")
-(require 'windows-path)
-(windows-path-activate)
+(if (eq system-type "windows-nt")
+    (progn ((add-to-list 'load-path "~/.emacs.d")
+            (require 'windows-path)
+            (windows-path-activate))))
 
 ;; Load the MKS commands.  The ~ is the %HOME%/$HOME
 ;; environment variable (available via (getenv "HOME")).
-(load-file "~/.emacs.d/mks-commands.el")
+(if (eq system-type "windows-nt")
+    (progn((load-file "~/.emacs.d/mks-commands.el"))))
+
 
 ;; Customizing ask-user-about-supersession-threat because whenever
 ;; I check out a file, my function changes it to writable and this
@@ -178,13 +181,19 @@
 
 (setq inhibit-splash-screen t)
 
+;; The following command is useful to execute (C-x C-e) inside the
+;; scratch buffer to list all the available fonts.
+;; (insert (prin1-to-string (x-list-fonts "*")))
+(setq my-os-dependent-font (if (eq system-type "windows-nt")
+                               "Source Code Pro"
+                             "-misc-fixed-medium-r-normal--25-*-75-75-c-90-iso8859-1" ))
+
 (cond (window-system
        (set-face-background 'default "black")
        (set-face-foreground 'default  "skyblue")
        ;;(set-face-background 'zmacs-region "green") ; When selecting w/ mouse
        ;;(set-face-foreground 'emacs-region "black")
-       ;;(set-face-font       'default      "*courier-bold-r*120-100-100*")
-       (set-face-font       'default      "Source Code Pro")
+       (set-face-font       'default      my-os-dependent-font)
        (set-cursor-color "red")
        (set-mouse-color "green")
        (set-face-background (quote modeline) "thistle4")
