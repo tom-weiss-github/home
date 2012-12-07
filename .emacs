@@ -61,15 +61,16 @@
 ;; These are some packages which allow for cygwin paths in gnu emacs
 ;; and windows paths in cygwin emacs.  The cygwin-mount.el and 
 ;; windows-path.el must be in the $HOME/.emacs.d directory.
-(add-to-list 'load-path "~/.emacs.d")
+
 (if (eq system-type 'windows-nt)
-    (progn ((require 'windows-path)
-            (windows-path-activate))))
+    (progn (add-to-list 'load-path "~/.emacs.d")
+           (require 'windows-path)
+           (windows-path-activate)))
 
 ;; Load the MKS commands.  The ~ is the %HOME%/$HOME
 ;; environment variable (available via (getenv "HOME")).
 (if (eq system-type 'windows-nt)
-    (progn((load-file "~/.emacs.d/mks-commands.el"))))
+    (progn (load-file "~/.emacs.d/mks-commands.el")))
 
 
 ;; Customizing ask-user-about-supersession-threat because whenever
