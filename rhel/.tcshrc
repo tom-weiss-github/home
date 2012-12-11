@@ -7,10 +7,15 @@
 
 umask 2
 alias ee 'emacs -nw '
+alias c 'emacsclient -n '
 alias ls 'ls -aFC'
 set prompt="$HOST %~\n% "
 alias h history
 alias hg 'history | grep '
+alias rw ~/githome/setxtitle.sh
+
+set history=400
+set savehist=400
 
 setenv EDITOR 'emacs -nw'
 # ALTERNATE_EDITOR causes emacs to be opened if emacsclient is invoked and no instance is running.
@@ -24,4 +29,4 @@ setenv CPLUS_INCLUDE_PATH /opt/gcc-4.7.0/include:/opt/gcc-4.7.0/include/c++/gcc-
 setenv LD_LIBRARY_PATH /opt/gcc-4.7.0/lib:/opt/gcc-4.7.0/lib64:/opt/gcc-4.7.0/libexec:/tmp/product:/tmp/updates:/lib64:/usr/lib64:/lib:/usr/lib:/tmp/DD/lib64:/tmp/DD/usr/lib64:/tmp/DD/lib:/tmp/DD/usr/lib
 setenv LD_LIBRARY_PATH /home/debesys/dev-root/debesys/ext/linux/x86-64/release/lib:/home/debesys/dev-root/debesys/build/x86-64/debug/lib:$LD_LIBRARY_PATH
 
-
+setenv LBM_LICENSE_FILENAME ~/29WestLicense.txt
