@@ -1,7 +1,7 @@
+#!/bin/bash
+
 # Author: Ulf Stegemann
 # Modified by Tom Weiss
-
-#!/bin/bash
   
 # test args
 if [ ! ${#} -ge 3 ]; then
