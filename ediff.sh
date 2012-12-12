@@ -35,7 +35,8 @@ fi
 
 # run emacsclient
 # ${_EMACSCLIENT} ${_EMACSCLIENTOPTS} -a "" -e "(${_EVAL})" 2>&1
-${_EMACSCLIENT} -c -e "(${_EVAL})" 2>&1
+${_EMACSCLIENT} -t -e "(${_EVAL})" 2>&1
+
 
 # check modified file
 if [ ! $(egrep -c '^(<<<<<<<|=======|>>>>>>>|####### Ancestor)' ${_MERGED}) = 0 ]; then
