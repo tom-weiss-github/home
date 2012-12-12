@@ -33,9 +33,11 @@ else
     _EVAL="${_EDIFF} \"${_LOCAL}\" \"${_REMOTE}\" nil \"${_MERGED}\""
 fi
 
+# -c opens a new emacs, -t instead opens in the console, but I found
+# that if I open in the console the buffers also appear in the instance
+# of the emacs running with the server enabled, which I didn't like.
 # run emacsclient
-# ${_EMACSCLIENT} ${_EMACSCLIENTOPTS} -a "" -e "(${_EVAL})" 2>&1
-${_EMACSCLIENT} -t -e "(${_EVAL})" 2>&1
+${_EMACSCLIENT} -c -e "(${_EVAL})" 2>&1
 
 
 # check modified file
