@@ -220,6 +220,7 @@
 ;; inl file should be c++ code
 (setq auto-mode-alist (cons '("\\.inl$" . c++-mode) auto-mode-alist))
 
+(setq ediff-split-window-function 'split-window-horizontally)
 
 ;; Turn on colors by default.  To toggle colors for a specific 
 ;; buffer, do M-x font-lock-mode.
