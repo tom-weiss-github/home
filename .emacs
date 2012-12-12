@@ -44,6 +44,10 @@
 (menu-bar-mode 0)
 
 
+(defun close-all-buffers ()
+  (interactive)
+  (mapc 'kill-buffer (buffer-list)))
+
 ;; Remove the tool bar if not running inside a terminal.
 (if window-system
     (tool-bar-mode 0))

@@ -33,16 +33,9 @@ else
     _EVAL="${_EDIFF} \"${_LOCAL}\" \"${_REMOTE}\" nil \"${_MERGED}\""
 fi
 
-# console vs. X
-if [ "${TERM}" = "linux" ]; then
-    unset DISPLAY
-    _EMACSCLIENTOPTS="-t"
-else
-    _EMACSCLIENTOPTS="-c"
-fi
-
 # run emacsclient
-${_EMACSCLIENT} ${_EMACSCLIENTOPTS} -a "" -e "(${_EVAL})" 2>&1
+# ${_EMACSCLIENT} ${_EMACSCLIENTOPTS} -a "" -e "(${_EVAL})" 2>&1
+${_EMACSCLIENT} -c -e "(${_EVAL})" 2>&1
 
 # check modified file
 if [ ! $(egrep -c '^(<<<<<<<|=======|>>>>>>>|####### Ancestor)' ${_MERGED}) = 0 ]; then
