@@ -13,6 +13,9 @@ set prompt="$HOST %~\n% "
 alias h history
 alias hg 'history | grep '
 alias rw ~/githome/setxtitle.sh
+alias m 'make -C /home/debesys/dev-root/debesys '
+alias cf 'emacsclient -n `find . -name \!:1`'
+alias ff 'find . -type d -path "*/build" -prune -o -path "*/.git" -prune -o -path "*/ext" -prune -o -path "*/pycommon" -prune -o \( \! -iname "*.ico" -and \! -iname "*.cs" -and \! -iname "*.png" -and \! -iname "*.jar" -and \! -iname "*.pyc" -and \! -iname "*.o" -and \! -iname "*.d" \! -iname "*.a" \! -name "*.so" \! -iname "*.bin" \! -iname "*.sql" \! -iname "*.dat" \) -print0 | xargs -0 grep -iHn'
 
 set history=400
 set savehist=400

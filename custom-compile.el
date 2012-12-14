@@ -22,8 +22,6 @@
 ;; Possible Values: 'Debug', 'Release'
 (setq custom-compile-msbuild-configuration "Debug")
 
-(message (concat custom-compile-msbuild-target "ing") )
-
 (defun set-custom-compile-options (settings)
   (interactive "sEnter Custom Compile Settings (o|p|-  b|r|-  d|r|-): ")
   "Sets custom compile options. A dash keeps the existing value."
@@ -295,6 +293,28 @@ buffer, some user settings, and the source tree that the file lives in."
     )
 )
 ;; (gw-compile)
+
+
+(setq d-compile-target "all")
+(setq d-compile-command "make -C /home/debesys/dev-root/debesys ")
+
+(defun d-set-compile-target (target)
+ "Set the compile target."
+ (interactive "sEnter Target(s) or ENTER to view: ")
+ (if (string= "" target)
+     (message (concat "Target remains '" d-compile-target "'."))
+   (progn 
+     (setq d-compile-target target)
+     (message (concat "Target changed to '" d-compile-target "'."))))
+)
+
+(defun d-compile ()
+  "Compile using existing target."
+  (interactive)
+  (setq compile-command (concat d-compile-command d-compile-target))
+  (call-interactively 'compile)
+)
+
 
 
 

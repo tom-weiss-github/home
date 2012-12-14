@@ -104,8 +104,14 @@
 
 ;; Load my custom compile commands.
 (load-file "~/.emacs.d/custom-compile.el")
-(global-set-key (quote[f7]) (quote gw-compile))
-(global-set-key (quote[f8]) (quote set-custom-compile-options))
+(if (eq system-type 'gnu/linux)
+    (global-set-key (quote[f7]) (quote d-compile))
+  (global-set-key (quote[f7]) (quote gw-compile)))
+
+(if (eq system-type 'gnu/linux)
+    (global-set-key (quote[f8]) (quote d-set-compile-target))
+  (global-set-key (quote[f8]) (quote set-custom-compile-options)))
+
 (global-set-key (quote[f9]) (quote next-error))
 
 ;; Disable backup and autosave.  The motivation was false positives
