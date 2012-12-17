@@ -50,13 +50,15 @@ SYMBOL should be one of 'grep-command', 'grep-template',
            (setq find-filters " -type f         -path \"*/misc/xerces\" -prune -o -path \"*/misc/boost\" -prune -o -path \"*/misc/xmlhelp\" -prune -o -path \"*/misc/ace\" -prune -o -path \"*/misc/cppunit\" -prune -o -path \"*/misc/performance_logger\" -prune -o -path \"*/misc/pfx\" -prune -o -path \"*/misc/unittestframework\" -prune -o \"(\" -not -name TAGS -and -not -regex \".*log\" -and -not -regex \".*idb\" -and -not -regex \".*pch\" -and -not -regex \".*sbr\" -and -not -regex \".*ipch\" -and -not -regex \".*zip\" -and -not -regex \".*xml\" -and -not -regex \".*exe\" -and -not -regex \".*dll\" -and -not -regex \".*manifest\" -and -not -regex \".*csv\" -and -not -regex \".*ilk\" -and -not -regex \".*bsc\" -and -not -regex \".*map\" -and -not -regex \".*sdf\" -and -not -regex \".*vsd\" -and -not -regex \".*lib\" -and -not -regex \".*obj\" -and -not -regex \".*pdb\" \")\"  -print0 | xargs -0 grep -nHi -e ")
            ))
 
-(if (eq system-type 'gnu/linux)
+(if (eq system-type 'toberemoved)
     (progn (setq marker-file "tweiss-marker-file.txt") 
            (setq find-filters " -type f -path \"*/client.net\" -prune -o -path \"*/ext\" -prune -o \"(\" -not -name TAGS -and -not -regex \".*log\" -and -not -regex \".*jar\" -and -not -regex \".*pdf\" -and -not -regex \".*dll\" -and -not -regex \".*xml\" -and -not -regex \".*pdb\" -and -not -regex \".*ps1\" -and -not -regex \".*psm1\" -and -not -regex \".*vcproj\" -and -not -regex \".*vcxproj\" -and -not -regex \".*html\" -and -not -regex \".*swg\" -and -not -regex \".*py\" \")\"  -print0 | xargs -0 grep -nHi -e ")
            ))
 
-
-
+(if (eq system-type 'gnu/linux)
+    (progn (setq marker-file "tweiss-marker-file.txt") 
+           (setq find-filters " -type d -path \"*/build\" -prune -o -path \"*/.git\" -prune -o -path \"*/ext\" -prune -o -path \"*/pycommon\" -prune -o \"(\" \! -iname \"*.ico\" -and \! -iname \"*.cs\" -and \! -iname \"*.png\" -and \! -iname \"*.jar\" -and \! -iname \"*.pyc\" -and \! -iname \"*.o\" -and \! -iname \"*.d\" \! -iname \"*.a\" \! -name \"*.so\" \! -iname \"*.bin\" \! -iname \"*.sql\" \! -iname \"*.dat\" \")\" -print0 | xargs -0 grep -nHi -e ")
+           ))
 
 ;; The -print0 in find causes it to put NULLs at the end of the file names (which helps with spaces in the names).  The -0 in
 ;; xargs then uses the NULL instead of spaces.  This particular method solves a problem the previous two suffer from.  I noticed

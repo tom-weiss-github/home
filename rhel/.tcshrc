@@ -15,7 +15,16 @@ alias hg 'history | grep '
 alias rw ~/githome/setxtitle.sh
 alias m 'make -C /home/debesys/dev-root/debesys '
 alias cf 'emacsclient -n `find . -name \!:1`'
+alias f 'find . -name \!:1 -print'
 alias ff 'find . -type d -path "*/build" -prune -o -path "*/.git" -prune -o -path "*/ext" -prune -o -path "*/pycommon" -prune -o \( \! -iname "*.ico" -and \! -iname "*.cs" -and \! -iname "*.png" -and \! -iname "*.jar" -and \! -iname "*.pyc" -and \! -iname "*.o" -and \! -iname "*.d" \! -iname "*.a" \! -name "*.so" \! -iname "*.bin" \! -iname "*.sql" \! -iname "*.dat" \) -print0 | xargs -0 grep -iHn'
+
+alias tlsrh '/bin/ls -tr /volatile/logs/*_send_recv_* | tail -1 | xargs tail -f | sed -u "s/\x01/  /g"'
+alias tlsr '/bin/ls -tr /volatile/logs/*_send_recv_* | tail -1 | xargs tail -f | sed -u "s/\x01/  /g" | grep --line-buffered -v 35=0'
+
+alias toc 'sudo tail -f /var/log/messages'
+alias eoc 'sudo emacs -nw /var/log/messages'
+
+alias rmvol 'rm /volatile/logs/*'
 
 set history=400
 set savehist=400
