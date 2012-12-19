@@ -1,6 +1,6 @@
-;; 
-;; Custom Compile 
-;; 
+;;
+;; Custom Compile
+;;
 ;; Author:  Tom Weiss
 ;; email:   weiss@cs.wisc.edu
 ;;
@@ -31,7 +31,7 @@
              (config  (substring settings 2 3) ) )
         (progn
           (setq custom-compile-msbuild-project (cond ((string= "o" project) "order")
-                                                     ((string= "p" project) "price") 
+                                                     ((string= "p" project) "price")
                                                      (t custom-compile-msbuild-project) ) )
 
           (setq custom-compile-msbuild-target (cond ((string= "b" target) "Build")
@@ -45,7 +45,7 @@
           (message (concat custom-compile-msbuild-target "ing " custom-compile-msbuild-project " server " custom-compile-msbuild-configuration) )
           )
         )
-    (message (concat "Failed to set custom compile options, the input must be exactly 3 characters, received '" 
+    (message (concat "Failed to set custom compile options, the input must be exactly 3 characters, received '"
                      settings "', which is " (number-to-string (length settings)) ".") )
     )
 )
@@ -98,12 +98,12 @@ are specific to each source tree."
   (goto-char (point-min))
   (while (re-search-forward "\\(TT_.*\\)=" nil t)
     (replace-match "\"\\1\"=" nil nil))
-  ;; Previous version, just keeping it around for a while, this 
+  ;; Previous version, just keeping it around for a while, this
   ;; older version only kept the envs which ended in version,
   ;; but I learned I need all of them.
   ;; (while (re-search-forward "TT_.*_VERSION" nil t)
   ;;   (replace-match "\"\\&\"" nil nil))
-  
+
 
   (goto-char (point-min))
   (while (search-forward "=" nil t)
@@ -117,7 +117,7 @@ are specific to each source tree."
   (goto-char (point-min))
   (flush-lines ".*PRODVRM.*")
 
-  ;; I need the environment variables with paths to have 
+  ;; I need the environment variables with paths to have
   ;; double backslashes.
   (goto-char (point-min))
   (while (search-forward "\\" nil t)
@@ -142,7 +142,7 @@ are specific to each source tree."
 
 
 (defun eval-build-envs (lisp-env-full-path)
-  "This method sets environment variables which are contained in a 
+  "This method sets environment variables which are contained in a
 file.  These variables and their values are specific to each source
 tree root and must be set dynamically since the files from multiple
 source trees may be open at the same time and compilation should use
@@ -150,7 +150,7 @@ only the variables and values for that file's source tree."
   (setq the-buffer (create-file-buffer lisp-env-full-path))
   (switch-to-buffer-other-window the-buffer)
   (insert-file-contents lisp-env-full-path)
-  (setq my-current-buffer (current-buffer))  
+  (setq my-current-buffer (current-buffer))
 
   (eval-buffer nil)
 
@@ -159,7 +159,7 @@ only the variables and values for that file's source tree."
   ;; Great if you know the key stroke, but not the lisp function.
   (call-interactively 'other-window)            ;; C-x o
   (delete-other-windows)                        ;; C-x 1
-  
+
   (message (concat "Evaluated environment variables from " lisp-env-full-path))
 )
 ;; (eval-build-envs "h:/.emacs.d/SetEnv.lisp")
@@ -169,7 +169,7 @@ only the variables and values for that file's source tree."
 input."
   ;; Since I just set the SetEnv.lisp environment variables, I can use their
   ;; values to figure out what to build.
-  (let ( (vs-proj "") 
+  (let ( (vs-proj "")
          (gw-version "unset")
          (gw-name "unset")
          (gw-vcxproj "unset")
@@ -181,10 +181,10 @@ input."
     (setq vs-proj (concat vs-proj (getenv "TT_DEV_HOME")))
     (setq vs-proj (replace-regexp-in-string "\\\\" "/" vs-proj))
     (setq vs-proj (concat vs-proj "/gw"))
-    
+
     (if (not (equal btec-version nil))
         (progn
-          (setq gw-name "/btec") 
+          (setq gw-name "/btec")
           (setq gw-version btec-version)
           (if (string= "order" custom-compile-msbuild-project)
               (setq gw-vcxproj "btec_orders.vcxproj")
@@ -194,10 +194,10 @@ input."
             )
           )
       )
-      
+
     (if (not (equal ose-version nil))
         (progn
-          (setq gw-name "/ose") 
+          (setq gw-name "/ose")
           (setq gw-version ose-version)
           (if (string= "order" custom-compile-msbuild-project)
               (setq gw-vcxproj "ose_orders.vcxproj")
@@ -210,7 +210,7 @@ input."
 
     (if (not (equal sgx-version nil))
         (progn
-          (setq gw-name "/sgx") 
+          (setq gw-name "/sgx")
           (setq gw-version sgx-version)
           (if (string= "order" custom-compile-msbuild-project)
               (setq gw-vcxproj "sgx_orders.vcxproj")
@@ -220,10 +220,10 @@ input."
             )
           )
       )
-    
+
     (if (not (equal tocom-version nil))
         (progn
-          (setq gw-name "/tocom") 
+          (setq gw-name "/tocom")
           (setq gw-version tocom-version)
           (if (string= "order" custom-compile-msbuild-project)
               (setq gw-vcxproj "tocom_orders.vcxproj")
@@ -238,14 +238,14 @@ input."
     (setq vs-proj (concat vs-proj "/"))
     (setq vs-proj (concat vs-proj gw-version))
     (setq vs-proj (concat vs-proj "/dev"))
-    
+
     (if (string= "order" custom-compile-msbuild-project)
         (setq vs-proj (concat vs-proj "/orders"))
       )
     (if (string= "price" custom-compile-msbuild-project)
         (setq vs-proj (concat vs-proj "/prices"))
       )
-    
+
     (setq vs-proj (concat vs-proj "/"))
     (setq vs-proj (concat vs-proj gw-vcxproj))
 
@@ -295,7 +295,7 @@ buffer, some user settings, and the source tree that the file lives in."
 ;; (gw-compile)
 
 
-(setq d-compile-target "all")
+(setq d-compile-target "invalid")
 (setq d-compile-command "make -C /home/debesys/dev-root/debesys ")
 
 (defun d-set-compile-target (target)
@@ -303,7 +303,7 @@ buffer, some user settings, and the source tree that the file lives in."
  (interactive "sEnter Target(s) or ENTER to view: ")
  (if (string= "" target)
      (message (concat "Target remains '" d-compile-target "'."))
-   (progn 
+   (progn
      (setq d-compile-target target)
      (message (concat "Target changed to '" d-compile-target "'."))))
 )

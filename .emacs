@@ -4,7 +4,7 @@
 ;; This file is not part of GNU Emacs.
 
 ;; This forces emacs to save files in UNIX format.
-;;(global-set-key (quote[f5]) (set-buffer-file-coding-system (quote undecided-unix) nil)) 
+;;(global-set-key (quote[f5]) (set-buffer-file-coding-system (quote undecided-unix) nil))
 
 ;; Should force emacs to display line numbers.
 (line-number-mode 1)
@@ -24,10 +24,10 @@
 (global-set-key (quote[f12]) (quote set-foreground-color))
 
 ;; This might be a better way to change both colors with one button.
-;;(global-set-key [f9] 
-;;                '(lambda () 
-;;                   (interactive) 
-;;                   (set-background-color "white") 
+;;(global-set-key [f9]
+;;                '(lambda ()
+;;                   (interactive)
+;;                   (set-background-color "white")
 ;;                   (set-foreground-color "black")))
 
 ;; When emacs asks for "yes" or "no", let "y" or "n" sufficide
@@ -58,12 +58,38 @@
 ;; use tabs for indenting
 ;;(setq-default indent-tabs-mode t)
 
+(add-hook 'before-save-hook
+          'delete-trailing-whitespace)
+
+;; The lines-tail option highlights columns that go beyond
+;; the variable whitespace-line-column, whose default value
+;; is 80.  To also see trailing whitespace, do (lines-tail trailing).
+;; Setting the modes to c-mode and c++-mode means whitespace
+;; mode only takes effect in those buffers.
+;; Turned this off for now since too many lines exceed 80
+;; characters and no strict enforcement is in place.
+;; (require 'whitespace)
+;; (setq whitespace-style '(lines-tail))
+;; (global-whitespace-mode t)
+;; (setq whitespace-global-modes '(c-mode c++-mode))
+;; (defun my-c-mode-setup ()
+;;   (set-buffer-file-coding-system 'utf-8-unix nil 1)
+;;   (global-whitespace-mode t)
+;; )
+;;(add-hook 'c-mode-hook 'my-c-mode-setup)
+
+;; File Cache
+;; To be explored further.  Doing M-tab when opening
+;; a file will look in the cache.
+;; (file-cache-add-directory-recursively "directory")
+;; (file-cache-add-directory-recursively "some/path/")
+
 ;; auto-magic copyright updates
 (load-library "copyright")
 (add-hook 'write-file-hooks 'copyright-update)
 
 ;; These are some packages which allow for cygwin paths in gnu emacs
-;; and windows paths in cygwin emacs.  The cygwin-mount.el and 
+;; and windows paths in cygwin emacs.  The cygwin-mount.el and
 ;; windows-path.el must be in the $HOME/.emacs.d directory.
 (if (or (eq system-type 'windows-nt)
         (eq system-type 'cygwin) )
@@ -132,7 +158,7 @@
 ;; Dimensions & Position
 ;; =====================
 ;; Set the size of emacs on winnt (this should also be okay for solaris).
-;; These don't seem to work right with GNU Emacs 23.1, so I use the 
+;; These don't seem to work right with GNU Emacs 23.1, so I use the
 ;; below command to set the dimensions and position.
 ;;(set-frame-height (selected-frame) 80)
 ;;(set-frame-width (selected-frame)  100)
@@ -174,7 +200,7 @@
 ;; c-set-style choices:
 ;; gnu, k&r, bsd, whitesmith, stroustrup, ellemtel, linux, python, java
 ;; If the indent is not working, go to the bad line, and do C-c C-o
-;; this will say what is controlling the indent, and then it can be 
+;; this will say what is controlling the indent, and then it can be
 ;; changed above.
 
 ;; C-c C-s will display the syntactic information of a line.
@@ -221,14 +247,14 @@
 ;; on set-cursor-color, and then 'customize this face', which allowed me to set red ad
 ;; the background.  I found the below example and this seems to work.
 (custom-set-faces
- '(cursor ((t (:background "red" :width extra-expanded))))) 
+ '(cursor ((t (:background "red" :width extra-expanded)))))
 
 ;; inl file should be c++ code
 (setq auto-mode-alist (cons '("\\.inl$" . c++-mode) auto-mode-alist))
 
 (setq ediff-split-window-function 'split-window-horizontally)
 
-;; Turn on colors by default.  To toggle colors for a specific 
+;; Turn on colors by default.  To toggle colors for a specific
 ;; buffer, do M-x font-lock-mode.
 (require 'font-lock)
 
@@ -346,12 +372,12 @@
 ;; MessageType: J
 ;; MessageBodyLength: 52
 ;; MarketID: 197140
-;; 
+;;
 ;; sv_.*[0123456789]\{8\}.*
 ;; (Above was used to find log message helpers, starts with sv_, then an 8 digit number.)
 ;;
 ;; do M C-s  MessageType: JC-qC-jMessage.*C-qC-jMarketID: 197140
-;; The 'C-qC-j' part is the newline.                        
+;; The 'C-qC-j' part is the newline.
 ;; M-x replace-regexp --> regular expression search-replace.
 ;; example of regular expression search-replace:
 ;; M-x replace-regexp TEXT[ ]* <enter> ' = ' (that's space equals space)

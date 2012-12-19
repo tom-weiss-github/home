@@ -57,7 +57,7 @@ SYMBOL should be one of 'grep-command', 'grep-template',
 
 (if (eq system-type 'gnu/linux)
     (progn (setq marker-file "tweiss-marker-file.txt") 
-           (setq find-filters " -type d -path \"*/build\" -prune -o -path \"*/.git\" -prune -o -path \"*/ext\" -prune -o -path \"*/pycommon\" -prune -o \"(\" \! -iname \"*.ico\" -and \! -iname \"*.cs\" -and \! -iname \"*.png\" -and \! -iname \"*.jar\" -and \! -iname \"*.pyc\" -and \! -iname \"*.o\" -and \! -iname \"*.d\" \! -iname \"*.a\" \! -name \"*.so\" \! -iname \"*.bin\" \! -iname \"*.sql\" \! -iname \"*.dat\" \")\" -print0 | xargs -0 grep -nHi -e ")
+           (setq find-filters " -type d -path \"*/build\" -prune -o -path \"*/.git\" -prune -o -path \"*/ext\" -prune -o -path \"*/pycommon\" -prune -o \"(\" \! -iname \"*.ico\" -and \! -iname \"TAGS\" -and \! -iname \"*.cs\" -and \! -iname \"*.png\" -and \! -iname \"*.jar\" -and \! -iname \"*.pyc\" -and \! -iname \"*.o\" -and \! -iname \"*.d\" \! -iname \"*.a\" \! -iname \"*.so\" \! -iname \"*.bin\" \! -iname \"*.sql\" \! -iname \"*.dat\" \")\" -print0 | xargs -0 grep -nHi -e ")
            ))
 
 ;; The -print0 in find causes it to put NULLs at the end of the file names (which helps with spaces in the names).  The -0 in
