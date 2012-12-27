@@ -13,7 +13,10 @@ set prompt="$HOST %~\n% "
 alias h history
 alias hg 'history | grep '
 alias rw ~/githome/setxtitle.sh
-alias m 'make -C /home/debesys/dev-root/debesys '
+# I have a container of all source trees, dev-root, three levels under /.  The source trees
+# start four levels under /.  This alias will figure out which source tree I'm in based on
+# the current working directory (which must be somewhere inside one of the source trees).
+alias m 'make -C `pwd | cut -d "/" -f 1,2,3,4,5` '
 alias cf 'emacsclient -n `find . -name \!:1`'
 alias f 'find . -name \!:1 -print'
 alias ff 'find . -type d -path "*/build" -prune -o -path "*/.git" -prune -o -path "*/ext" -prune -o -path "*/pycommon" -prune -o \( \! -iname "*.ico" -and \! -iname "*.cs" -and \! -iname "*.png" -and \! -iname "*.jar" -and \! -iname "*.pyc" -and \! -iname "*.o" -and \! -iname "*.d" \! -iname "*.a" \! -name "*.so" \! -iname "*.bin" \! -iname "*.sql" \! -iname "*.dat" \) -print0 | xargs -0 grep -iHn'

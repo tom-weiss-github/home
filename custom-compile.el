@@ -296,7 +296,6 @@ buffer, some user settings, and the source tree that the file lives in."
 
 
 (setq d-compile-target "invalid")
-(setq d-compile-command "make -C /home/debesys/dev-root/debesys ")
 
 (defun d-set-compile-target (target)
  "Set the compile target."
@@ -311,8 +310,21 @@ buffer, some user settings, and the source tree that the file lives in."
 (defun d-compile ()
   "Compile using existing target."
   (interactive)
-  (setq compile-command (concat d-compile-command d-compile-target))
-  (call-interactively 'compile)
+  (setq d-marker-file "makefile")
+  (setq d-dev-root (find-best-root d-marker-file))
+  (setq d-marker-abs-path (concat d-dev-root d-marker-file))
+
+  (message d-marker-abs-path)
+
+  (if (file-exists-p d-marker-abs-path)
+      (progn
+        (setq d-compile-command "make -C ")
+        (setq d-compile-command (concat d-compile-command d-dev-root))
+        (setq compile-command (concat d-compile-command " " d-compile-target))
+        (call-interactively 'compile)
+        (message compile-command))
+    (message "I don't know how to compile this file.")
+    )
 )
 
 
