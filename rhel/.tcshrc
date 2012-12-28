@@ -42,6 +42,6 @@ setenv LIBRARY_PATH /opt/gcc-4.7.0/lib:/opt/gcc-4.7.0/lib64
 setenv C_INCLUDE_PATH /opt/gcc-4.7.0/include
 setenv CPLUS_INCLUDE_PATH /opt/gcc-4.7.0/include:/opt/gcc-4.7.0/include/c++/gcc-4.7.0
 setenv LD_LIBRARY_PATH /opt/gcc-4.7.0/lib:/opt/gcc-4.7.0/lib64:/opt/gcc-4.7.0/libexec:/tmp/product:/tmp/updates:/lib64:/usr/lib64:/lib:/usr/lib:/tmp/DD/lib64:/tmp/DD/usr/lib64:/tmp/DD/lib:/tmp/DD/usr/lib
-setenv LD_LIBRARY_PATH /home/debesys/dev-root/debesys/ext/linux/x86-64/release/lib:/home/debesys/dev-root/debesys/build/x86-64/debug/lib:$LD_LIBRARY_PATH
+alias denv 'setenv LD_LIBRARY_PATH /opt/gcc-4.7.0/lib:/opt/gcc-4.7.0/lib64:/opt/gcc-4.7.0/libexec:/tmp/product:/tmp/updates:/lib64:/usr/lib64:/lib:/usr/lib:/tmp/DD/lib64:/tmp/DD/usr/lib64:/tmp/DD/lib:/tmp/DD/usr/lib;setenv LD_LIBRARY_PATH `pwd | cut -d "/" -f 1,2,3,4,5`/ext/linux/x86-64/release/lib:`pwd | cut -d "/" -f 1,2,3,4,5`/build/x86-64/debug/lib:$LD_LIBRARY_PATH '
 
 setenv LBM_LICENSE_FILENAME ~/29WestLicense.txt

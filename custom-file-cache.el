@@ -30,9 +30,9 @@
       (if (file-exists-p d-file-cache-abs-path)
           (progn
             (if (string= d-file-cache-abs-path d-current-file-cache)
-                (message "Same cache, nothing to do.")
+                (message (concat "Same cache, '" d-file-cache-abs-path "' nothing to do."))
               (progn
-                (message "Different cache, clear and switch to this one.")
+                (message (concat "Switching from '" d-current-file-cache "' to '" d-file-cache-abs-path "'."))
                 (file-cache-clear-cache)
                 (let ((buf (find-file-noselect d-file-cache-abs-path)))
                   (setq file-cache-alist (read buf))
@@ -48,10 +48,10 @@
           (with-temp-file d-file-cache-abs-path
             (prin1 file-cache-alist (current-buffer)))
           (setq d-current-file-cache d-file-cache-abs-path)
-          (message "Cache creation complete.")
+          (message (concat "Cache creation complete, '" d-current-cache-file  "'."))
           )
         )
-    (message "Not a valid source tree, no custom file caching.")
+    (message "Not a valid source tree, no custom file caching.\n")
     )
 )
 
