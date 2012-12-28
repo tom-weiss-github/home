@@ -56,7 +56,11 @@
 )
 
 (defun d-find-file-with-custom-file-cache ()
-  "tbd"
+  "This function sets the file cache (potentially creating one) if
+the current buffer is found to be in a source tree.  Regardless
+of setting the cache, find-file will be invoked.  It's intended
+that this function should be mapped to C-x C-f to get automatic
+caching when files are opened."
   (interactive)
   (d-set-my-file-cache)
   (call-interactively 'find-file)
