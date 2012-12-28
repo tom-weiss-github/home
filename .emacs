@@ -23,6 +23,10 @@
 (global-set-key (quote[f11]) (quote set-background-color))
 (global-set-key (quote[f12]) (quote set-foreground-color))
 
+;; Map C-x C-f to set the correct file cache and then call open-file.
+(load-file "~/.emacs.d/custom-file-cache.el")
+(global-set-key (kbd "C-x C-f") (quote d-find-file-with-custom-file-cache))
+
 ;; This might be a better way to change both colors with one button.
 ;;(global-set-key [f9]
 ;;                '(lambda ()
