@@ -9,6 +9,13 @@
 ;; Should force emacs to display line numbers.
 (line-number-mode 1)
 
+;; To be explored further:
+;; When using the electric buffer list, I'd prefer if the window split
+;; is horizontal.  The following two variables should allow me to
+;; control how the split happens when I invoke the ebl.
+;; (split-width-threshold 0)
+;; (split-height-threshold nil) If nil, emacs is not allowed to split vertically
+
 ;; map f1 to open to the electric buffer list (made by Tom Weiss)
 (global-set-key (quote[f1]) (quote electric-buffer-list))
 
@@ -47,6 +54,9 @@
 ;; Remove the menu bar.
 (menu-bar-mode 0)
 
+;; For further experimentation:
+;; Move between windows with shift+arrows.
+;; (windmove-default-bindings)
 
 (defun close-all-buffers ()
   (interactive)
