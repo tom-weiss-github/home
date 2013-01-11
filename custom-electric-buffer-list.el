@@ -16,7 +16,7 @@
 ;; pop-up-windows is non-nil. Setting a value of nil will ensure that the split will be horizontal.
 
 
-(defun cebl ()
+(defun custom-electric-buffer-list ()
   (interactive)
   "Make sure the electric buffer list's window is wide enough."
   ;; Determine if the current window is taking up the entire width.
