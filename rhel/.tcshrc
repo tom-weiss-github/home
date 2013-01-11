@@ -21,7 +21,7 @@ alias cf 'emacsclient -n `find . -name \!:1`'
 alias f 'find . -name \!:1 -print'
 alias ff 'find . -type d -path "*/build" -prune -o -path "*/.git" -prune -o -path "*/ext" -prune -o -path "*/pycommon" -prune -o \( \! -iname "*.ico" -and \! -iname "*.cs" -and \! -iname "*.png" -and \! -iname "*.jar" -and \! -iname "*.pyc" -and \! -iname "*.o" -and \! -iname "*.d" \! -iname "*.a" \! -name "*.so" \! -iname "*.bin" \! -iname "*.sql" \! -iname "*.dat" \) -print0 | xargs -0 grep -iHn'
 
-alias git-add-mod 'git status | grep modified | cut -d " " -f 4 | xargs --max-args=1 git add'
+alias git-add-mod 'git status | grep modified | cut -d " " -f 4 | xargs --max-args=1 git add -v '
 
 alias tlsrh '/bin/ls -tr /volatile/logs/*_send_recv_* | tail -1 | xargs tail -f | sed -u "s/\x01/  /g"'
 alias tlsr '/bin/ls -tr /volatile/logs/*_send_recv_* | tail -1 | xargs tail -f | sed -u "s/\x01/  /g" | grep --line-buffered -v 35=0'
