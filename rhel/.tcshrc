@@ -5,6 +5,7 @@
 # RHEL .tcshrc
 #
 
+echo Sourcing .tcshrc
 umask 2
 alias ee 'emacs -nw '
 alias c 'emacsclient -n '
@@ -38,19 +39,35 @@ setenv EDITOR 'emacs -nw'
 # ALTERNATE_EDITOR causes emacs to be opened if emacsclient is invoked and no instance is running.
 setenv ALTERNATE_EDITOR 'emacs'
 
-
-alias set_path 'setenv PATH /opt/gcc-4.7.0/bin:/usr/NX/bin:/opt/eclipse:/opt/nunit/bin:/opt/mono-2.10/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/home/debesys/Downloads/meld-1.6.1/bin'
-set_path
-
 setenv LIBRARY_PATH /opt/gcc-4.7.0/lib:/opt/gcc-4.7.0/lib64
 setenv C_INCLUDE_PATH /opt/gcc-4.7.0/include
 setenv CPLUS_INCLUDE_PATH /opt/gcc-4.7.0/include:/opt/gcc-4.7.0/include/c++/gcc-4.7.0
 
+# PATH and LD_LIBRARY_PATH are set to some default value.  When running our software, additional values are added to each
+# one, depending on the location of our software on the file system.  Certain programs (e.g., GDB) will source this file
+# since $SHELL is set.  It's vital that sourcing this script does not wipe out the additional values.  It's also useful
+# to reset back to the initial values and add different values (simply appending would leave the old values and potentially
+# cause loading and linking to incorrect versions.
+alias set_path 'setenv PATH /opt/gcc-4.7.0/bin:/usr/NX/bin:/usr/NX/bin:/opt/eclipse:/opt/nunit/bin:/opt/mono-2.10/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/home/debesys/Downloads/meld-1.6.1/bin'
+set_path
+
 alias set_ld_library_path 'setenv LD_LIBRARY_PATH /opt/gcc-4.7.0/lib:/opt/gcc-4.7.0/lib64:/opt/gcc-4.7.0/libexec:/tmp/product:/tmp/updates:/lib64:/usr/lib64:/lib:/usr/lib:/tmp/DD/lib64:/tmp/DD/usr/lib64:/tmp/DD/lib:/tmp/DD/usr/lib'
-set_ld_library_path
+if( ! ($?LD_LIBRARY_PATH) ) then
+    set_ld_library_path
+endif
+set ld_set = `echo $LD_LIBRARY_PATH | grep "ext/linux/x86-64/release/lib"`
+if ( "" == $ld_set ) then
+    set_ld_library_path
+    echo "Explicit values had not been added to parent's LD_LIBRARY_PATH, it has been set to $LD_LIBRARY_PATH."
+else
+    echo "Explicit values had been added to parent's LD_LIBRARY_PATH, it remains $LD_LIBRARY_PATH."
+endif
 
 alias denv 'set_ld_library_path;   setenv LD_LIBRARY_PATH `pwd | cut -d "/" -f 1,2,3,4,5`/build/x86-64/debug/lib:`pwd | cut -d "/" -f 1,2,3,4,5`/ext/linux/x86-64/release/lib:$LD_LIBRARY_PATH;   echo LD_LIBRARY_PATH now set to $LD_LIBRARY_PATH;   set_path;  echo;   setenv PATH `pwd | cut -d "/" -f 1,2,3,4,5`/build/x86-64/debug/bin:$PATH;   echo PATH is now set to $PATH'
 
+alias envs 'echo LD_LIBRARY_PATH $LD_LIBRARY_PATH; echo ; echo PATH $PATH;'
+
+alias cdbin 'cd `pwd | cut -d "/" -f 1,2,3,4,5`/build/x86-64/debug/bin'
 
 setenv LBM_LICENSE_FILENAME ~/29WestLicense.txt
 
