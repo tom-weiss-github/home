@@ -76,6 +76,17 @@ SYMBOL should be one of 'grep-command', 'grep-template',
                                       "-print0 | xargs -0 grep -nHi -e "))
            ))
 
+(setq custom-find-grep-path-suffix "")
+(defun set-fg-suffix (suffix)
+  "Set an optional suffix for the search.  This is useful for more fine grained searching."
+  (interactive "sEnter Search Suffix: ")
+  (if (string= "" suffix)
+      (message "The optional search suffix is now empty.")
+    (message (concat "The optional search suffix is now '" suffix "'."))
+    )
+  (setq custom-find-grep-path-suffix suffix)
+)
+
 ;; The -print0 in find causes it to put NULLs at the end of the file names (which helps with spaces in the names).  The -0 in
 ;; xargs then uses the NULL instead of spaces.  This particular method solves a problem the previous two suffer from.  I noticed
 ;; that if a file with an extension I want to filter out was in the same directory as the file which was open, then find would
@@ -86,6 +97,7 @@ SYMBOL should be one of 'grep-command', 'grep-template',
   (let ((fg-tt-filters find-filters ))
     (setq my-find-grep-command "find \"")
     (setq my-find-grep-command (concat my-find-grep-command (find-best-root marker-file)))
+    (setq my-find-grep-command (concat my-find-grep-command custom-find-grep-path-suffix))
     (setq my-find-grep-command (concat my-find-grep-command "\""))
     (setq my-find-grep-command (concat my-find-grep-command fg-tt-filters))
     (grep-apply-setting 'grep-find-command my-find-grep-command)

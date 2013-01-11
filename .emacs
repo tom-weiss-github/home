@@ -128,6 +128,7 @@
 ;; Load my custom find grep.
 (load-file "~/.emacs.d/custom-find-grep.el")
 (global-set-key (quote[f4]) (quote fg))
+(global-set-key (quote[f6]) (quote set-fg-suffix))
 
 ;; Was experimenting with these two but never had a good use for them,
 ;; hence they haven't been added to any keyboard binding.

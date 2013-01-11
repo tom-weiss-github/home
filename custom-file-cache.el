@@ -48,7 +48,7 @@
           (with-temp-file d-file-cache-abs-path
             (prin1 file-cache-alist (current-buffer)))
           (setq d-current-file-cache d-file-cache-abs-path)
-          (message (concat "Cache creation complete, '" d-current-cache-file  "'."))
+          (message (concat "Cache creation complete, '" d-current-file-cache  "'."))
           )
         )
     (message "Not a valid source tree, no custom file caching.\n")

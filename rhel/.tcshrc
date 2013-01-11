@@ -21,6 +21,8 @@ alias cf 'emacsclient -n `find . -name \!:1`'
 alias f 'find . -name \!:1 -print'
 alias ff 'find . -type d -path "*/build" -prune -o -path "*/.git" -prune -o -path "*/ext" -prune -o -path "*/pycommon" -prune -o \( \! -iname "*.ico" -and \! -iname "*.cs" -and \! -iname "*.png" -and \! -iname "*.jar" -and \! -iname "*.pyc" -and \! -iname "*.o" -and \! -iname "*.d" \! -iname "*.a" \! -name "*.so" \! -iname "*.bin" \! -iname "*.sql" \! -iname "*.dat" \) -print0 | xargs -0 grep -iHn'
 
+alias git-add-mod 'git status | grep modified | cut -d " " -f 4 | xargs --max-args=1 git add'
+
 alias tlsrh '/bin/ls -tr /volatile/logs/*_send_recv_* | tail -1 | xargs tail -f | sed -u "s/\x01/  /g"'
 alias tlsr '/bin/ls -tr /volatile/logs/*_send_recv_* | tail -1 | xargs tail -f | sed -u "s/\x01/  /g" | grep --line-buffered -v 35=0'
 
@@ -37,11 +39,19 @@ setenv EDITOR 'emacs -nw'
 setenv ALTERNATE_EDITOR 'emacs'
 
 
-setenv PATH /opt/gcc-4.7.0/bin:/usr/NX/bin:/opt/eclipse:/opt/nunit/bin:/opt/mono-2.10/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/home/debesys/Downloads/meld-1.6.1/bin
+alias set_path 'setenv PATH /opt/gcc-4.7.0/bin:/usr/NX/bin:/opt/eclipse:/opt/nunit/bin:/opt/mono-2.10/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/home/debesys/Downloads/meld-1.6.1/bin'
+set_path
+
 setenv LIBRARY_PATH /opt/gcc-4.7.0/lib:/opt/gcc-4.7.0/lib64
 setenv C_INCLUDE_PATH /opt/gcc-4.7.0/include
 setenv CPLUS_INCLUDE_PATH /opt/gcc-4.7.0/include:/opt/gcc-4.7.0/include/c++/gcc-4.7.0
-setenv LD_LIBRARY_PATH /opt/gcc-4.7.0/lib:/opt/gcc-4.7.0/lib64:/opt/gcc-4.7.0/libexec:/tmp/product:/tmp/updates:/lib64:/usr/lib64:/lib:/usr/lib:/tmp/DD/lib64:/tmp/DD/usr/lib64:/tmp/DD/lib:/tmp/DD/usr/lib
-alias denv 'setenv LD_LIBRARY_PATH /opt/gcc-4.7.0/lib:/opt/gcc-4.7.0/lib64:/opt/gcc-4.7.0/libexec:/tmp/product:/tmp/updates:/lib64:/usr/lib64:/lib:/usr/lib:/tmp/DD/lib64:/tmp/DD/usr/lib64:/tmp/DD/lib:/tmp/DD/usr/lib;setenv LD_LIBRARY_PATH `pwd | cut -d "/" -f 1,2,3,4,5`/ext/linux/x86-64/release/lib:`pwd | cut -d "/" -f 1,2,3,4,5`/build/x86-64/debug/lib:$LD_LIBRARY_PATH '
+
+alias set_ld_library_path 'setenv LD_LIBRARY_PATH /opt/gcc-4.7.0/lib:/opt/gcc-4.7.0/lib64:/opt/gcc-4.7.0/libexec:/tmp/product:/tmp/updates:/lib64:/usr/lib64:/lib:/usr/lib:/tmp/DD/lib64:/tmp/DD/usr/lib64:/tmp/DD/lib:/tmp/DD/usr/lib'
+set_ld_library_path
+
+alias denv 'set_ld_library_path;   setenv LD_LIBRARY_PATH `pwd | cut -d "/" -f 1,2,3,4,5`/build/x86-64/debug/lib:`pwd | cut -d "/" -f 1,2,3,4,5`/ext/linux/x86-64/release/lib:$LD_LIBRARY_PATH;   echo LD_LIBRARY_PATH now set to $LD_LIBRARY_PATH;   set_path;  echo;   setenv PATH `pwd | cut -d "/" -f 1,2,3,4,5`/build/x86-64/debug/bin:$PATH;   echo PATH is now set to $PATH'
+
 
 setenv LBM_LICENSE_FILENAME ~/29WestLicense.txt
+
+

@@ -1,5 +1,5 @@
 ;;
-;; Custom File Cache
+;; Custom Electric Buffer List
 ;;
 ;; Author:  Tom Weiss
 ;; email:   weiss@cs.wisc.edu
@@ -10,40 +10,46 @@
 ;; buffer width is 160 or greater the electric-buffer-list is displayed
 ;; in a buffer split vertically.
 
-;; A new idea to explore is to use the commands (to be found) which widen
-;; the current window, show the buffer list, and then narrow the width.
-;; It would also be useful to see if the current window is as wide
-
-
 ;; split-height-threshold - This variable determines when display-buffer may split a window, if there
 ;; are multiple windows. display-buffer always splits the largest window if it has at least this
 ;; many lines. If the largest window is not this tall, it is split only if it is the sole window and
-;; pop-up-windows is non-nil.
-
-;; split-width-threshold - Setting a value of nil will ensure that the split will be horizontal.
-
+;; pop-up-windows is non-nil. Setting a value of nil will ensure that the split will be horizontal.
 
 
 (defun cebl ()
   (interactive)
-  "tbd"
-  (let ((orig-tbd split-height-threshold))
-    ;; (message orig-tbd)
-    ;;(setq split-height-threshold nil)
-    ;; (message (concat "Saving split-height-threshold value of %d" orig-tbd))
-    (message (int-to-string split-height-threshold))
-    ;; (electric-buffer-list)
-    ;; (call-interactively 'electric-buffer-list)
-    ;;(setq split-height-threshold orig-tbd)
-    ;;(message (concat "Setting split-height-threshold back to " split-height-threshold))
+  "Make sure the electric buffer list's window is wide enough."
+  ;; Determine if the current window is taking up the entire width.
+  (if (eq (window-width) (screen-width))
+      (progn
+        (message "Current window is full width, force electric buffer list window to be full width.")
+        (let ((temp-split-width-threshold split-width-threshold ))
+          (setq split-width-threshold nil)
+          (call-interactively 'electric-buffer-list)
+          (setq split-width-threshold temp-split-width-threshold)
+          )
+        )
+    (progn
+      (message (concat "Current window is " (int-to-string (window-width)) " of " (int-to-string (screen-width)) ", let's widen."))
+      ;; The amount to widen is 3/4 of the screen width minis the window with.  That is,
+      ;; use 3/4 of the other widow for the extra space for the electric buffer list.
+      (setq amount-to-widen (truncate (* .75 (- (screen-width) (window-width)))))
+      (enlarge-window-horizontally amount-to-widen)
+      (call-interactively 'electric-buffer-list)
+      (shrink-window-horizontally amount-to-widen)
+      )
     )
 )
+
+
+;; What follows are the notes I created as I explored how to solve this problem.  I left
+;; for future reference.
 
 ;; Forces all splits to be horizontal.  It works great to cause the electric buffer list
 ;; to utilize the full width, but does not work as I intend when the screen is already
 ;; split in half vertically.
-(setq split-width-threshold nil)
-(setq split-width-threshold 80)
+;; (setq split-width-threshold nil)
+;; (setq split-width-threshold 80)
 
 ;; To view what a key is mapped to, run describe-key and provide the key.  It will
 ;; display what the key is mapped to.
@@ -52,34 +58,35 @@
 ;; C-x 3 is bound to split-window-horizontally
 
 ;; Return the name of the current buffer.
-(buffer-name)
+;; (buffer-name)
 
 ;; Seems to provide the same result as window-list.
-(get-buffer-window-list nil t t)
+;; (get-buffer-window-list nil t t)
 
 ;; Displays each window and the buffer inside each window.
-(window-list)
+;; (window-list)
 ;; This will return the number of windows I have open.
-(length (window-list))
+;; (length (window-list))
 
-(window-tree)
+;; (window-tree)
 
 ;; This mode seems to allow me to go back to some previous setup.  That would be useful
 ;; except after I widen the electric buffer list I want to have at least one new buffer
 ;; open.
-(winner-mode nil)
+;; (winner-mode nil)
 
 ;; Displays available height.
-(screen-height)
+;; (screen-height)
 
 ;; Displays available width.
-(screen-width)
+;; (screen-width)
 
 ;; Displays the current's window's width.
-(window-width)
+;; (window-width)
 
 ;; This command will expand or shrink the current window.
-(enlarge-window-horizontally NUMBER)
-(call-interactively 'enlarge-window-horizontally)
+;; (enlarge-window-horizontally 20)
+;; (call-interactively 'enlarge-window-horizontally)
 
-(call-interactively 'shrink-window-horizontally)
+;; (shrink-window-horizontally 20)
+;; (call-interactively 'shrink-window-horizontally)
