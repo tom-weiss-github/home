@@ -35,7 +35,14 @@
       ;; use 3/4 of the other widow for the extra space for the electric buffer list.
       (setq amount-to-widen (truncate (* .75 (- (screen-width) (window-width)))))
       (enlarge-window-horizontally amount-to-widen)
-      (call-interactively 'electric-buffer-list)
+
+      ;; Setting inhibit-quit to a non-nil value ensure that if the user does C-q during
+      ;; the invocation of electric-buffer-list, control will return so that the window
+      ;; can be shrunk again.
+      (let ((inhibit-quit t))
+        (call-interactively 'electric-buffer-list)
+        )
+
       (shrink-window-horizontally amount-to-widen)
       )
     )
