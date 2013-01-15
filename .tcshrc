@@ -7,6 +7,9 @@
 # C:\cygwin\bin\rxvt.exe -display :0 -fn "Courier New-18" -sl 512 -geometry 188x40+0+300 -bg 8 -fg green -cr red -tn rxvt-cygwin-native -e /usr/bin/tcsh
 # A useful way to determine the proper width is to open emacs in the console and evaluate (window-size) in the scratch buffer.
 #
+# Mintty shortcut target.
+# C:\cygwin\bin\mintty.exe --position 0,420 -e /usr/bin/tcsh
+#
 
 ############
 # My PATHs #
@@ -17,7 +20,7 @@
 # with this if you want the cmd.exe to properly inherit the path if cmd.exe is launched from tcsh.
 # In those cases, the spaces seem to get replaced with semicolons.  To combat this, I've turned to
 # the strategy of replacing such paths with their equivalent 8.3 name.  This can be found by doing
-# dir /x in the cmd.exe.  
+# dir /x in the cmd.exe.
 
 # Example:  set path = ($path /cygdrive/c/Program\ Files)
 # Normal example:  set path = ($path /usr/bin)
@@ -135,7 +138,7 @@ alias gen_doc 'python T:/Development/CoreBuilds/Tools/Scripts/generate_documenta
 
 alias tltt '/bin/ls -tr c:/tt/logfiles/TT*.log | tail -1 | xargs tail -f'
 alias edtt 'c:/cygwin/bin/emacs -nw `/bin/ls -tr c:/tt/logfiles/TT*.log | tail -1 | xargs cygpath`'
-# Good for FIX: alias tlsr '/bin/ls -tr c:/tt/logfiles/*_Send-Recv_* | tail -1 | xargs tail -f | sed "s/\x01/  /g"'  
+# Good for FIX: alias tlsr '/bin/ls -tr c:/tt/logfiles/*_Send-Recv_* | tail -1 | xargs tail -f | sed "s/\x01/  /g"'
 alias tlsr '/bin/ls -tr c:/tt/logfiles/*_Send-Recv_* | tail -1 | xargs -i tail -f {} | grep -v BI9'
 alias edsr 'c:/cygwin/bin/emacs -nw `/bin/ls -tr c:/tt/logfiles/*_Send-Recv_* | tail -1 | xargs cygpath`'
 
@@ -197,7 +200,7 @@ alias fb 'si viewcp --noshowPropagationInfo --fields=member,location,revision \!
 #                                variant            project                                                                member
 # si viewhistory --rfilter=daterange::past:1:months --rfilter=labellike:BTEC\* --devpath BTEC_7.4 --project=/SAN/mks-si/data1/projectsource/gw/om_common/main/dev/orders/orders.pj order_transaction.cpp
 # si co --cpid=:none file
-# si ci --cpid=:none --branch or --nobranch 
+# si ci --cpid=:none --branch or --nobranch
 
 alias sinwho 'c:/SysInternals/PsLoggedon.exe \\\\sin-vm-sgx01;c:/SysInternals/PsLoggedon.exe \\\\sin-vm-sgx02;c:/SysInternals/PsLoggedon.exe \\\\sin-vm-sgx03;c:/SysInternals/PsLoggedon.exe \\\\sin-vm-sgx04;c:/SysInternals/PsLoggedon.exe \\\\sin-vm-sgx05;c:/SysInternals/PsLoggedon.exe \\\\sin-vm-sgx06;c:/SysInternals/PsLoggedon.exe \\\\sin-vm-sgx07;c:/SysInternals/PsLoggedon.exe \\\\sin-vm-sgx08;c:/SysInternals/PsLoggedon.exe \\\\sin-vm-sgx09;c:/SysInternals/PsLoggedon.exe \\\\sin-vm-sgx10'
 
@@ -252,11 +255,10 @@ endif
 
 # -f for files.
 echo "/home/tweiss1/.tcshrc sourced"
-if( -d c:/tt-dev/ ) then 
+if( -d c:/tt-dev/ ) then
     cd c:/tt-dev/
 else if( -d c:/development/ ) then
     cd c:/development/
 else if( -d e:/ ) then
     cd e:/
 endif
-

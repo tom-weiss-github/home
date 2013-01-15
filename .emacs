@@ -18,7 +18,11 @@
 
 ;; Map F1 to open the electric buffer list, perhaps wider than normal.
 (load-file "~/.emacs.d/custom-electric-buffer-list.el")
-(global-set-key (quote[f1]) (quote custom-electric-buffer-list))
+(if (eq system-type 'gnu/linux)
+    (global-set-key (quote[f1]) (quote custom-electric-buffer-list))
+  (global-set-key (quote[f1]) (quote electric-buffer-list))
+)
+
 
 ;; map f2 to goto line number
 (global-set-key (quote[f2]) (quote goto-line))

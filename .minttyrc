@@ -1,0 +1,11 @@
+BoldAsFont=no
+CursorBlinks=no
+CursorColour=255,0,0
+ForegroundColour=90,216,48
+BackgroundColour=37,37,37
+Font=Source Code Pro
+FontHeight=12
+CursorType=block
+FontSmoothing=full
+Columns=186
+Rows=30
