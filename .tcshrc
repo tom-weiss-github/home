@@ -4,6 +4,8 @@
 #
 # The shortcut I use to launch tcsh.
 # C:\cygwin\bin\rxvt.exe -display :0 -fn "Lucida Console-14" -sl 512 -geometry 235x50+0+320 -bg black -fg green -cr red -tn rxvt-cygwin-native -e /usr/bin/tcsh
+# C:\cygwin\bin\rxvt.exe -display :0 -fn "Courier New-18" -sl 512 -geometry 188x40+0+300 -bg 8 -fg green -cr red -tn rxvt-cygwin-native -e /usr/bin/tcsh
+# A useful way to determine the proper width is to open emacs in the console and evaluate (window-size) in the scratch buffer.
 #
 
 ############
