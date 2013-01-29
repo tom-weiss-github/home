@@ -17,12 +17,18 @@ alias rw ~/githome/setxtitle.sh
 # I have a container of all source trees, dev-root, three levels under /.  The source trees
 # start four levels under /.  This alias will figure out which source tree I'm in based on
 # the current working directory (which must be somewhere inside one of the source trees).
-alias m 'make -C `pwd | cut -d "/" -f 1,2,3,4,5` '
+alias m 'make -RrC `pwd | cut -d "/" -f 1,2,3,4,5` '
 alias cf 'emacsclient -n `find . -name \!:1`'
 alias f 'find . -name \!:1 -print'
-alias ff 'find . -type d -path "*/build" -prune -o -path "*/.git" -prune -o -path "*/ext" -prune -o -path "*/pycommon" -prune -o \( \! -iname "*.ico" -and \! -iname "*.cs" -and \! -iname "*.png" -and \! -iname "*.jar" -and \! -iname "*.pyc" -and \! -iname "*.o" -and \! -iname "*.d" \! -iname "*.a" \! -name "*.so" \! -iname "*.bin" \! -iname "*.sql" \! -iname "*.dat" \) -print0 | xargs -0 grep -iHn'
+alias ff 'find . -type d -path "*/build" -prune -o -path "*/.git" -prune -o -path "*/ext" -prune -o -path "*/pycommon" -prune -o \( \! -iname "*.ico" -and \! -iname "TAGS" -and \! -iname "emacs-file-cache" -and \! -iname "*.cs" -and \! -iname "*.png" -and \! -iname "*.jar" -and \! -iname "*.pyc" -and \! -iname "*.o" -and \! -iname "*.d" \! -iname "*.a" \! -name "*.so" \! -iname "*.bin" \! -iname "*.sql" \! -iname "*.dat" \) -print0 | xargs -0 grep -iHn'
 
 alias git-add-mod 'git status | grep modified | cut -d " " -f 4 | xargs --max-args=1 git add -v '
+alias g 'git'
+
+# rmp is needed because my installed python does not seem to correctly work with the python
+# in ext.  Until John fixes this issue, this is the work-around.  These files must be present
+# for building and must be not present for env.tcsh and running ledger.
+alias rmp 'rm -v ext/linux/x86-64/release/lib/libpython2.7.so*'
 
 alias tlsrh '/bin/ls -tr /volatile/logs/*_send_recv_* | tail -1 | xargs tail -f | sed -u "s/\x01/  /g"'
 alias tlsr '/bin/ls -tr /volatile/logs/*_send_recv_* | tail -1 | xargs tail -f | sed -u "s/\x01/  /g" | grep --line-buffered -v 35=0'
@@ -39,9 +45,12 @@ setenv EDITOR 'emacs -nw'
 # ALTERNATE_EDITOR causes emacs to be opened if emacsclient is invoked and no instance is running.
 setenv ALTERNATE_EDITOR 'emacs'
 
+# Cause the dynamic linker to resolve all symbols at program startup.  Useful to ensure uncalled
+# functions won't fail resolution at runtime.
+setenv LD_BIND_NOW "yes"
 setenv LIBRARY_PATH /opt/gcc-4.7.0/lib:/opt/gcc-4.7.0/lib64
-setenv C_INCLUDE_PATH /opt/gcc-4.7.0/include
-setenv CPLUS_INCLUDE_PATH /opt/gcc-4.7.0/include:/opt/gcc-4.7.0/include/c++/gcc-4.7.0
+
+alias env.tcsh 'source ~/githome/rhel/env.tcsh '
 
 # PATH and LD_LIBRARY_PATH are set to some default value.  When running our software, additional values are added to each
 # one, depending on the location of our software on the file system.  Certain programs (e.g., GDB) will source this file
@@ -49,23 +58,59 @@ setenv CPLUS_INCLUDE_PATH /opt/gcc-4.7.0/include:/opt/gcc-4.7.0/include/c++/gcc-
 # to reset back to the initial values and add different values (simply appending would leave the old values and potentially
 # cause loading and linking to incorrect versions.
 alias set_path 'setenv PATH /opt/gcc-4.7.0/bin:/usr/NX/bin:/usr/NX/bin:/opt/eclipse:/opt/nunit/bin:/opt/mono-2.10/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/home/debesys/Downloads/meld-1.6.1/bin'
-set_path
+if( ! ($?PATH) ) then
+    set_path
+endif
+# set path_set = `echo $PATH | grep ext/linux/x86-64/release/bin`
+# if( "" == $path_set ) then
+#     set_path
+#     echo "PATH set to $PATH"
+# else
+#     echo "PATH (env'd) remains $PATH"
+# endif
+
+if( ! ($?PYTHONPATH) ) then
+    setenv PYTHONPATH ""
+endif
+
 
 alias set_ld_library_path 'setenv LD_LIBRARY_PATH /opt/gcc-4.7.0/lib:/opt/gcc-4.7.0/lib64:/opt/gcc-4.7.0/libexec:/tmp/product:/tmp/updates:/lib64:/usr/lib64:/lib:/usr/lib:/tmp/DD/lib64:/tmp/DD/usr/lib64:/tmp/DD/lib:/tmp/DD/usr/lib'
 if( ! ($?LD_LIBRARY_PATH) ) then
     set_ld_library_path
 endif
-set ld_set = `echo $LD_LIBRARY_PATH | grep "ext/linux/x86-64/release/lib"`
-if ( "" == $ld_set ) then
-    set_ld_library_path
-    echo "Explicit values had not been added to parent's LD_LIBRARY_PATH, it has been set to $LD_LIBRARY_PATH."
-else
-    echo "Explicit values had been added to parent's LD_LIBRARY_PATH, it remains $LD_LIBRARY_PATH."
+# set ld_set = `echo $LD_LIBRARY_PATH | grep "ext/linux/x86-64/release/lib"`
+# if ( "" == $ld_set ) then
+#     set_ld_library_path
+#     echo "LD_LIBRARY_PATH set to $LD_LIBRARY_PATH"
+# else
+#     echo "LD_LIBRARY_PATH (env'd) remains $LD_LIBRARY_PATH"
+# endif
+
+
+alias set_c_include_path 'setenv C_INCLUDE_PATH /opt/gcc-4.7.0/include'
+if( ! ($?C_INCLUDE_PATH) ) then
+    set_c_include_path
+endif
+# set c_include_path_set = `echo $C_INCLUDE_PATH | grep "python"`
+# if( "" == $c_include_path_set ) then
+#     set_c_include_path
+#     echo "C_INCLUDE_PATH set to $C_INCLUDE_PATH."
+# else
+#     echo "C_INCLUDE_PATH (env'd) remains $C_INCLUDE_PATH."
+# endif
+
+alias set_cplus_include_path 'setenv CPLUS_INCLUDE_PATH /opt/gcc-4.7.0/include:/opt/gcc-4.7.0/include/c++/gcc-4.7.0'
+if( ! ($?CPLUS_INCLUDE_PATH) ) then
+    set_cplus_include_path
 endif
 
-alias denv 'set_ld_library_path;   setenv LD_LIBRARY_PATH `pwd | cut -d "/" -f 1,2,3,4,5`/build/x86-64/debug/lib:`pwd | cut -d "/" -f 1,2,3,4,5`/ext/linux/x86-64/release/lib:$LD_LIBRARY_PATH;   echo LD_LIBRARY_PATH now set to $LD_LIBRARY_PATH;   set_path;  echo;   setenv PATH `pwd | cut -d "/" -f 1,2,3,4,5`/build/x86-64/debug/bin:$PATH;   echo PATH is now set to $PATH'
+# alias denv_path 'set_path;  setenv PATH `pwd | cut -d "/" -f 1,2,3,4,5`/ext/linux/x86-64/release/bin:`pwd | cut -d "/" -f 1,2,3,4,5`/build/x86-64/debug/bin:$PATH; echo PATH now set to $PATH'
+# alias denv_pythonpath 'setenv PYTHONPATH `pwd | cut -d "/" -f 1,2,3,4,5`/ext/linux/x86-64/release/lib/python2.7/site-packages:`pwd | cut -d "/" -f 1,2,3,4,5`/build/x86-64/debug/python;  echo PYTHONPATH is now set to $PYTHONPATH'
+# alias denv_ld_library_path 'set_ld_library_path;   setenv LD_LIBRARY_PATH `pwd | cut -d "/" -f 1,2,3,4,5`/build/x86-64/debug/lib:`pwd | cut -d "/" -f 1,2,3,4,5`/ext/linux/x86-64/release/lib:$LD_LIBRARY_PATH;   echo LD_LIBRARY_PATH now set to $LD_LIBRARY_PATH'
+# alias denv_c_include_path 'set_c_include_path;  echo;  setenv C_INCLUDE_PATH `python2.7-config --prefix`/include/python2.7:$C_INCLUDE_PATH;  echo C_INCLUDE_PATH now set to $C_INCLUDE_PATH'
+# alias denv 'denv_path;  denv_pythonpath;  denv_ld_library_path;  denv_c_include_path;'
 
-alias envs 'echo LD_LIBRARY_PATH $LD_LIBRARY_PATH; echo ; echo PATH $PATH;'
+alias envs 'echo LD_LIBRARY_PATH $LD_LIBRARY_PATH;  echo PATH $PATH;  echo C_INCLUDE_PATH $C_INCLUDE_PATH; echo CPLUS_INCLUDE_PATH $CPLUS_INCLUDE_PATH; echo PYTHONPATH $PYTHONPATH'
 
 alias cdbin 'cd `pwd | cut -d "/" -f 1,2,3,4,5`/build/x86-64/debug/bin'
 

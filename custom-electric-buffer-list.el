@@ -25,7 +25,14 @@
         (message "Current window is full width, force electric buffer list window to be full width.")
         (let ((temp-split-width-threshold split-width-threshold ))
           (setq split-width-threshold nil)
-          (call-interactively 'electric-buffer-list)
+
+          ;; Setting inhibit-quit to a non-nil value ensure that if the user does C-q during
+          ;; the invocation of electric-buffer-list, control will return so that the window
+          ;; can be shrunk again.
+          (let ((inhibit-quit t))
+            (call-interactively 'electric-buffer-list)
+            )
+
           (setq split-width-threshold temp-split-width-threshold)
           )
         )
