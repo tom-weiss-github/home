@@ -1,0 +1,35 @@
+#!/usr/bin/expect
+
+# It's generally unsafe to force the user to type their
+# password in the clear on the command line.  Make sure
+# your use is valid.
+set password [lindex $argv 0]
+
+if { $password == "" }  {
+    puts "Usage: copy.expect PASSWORD\n"
+    exit 1
+}
+
+spawn sftp root@192.168.254.180
+expect "password:"
+send "$password\r"
+expect "sftp>"
+send "cd /home/debesys/bin \r"
+expect "sftp>"
+send "put cme \r"
+expect "sftp>"
+send "put ../lib/liball_messages.so \r"
+expect "sftp>"
+send "quit \r"
+
+spawn sftp root@192.168.254.187
+expect "password:"
+send "$password\r"
+expect "sftp>"
+send "cd /home/debesys/bin \r"
+expect "sftp>"
+send "put simutrader \r"
+expect "sftp>"
+send "put ../lib/liball_messages.so \r"
+expect "sftp>"
+send "quit \r"
