@@ -318,7 +318,7 @@ buffer, some user settings, and the source tree that the file lives in."
 
   (if (file-exists-p d-marker-abs-path)
       (progn
-        (setq d-compile-command "make -C ")
+        (setq d-compile-command "make -rRC ")
         (setq d-compile-command (concat d-compile-command d-dev-root))
         (setq compile-command (concat d-compile-command " " d-compile-target))
         (call-interactively 'compile)

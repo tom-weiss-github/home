@@ -353,7 +353,14 @@
 ;;(global-set-key [backspace] 'delete-char)
 ;;(normal-erase-is-backspace-mode nil)
 
-
+;; Debugging with GDB
+;; M-x gdb
+;; Watching a variable: move point to variable and do M-x gud-watch
+;; the expression is watched in the speedbar.
+;; gdb-show-changed-values to non-nil highlights recently changed
+;; values.
+;; gdb-speedbar-auto-raise to non-nil raises the speedbar everytime
+;; a watched expression changes.
 
 
 ;; Useful emacs commands.

@@ -17,7 +17,7 @@ alias rw ~/githome/setxtitle.sh
 # I have a container of all source trees, dev-root, three levels under /.  The source trees
 # start four levels under /.  This alias will figure out which source tree I'm in based on
 # the current working directory (which must be somewhere inside one of the source trees).
-alias m 'make -RrC `pwd | cut -d "/" -f 1,2,3,4,5` '
+alias m 'make -Rr -j 8 -C `pwd | cut -d "/" -f 1,2,3,4,5` '
 alias cf 'emacsclient -n `find . -name \!:1`'
 alias f 'find . -name \!:1 -print'
 alias ff 'find . -type d -path "*/build" -prune -o -path "*/.git" -prune -o -path "*/ext" -prune -o -path "*/pycommon" -prune -o \( \! -iname "*.ico" -and \! -iname "TAGS" -and \! -iname "emacs-file-cache" -and \! -iname "*.cs" -and \! -iname "*.png" -and \! -iname "*.jar" -and \! -iname "*.pyc" -and \! -iname "*.o" -and \! -iname "*.d" \! -iname "*.a" \! -name "*.so" \! -iname "*.bin" \! -iname "*.sql" \! -iname "*.dat" \) -print0 | xargs -0 grep -iHn'
@@ -28,13 +28,14 @@ alias g 'git'
 # rmp is needed because my installed python does not seem to correctly work with the python
 # in ext.  Until John fixes this issue, this is the work-around.  These files must be present
 # for building and must be not present for env.tcsh and running ledger.
-alias rmp 'rm -v ext/linux/x86-64/release/lib/libpython2.7.so*'
+alias rmp 'rm -v `pwd | cut -d "/" -f 1,2,3,4,5`/ext/linux/x86-64/release/lib/libpython2.7.so*'
+alias lsp 'ls `pwd | cut -d "/" -f 1,2,3,4,5`/ext/linux/x86-64/release/lib/libpython2.7.so*'
 
 alias tlsrh '/bin/ls -tr /volatile/logs/*_send_recv_* | tail -1 | xargs tail -f | sed -u "s/\x01/  /g"'
 alias tlsr '/bin/ls -tr /volatile/logs/*_send_recv_* | tail -1 | xargs tail -f | sed -u "s/\x01/  /g" | grep --line-buffered -v 35=0'
 
-alias toc 'sudo tail -f /var/log/messages'
-alias eoc 'sudo emacs -nw /var/log/messages'
+alias tloc 'sudo tail -f /var/log/messages'
+alias eloc 'sudo emacs -nw /var/log/messages'
 
 alias rmvol 'rm /volatile/logs/*'
 
@@ -70,7 +71,15 @@ endif
 # endif
 
 if( ! ($?PYTHONPATH) ) then
-    setenv PYTHONPATH ""
+    setenv PYTHONPATH /dev/null
+endif
+
+if( ! ($?PYTHONHOME) ) then
+    setenv PYTHONHOME /dev/null
+endif
+
+if( ! ($?SWIG_LIB) ) then
+    setenv SWIG_LIB /dev/null
 endif
 
 
@@ -110,10 +119,12 @@ endif
 # alias denv_c_include_path 'set_c_include_path;  echo;  setenv C_INCLUDE_PATH `python2.7-config --prefix`/include/python2.7:$C_INCLUDE_PATH;  echo C_INCLUDE_PATH now set to $C_INCLUDE_PATH'
 # alias denv 'denv_path;  denv_pythonpath;  denv_ld_library_path;  denv_c_include_path;'
 
-alias envs 'echo LD_LIBRARY_PATH $LD_LIBRARY_PATH;  echo PATH $PATH;  echo C_INCLUDE_PATH $C_INCLUDE_PATH; echo CPLUS_INCLUDE_PATH $CPLUS_INCLUDE_PATH; echo PYTHONPATH $PYTHONPATH'
+alias envs 'echo LD_LIBRARY_PATH $LD_LIBRARY_PATH;  echo PATH $PATH;  echo C_INCLUDE_PATH $C_INCLUDE_PATH; echo CPLUS_INCLUDE_PATH $CPLUS_INCLUDE_PATH; echo PYTHONPATH $PYTHONPATH; echo PYTHONHOME $PYTHONHOME; echo SWIG_LIB $SWIG_LIB'
 
-alias cdbin 'cd `pwd | cut -d "/" -f 1,2,3,4,5`/build/x86-64/debug/bin'
+alias pbin 'pushd `pwd | cut -d "/" -f 1,2,3,4,5`/build/x86-64/debug/bin'
+alias pext 'pushd `pwd | cut -d "/" -f 1,2,3,4,5`/ext'
+alias prt  'pushd `pwd | cut -d "/" -f 1,2,3,4,5`'
 
 setenv LBM_LICENSE_FILENAME ~/29WestLicense.txt
 
-
+# Todo:  Replace pwd | cut -d "/" -f 1,2,3,4,5 with git rev-parse --show-toplevel for git related commands.
