@@ -1,0 +1,9 @@
+# Command Line Editing:
+# C-x C-x -> Go to point (same as emacs).
+
+# Cause Ctrl-w to kill the region.
+# stty werase undef
+"\C-w":kill-region
+
+# Cause Esc-w to copy the region, but not kill it.
+"\ew":copy-region-as-kill
