@@ -32,6 +32,9 @@ if( $DEBENV_CONFIG == "debug" || $DEBENV_CONFIG == "release" ) then
     # DEBENV_ENGAGED is not defined.
     if( "1" == $?DEBENV_ENGAGED ) then
         restore_env
+        unsetenv PYTHONPATH
+        unsetenv PYTHONHOME
+        unsetenv SWIG_LIB
     else
         save_env
     endif
@@ -40,16 +43,12 @@ if( $DEBENV_CONFIG == "debug" || $DEBENV_CONFIG == "release" ) then
 else if( $DEBENV_CONFIG == "reset" ) then
     if( "1" == $?DEBENV_ENGAGED ) then
         restore_env
+        unsetenv PYTHONPATH
+        unsetenv PYTHONHOME
+        unsetenv SWIG_LIB
         setenv DEBENV_ENGAGED "0"
     endif
 else
     echo "Usage: source env.tcsh [debug|release|reset]"
 endif
 
-echo LD_LIBRARY_PATH $LD_LIBRARY_PATH
-echo PATH $PATH
-echo C_INCLUDE_PATH $C_INCLUDE_PATH
-echo CPLUS_INCLUDE_PATH $CPLUS_INCLUDE_PATH
-echo PYTHONPATH $PYTHONPATH
-echo PYTHONHOME $PYTHONHOME
-echo SWIG_LIB $SWIG_LIB

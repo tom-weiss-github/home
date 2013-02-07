@@ -40,3 +40,9 @@ if( ! ($?SWIG_LIB) ) then
 else
     echo SWIG_LIB $SWIG_LIB
 endif
+
+if( ! ($?DEBENV_ENGAGED) ) then
+    echo DEBENV_ENGAGED is undefined.
+else
+    echo DEBENV_ENGAGED $DEBENV_ENGAGED
+endif
