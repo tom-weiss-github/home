@@ -7,6 +7,6 @@ fi
 
 # User specific environment and startup programs
 
-PATH=$PATH:$HOME/bin
+PATH=$PATH:$HOME/bin:/home/debesys/Downloads/meld-1.6.1/bin
 
 export PATH
