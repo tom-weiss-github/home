@@ -23,6 +23,9 @@
   (global-set-key (quote[f1]) (quote electric-buffer-list))
 )
 
+(if (eq system-type 'gnu/linux)
+    (load-file "~/.emacs.d/custom-gdb-functions.el")
+)
 
 ;; map f2 to goto line number
 (global-set-key (quote[f2]) (quote goto-line))
@@ -418,3 +421,7 @@
 ;; to paste, go to spot and do M-x yank-rectangle
 
 ;; To remove ^M characters, use CTRL-Q CTRL-M to specify the ^M character.
+
+;; Future Work
+;; - Write lisp function to automatically create TAGS if they don't exist.
+;; - Write lisp function to create ebrowse information if it doesn't exist.

@@ -17,7 +17,7 @@
   ;; found in some parent directory, custom caching won't be enabled.
   (setq d-marker-file "makefile")
 
-  (setq d-file-cache-name "emacs-file-cache")
+  (setq d-file-cache-name "FILES")
   (setq d-dev-root (find-best-root d-marker-file))
   (setq d-file-cache-abs-path (concat d-dev-root d-file-cache-name))
 

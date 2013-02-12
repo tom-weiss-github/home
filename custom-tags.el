@@ -1,6 +1,6 @@
-;; 
+;;
 ;; GNU Emacs TAGS Configuration
-;; 
+;;
 ;; Author: Tom Weiss
 ;; email:  weiss@cs.wisc.edu
 ;;
@@ -22,8 +22,19 @@
         )
       )
     )
-)
+  )
 
+(defun create-tag-file ()
+  (interactive)
+  "Create the TAGS file if it doesn't exist."
+  (let ((command "python")
+        (title "Create TAGS")
+        (script "/home/debesys/githome/create-emacs-tags.py")
+        (tag-file (concat (find-best-root "makefile"))) )
+    (start-process title title command script tag-file)
+    (message (concat command " " script " " tag-file))
+    )
+  )
 
 ;; TAGS
 ;; Documentation:
