@@ -23,25 +23,33 @@
     )
   )
 
-(defun find-best-root (anchor-file)
+(defun find-best-root (anchor-file &optional empty-on-failure)
   "Examines the parent directories of the current buffer.  Looks for a parent that contains the
 file passed in the anchor-file argument.  This is the directory from which I want."
 
   (if (not buffer-file-name)
       ;; Certain buffer (e.g., *scratch*) return nil from buffer-file-name.  In that case,
       ;; set the best path to "/" since that's the only path which can be counted on.
-      "/"
+      (if (eq nil empty-on-failure)
+          "/"
+        ""
+        )
     (let ((path-depth (safe-length (split-string (file-name-directory buffer-file-name) "/" 1)))
-          (best-root (file-name-directory buffer-file-name)))
-      (while (> path-depth 0)
-        (setq path-as-list (butlast (split-string (file-name-directory buffer-file-name) "/") path-depth))
+          (best-root (if (eq nil empty-on-failure)
+                         (file-name-directory buffer-file-name)
+                       ""))
+          (exclude-from-path 1))
+      (while (<= exclude-from-path (+ path-depth 1))
+        (setq path-as-list (butlast (split-string (file-name-directory buffer-file-name) "/") exclude-from-path))
         (setq potential-root (mkpath path-as-list))
+        (message (concat "Checking in " potential-root))
         (if (file-exists-p (concat potential-root anchor-file))
-            (setq best-root potential-root)
-          nil)
-        (setq path-depth (- path-depth 1))
+            (progn (setq best-root potential-root)
+                   (setq exclude-from-path (+ path-depth 2)) ;; Break from the loop.
+                   (message (concat "Found " anchor-file)))
+          (setq exclude-from-path (+ exclude-from-path 1)))
         )
       best-root
       )
     )
-)
+  )

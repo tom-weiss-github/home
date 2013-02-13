@@ -208,7 +208,7 @@
 	     (c-set-offset 'case-label 4 nil)
 	     (c-set-offset 'brace-list-intro 4 nil)
 	     (c-set-offset 'topmost-intro 0 nil)
-	     (c-set-offset 'innamespace 4 nil)
+	     (c-set-offset 'innamespace 0 nil)
              (c-set-offset 'inclass 4 nil)
 	     ;;(c-set-offset 'arglist-cont-nonempty c-lineup-arglist nil)
              ))

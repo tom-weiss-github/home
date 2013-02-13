@@ -29,7 +29,7 @@ alias hg='history | grep'
 alias rw=~/githome/setxtitle.sh
 unset PROMPT_COMMAND
 alias m='make -Rr -j 8 -C `git rev-parse --show-toplevel`'
-alias ff='find . -type d -path "*/build" -prune -o -path "*/.git" -prune -o -path "*/ext" -prune -o -path "*/pycommon" -prune -o \( \! -iname "*.ico" -and \! -iname "TAGS" -and \! -iname "emacs-file-cache" -and \! -iname "*.cs" -and \! -iname "*.png" -and \! -iname "*.jar" -and \! -iname "*.pyc" -and \! -iname "*.o" -and \! -iname "*.d" \! -iname "*.a" \! -name "*.so" \! -iname "*.bin" \! -iname "*.sql" \! -iname "*.dat" \) -print0 | xargs -0 grep -iHn'
+alias ff='find . -type d -path "*/build" -prune -o -path "*/.git" -prune -o -path "*/ext" -prune -o -path "*/pycommon" -prune -o \( \! -iname "*.ico" -and \! -iname "TAGS" -and \! -iname "FILES" -and \! -iname "BROWSE" -and \! -iname "*.cs" -and \! -iname "*.png" -and \! -iname "*.jar" -and \! -iname "*.pyc" -and \! -iname "*.o" -and \! -iname "*.d" \! -iname "*.a" \! -name "*.so" \! -iname "*.bin" \! -iname "*.sql" \! -iname "*.dat" \) -print0 | xargs -0 grep -iHn'
 alias git-add-mod='git status | grep modified | cut -d " " -f 4 | xargs --max-args=1 git add -v'
 alias g='git'
 alias tlsrh='/bin/ls -tr /volatile/logs/*_send_recv_* | tail -1 | xargs tail -f | sed -u "s/\x01/  /g"'

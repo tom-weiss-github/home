@@ -122,7 +122,7 @@ if( False == options.no_execute and
     sys.exit( 1 )
 
 if( True == options.verbose ):
-    print_with_border( "rename {0} {1}".format( cached_repo, new_repo ), "-" )
+    print_with_border( "mv {0} {1}".format( cached_repo, new_repo ), "-" )
 if( False == options.no_execute ):
     os.rename( cached_repo, new_repo )
 
@@ -154,3 +154,11 @@ if( False == options.no_execute and
 create_new_repo( "next", options.verbose, options.no_execute )
 
 sys.exit( 0 )
+
+
+# Figure out what to do with slashes in branch names.  Need to change the slash for directory operations.
+
+# Add option about shared branch.  Instead of "git branch <br>", and "git checkout <br>", do "git
+# checkout -t origin/<br>".
+
+# For shared branch, the branch must already exist instead of not exist.
