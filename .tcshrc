@@ -139,6 +139,7 @@ alias gen_doc 'python T:/Development/CoreBuilds/Tools/Scripts/generate_documenta
 alias tltt '/bin/ls -tr c:/tt/logfiles/TT*.log | tail -1 | xargs tail -f'
 alias edtt 'c:/cygwin/bin/emacs -nw `/bin/ls -tr c:/tt/logfiles/TT*.log | tail -1 | xargs cygpath`'
 # Good for FIX: alias tlsr '/bin/ls -tr c:/tt/logfiles/*_Send-Recv_* | tail -1 | xargs tail -f | sed "s/\x01/  /g"'
+alias tlcme '/bin/ls -tr //172.31.251.53/tt/logfiles/*P15000_CME_send_recv_* | tail -1 | xargs tail -f | sed -u "s/\x01/  /g" | grep --line-buffered -v 35=0 | grep tweiss'
 alias tlsr '/bin/ls -tr c:/tt/logfiles/*_Send-Recv_* | tail -1 | xargs -i tail -f {} | grep -v BI9'
 alias edsr 'c:/cygwin/bin/emacs -nw `/bin/ls -tr c:/tt/logfiles/*_Send-Recv_* | tail -1 | xargs cygpath`'
 
