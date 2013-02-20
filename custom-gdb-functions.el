@@ -16,5 +16,10 @@
     )
   )
 
-
+;; Next
+;; It would be useful to wrap all the gdb steps.
+;; - A function which would use the current build target in combination with
+;;   the find-best-root as the program to debug.
+;; - Split the window (if necessary) and execute the debugger command.
+;; - Run the gdb wrapper function.
 

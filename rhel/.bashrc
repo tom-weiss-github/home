@@ -34,6 +34,7 @@ alias git-add-mod='git status | grep modified | cut -d " " -f 4 | xargs --max-ar
 alias g='git'
 alias tlsrh='/bin/ls -tr /volatile/logs/*_send_recv_* | tail -1 | xargs tail -f | sed -u "s/\x01/  /g"'
 alias tlsr='/bin/ls -tr /volatile/logs/*_send_recv_* | tail -1 | xargs tail -f | sed -u "s/\x01/  /g" | grep --line-buffered -v 35=0'
+alias edsr='emacs -nw `/bin/ls -tr /volatile/logs/*_send_recv_* | tail -1`'
 alias tloc='/bin/ls -tr /var/log/*cme* | tail -1 | xargs tail -f'
 alias rmoc='/bin/ls -tr /var/log/*cme* | tail -1 | xargs rm'
 alias edoc='emacs -nw `/bin/ls -tr /var/log/*cme* | tail -1`'
@@ -42,7 +43,8 @@ alias rmvol='rm /volatile/logs/*'
 alias pbin='pushd `git rev-parse --show-toplevel`/build/x86-64/debug/bin'
 alias pext='pushd `git rev-parse --show-toplevel`/ext'
 alias prt='pushd `git rev-parse --show-toplevel`'
-alias edcfg='emacs -nw `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/debesys_system_config.cfg'
+alias dr='cd ~/dev-root'
+alias edcfg='emacs -nw `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/cme_oc_config.xml'
 alias run='`git rev-parse --show-toplevel`/run'
 alias envs='echo PATH $PATH; echo LD_LIBRARY_PATH $LD_LIBRARY_PATH; echo C_INCLUDE_PATH $C_INCLUDE_PATH; echo CPLUS_INCLUDE_PATH $CPLUS_INCLUDE_PATH; echo PYTHONPATH $PYTHONPATH; echo PYTHONHOME $PYTHONHOME; echo SWIG_LIB $SWIG_LIB; echo DEBENV_ENGAGED $DEBENV_ENGAGED'
 
@@ -50,7 +52,13 @@ alias envs='echo PATH $PATH; echo LD_LIBRARY_PATH $LD_LIBRARY_PATH; echo C_INCLU
 # To view the definition of a function, do 'type <function>'.
 function cf() { emacsclient -n `find . -name $1`; }
 function f() { find . -name $1 -print; }
-
+function rmbranch()
+{
+    echo "git push origin --delete $1";
+    git push origin --delete $1;
+    echo "git branch -d $1";
+    git branch -d $1;
+}
 
 if [ ! -f /var/log/profiles ]
 then
