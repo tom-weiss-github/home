@@ -20,6 +20,12 @@ send "put cme \r"
 expect "sftp>"
 send "put ../lib/liball_messages.so \r"
 expect "sftp>"
+send "put ../lib/libttlogger.so \r"
+expect "sftp>"
+send "put ../../../../ext/linux/x86-64/release/lib/libxerces-c-3.1.so \r"
+expect "sftp>"
+send "put ../etc/debesys/cme_oc_config.xml cme_oc_config.xml.latest.default \r"
+expect "stfp>"
 send "quit \r"
 
 spawn sftp root@192.168.254.187

@@ -7,9 +7,19 @@ fi
 
 # User specific aliases and functions
 
+# https://gist.github.com/henrik/31631
+function parse_git_dirty
+{
+    [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit (working directory clean)" ]] && echo "*"
+}
+function parse_git_branch
+{
+    git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/{\1$(parse_git_dirty)}/"
+}
 
-
-export PS1="\h \w \n>"
+export PS1="\h \[\033[1;30m\]\$(parse_git_branch) \[\033[0;0m\]\w \n>"
+#              \[\033[1;34m\] Start color dark grey.
+#                                                 \[\033[0;0m\] Stop color blue.
 export EDITOR="emacs -nw"
 # ALTERNATE_EDITOR causes emacs to be opened if emacsclient is invoked and no instance is running.
 export ALTERNATE_EDITOR=emacs
@@ -32,14 +42,15 @@ alias m='make -Rr -j 8 -C `git rev-parse --show-toplevel`'
 alias ff='find . -type d -path "*/build" -prune -o -path "*/.git" -prune -o -path "*/ext" -prune -o -path "*/pycommon" -prune -o \( \! -iname "*.ico" -and \! -iname "TAGS" -and \! -iname "FILES" -and \! -iname "BROWSE" -and \! -iname "*.cs" -and \! -iname "*.png" -and \! -iname "*.jar" -and \! -iname "*.pyc" -and \! -iname "*.o" -and \! -iname "*.d" \! -iname "*.a" \! -name "*.so" \! -iname "*.bin" \! -iname "*.sql" \! -iname "*.dat" \) -print0 | xargs -0 grep -iHn'
 alias git-add-mod='git status | grep modified | cut -d " " -f 4 | xargs --max-args=1 git add -v'
 alias g='git'
-alias tlsrh='/bin/ls -tr /volatile/logs/*_send_recv_* | tail -1 | xargs tail -f | sed -u "s/\x01/  /g"'
-alias tlsr='/bin/ls -tr /volatile/logs/*_send_recv_* | tail -1 | xargs tail -f | sed -u "s/\x01/  /g" | grep --line-buffered -v 35=0'
-alias edsr='emacs -nw `/bin/ls -tr /volatile/logs/*_send_recv_* | tail -1`'
+alias glog='git glog | head'
+alias tlsrh='/bin/ls -tr /var/lib/order-connector/*_send_recv_* | tail -1 | xargs tail -f | sed -u "s/\x01/  /g"'
+alias tlsr='/bin/ls -tr /var/lib/order-connector/*_send_recv_* | tail -1 | xargs tail -f | sed -u "s/\x01/  /g" | grep --line-buffered -v 35=0'
+alias edsr='emacs -nw `/bin/ls -tr /var/lib/order-connector/*_send_recv_* | tail -1`'
 alias tloc='/bin/ls -tr /var/log/*cme* | tail -1 | xargs tail -f'
 alias rmoc='/bin/ls -tr /var/log/*cme* | tail -1 | xargs rm'
 alias edoc='emacs -nw `/bin/ls -tr /var/log/*cme* | tail -1`'
-alias koc='ps -ef | grep cme | grep -v gdb | grep -v grep | grep -v tail | cut -d " " -f 3 | xargs -n 1 kill -9'
-alias rmvol='rm /volatile/logs/*'
+alias soc='kill `cat /var/run/cme.pid`'
+alias rmvol='rm /var/lib/order-connector/*'
 alias pbin='pushd `git rev-parse --show-toplevel`/build/x86-64/debug/bin'
 alias pext='pushd `git rev-parse --show-toplevel`/ext'
 alias prt='pushd `git rev-parse --show-toplevel`'
@@ -47,6 +58,7 @@ alias dr='cd ~/dev-root'
 alias edcfg='emacs -nw `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/cme_oc_config.xml'
 alias run='`git rev-parse --show-toplevel`/run'
 alias envs='echo PATH $PATH; echo LD_LIBRARY_PATH $LD_LIBRARY_PATH; echo C_INCLUDE_PATH $C_INCLUDE_PATH; echo CPLUS_INCLUDE_PATH $CPLUS_INCLUDE_PATH; echo PYTHONPATH $PYTHONPATH; echo PYTHONHOME $PYTHONHOME; echo SWIG_LIB $SWIG_LIB; echo DEBENV_ENGAGED $DEBENV_ENGAGED'
+alias bb1='ssh root@10.202.0.61'
 
 
 # To view the definition of a function, do 'type <function>'.
@@ -59,6 +71,13 @@ function rmbranch()
     echo "git branch -d $1";
     git branch -d $1;
 }
+function functions()
+{
+    type cf;
+    type f;
+    type rmbranch;
+}
+
 
 if [ ! -f /var/log/profiles ]
 then
