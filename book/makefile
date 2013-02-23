@@ -1,20 +1,29 @@
 CC=g++
-CFLAGS=-std=c++11 -c -Wall
+CFLAGS=-std=c++11 -c -Wall -Wextra -Werror -ggdb -O0
 BIN=bin
 OBJ=obj
+MKDIR=mkdir -p
 .PHONY : clean all trans
 
 all: $(BIN)/trans
 
 trans: $(BIN)/trans
-
 $(BIN)/trans: $(OBJ)/trans.o
-	mkdir $(BIN)
+	$(MKDIR) $(BIN)
 	$(CC) -o $@ $<
-
 $(OBJ)/trans.o: trans.cpp
-	mkdir $(OBJ)
+	$(MKDIR) $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $<
+
+
+rvalues: $(BIN)/rvalues
+$(BIN)/rvalues: $(OBJ)/rvalues.o
+	$(MKDIR) $(BIN)
+	$(CC) -o $@ $<
+$(OBJ)/rvalues.o: rvalues.cpp
+	$(MKDIR) $(OBJ)
+	$(CC) $(CFLAGS) -o $@ $<
+
 
 clean:
 	rm -rf $(BIN)
