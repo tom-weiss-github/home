@@ -85,8 +85,18 @@ template<typename T>
 void fn( T&& t )
 {
     t++;
-    std::cout << "t=" << t << std::endl;
+    std::cout << __FUNCTION__ << " t=" << t << std::endl;
 }
+
+template<typename T>
+struct FN
+{
+    static void apply( T&& t )
+    {
+        t++;
+        std::cout << __FUNCTION__ << " t=" << t << std::endl;
+    }
+};
 
 template<typename T>
 void ad( T&& t )
@@ -130,6 +140,16 @@ int main(int /*argc*/, char** /*argv*/)
 
     j = 100;
     fn( static_cast<int&&>(j) );
+    std::cout << "j=" << j << std::endl;
+
+    j = 100;
+    fn<int&>( j );
+    // fn<int&&>( j ); Does not compile.
+    std::cout << "j=" << j << std::endl;
+
+    j = 100;
+    // FN<int>::apply( j );  Does not compile.
+    FN<int>::apply( std::move(j) );
     std::cout << "j=" << j << std::endl;
 
     ad( 5 );
