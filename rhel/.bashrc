@@ -19,7 +19,7 @@ function parse_git_branch
 
 export PS1="\h \[\033[1;30m\]\$(parse_git_branch) \[\033[0;0m\]\w \n>"
 #              \[\033[1;34m\] Start color dark grey.
-#                                                 \[\033[0;0m\] Stop color blue.
+#                                                 \[\033[0;0m\] Stop color.
 export EDITOR="emacs -nw"
 # ALTERNATE_EDITOR causes emacs to be opened if emacsclient is invoked and no instance is running.
 export ALTERNATE_EDITOR=emacs
@@ -30,7 +30,9 @@ export LBM_LICENSE_FILENAME=~/29WestLicense.txt
 export LD_BIND_NOW=yes
 export PATH=$PATH:/home/debesys/Downloads/meld-1.6.1/bin
 
+. ~/githome/rhel/logs.sh
 
+alias edbrc='emacs -nw ~/githome/rhel/.bashrc'
 alias ee='emacs -nw'
 alias c='emacsclient -n'
 alias ls='ls -aFC --color=always'
@@ -44,22 +46,26 @@ alias git-add-mod='git status | grep modified | cut -d " " -f 4 | xargs --max-ar
 alias g='git'
 alias glog='git glog | head'
 alias tlsrh='/bin/ls -tr /var/lib/order-connector/*_send_recv_* | tail -1 | xargs tail -f | sed -u "s/\x01/  /g"'
+alias tlsrhbb1='/bin/ls -tr ~/bb1/var/lib/order-connector/*_send_recv_* | tail -1 | xargs tail -f | sed -u "s/\x01/  /g"'
 alias tlsr='/bin/ls -tr /var/lib/order-connector/*_send_recv_* | tail -1 | xargs tail -f | sed -u "s/\x01/  /g" | grep --line-buffered -v 35=0'
 alias edsr='emacs -nw `/bin/ls -tr /var/lib/order-connector/*_send_recv_* | tail -1`'
 alias tloc='/bin/ls -tr /var/log/*cme* | tail -1 | xargs tail -f'
+alias tlocbb1='/bin/ls -tr ~/bb1/var/log/debesys/*cme* | tail -1 | xargs tail -f'
 alias rmoc='/bin/ls -tr /var/log/*cme* | tail -1 | xargs rm'
 alias edoc='emacs -nw `/bin/ls -tr /var/log/*cme* | tail -1`'
 alias soc='kill `cat /var/run/cme.pid`'
 alias rmvol='rm /var/lib/order-connector/*'
 alias pbin='pushd `git rev-parse --show-toplevel`/build/x86-64/debug/bin'
 alias pext='pushd `git rev-parse --show-toplevel`/ext'
+alias cdrt='cd `git rev-parse --show-toplevel`'
 alias prt='pushd `git rev-parse --show-toplevel`'
 alias dr='cd ~/dev-root'
 alias edcfg='emacs -nw `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/cme_oc_config.xml'
+alias cpcfg='cp -v /home/debesys/configs/cme_oc_config.xml `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/cme_oc_config.xml'
 alias run='`git rev-parse --show-toplevel`/run'
 alias envs='echo PATH $PATH; echo LD_LIBRARY_PATH $LD_LIBRARY_PATH; echo C_INCLUDE_PATH $C_INCLUDE_PATH; echo CPLUS_INCLUDE_PATH $CPLUS_INCLUDE_PATH; echo PYTHONPATH $PYTHONPATH; echo PYTHONHOME $PYTHONHOME; echo SWIG_LIB $SWIG_LIB; echo DEBENV_ENGAGED $DEBENV_ENGAGED'
 alias bb1='ssh root@10.202.0.61'
-
+alias mbb1="sshfs root@10.202.0.61:/ ~/bb1"
 
 # To view the definition of a function, do 'type <function>'.
 function cf() { emacsclient -n `find . -name $1`; }
@@ -71,13 +77,6 @@ function rmbranch()
     echo "git branch -d $1";
     git branch -d $1;
 }
-function functions()
-{
-    type cf;
-    type f;
-    type rmbranch;
-}
-
 
 if [ ! -f /var/log/profiles ]
 then
