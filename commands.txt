@@ -1,0 +1,2 @@
+lsb_release -i -r
+Print vendor and version information of linux distribution.

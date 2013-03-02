@@ -25,7 +25,7 @@
 
 (defun find-best-root (anchor-file &optional empty-on-failure)
   "Examines the parent directories of the current buffer.  Looks for a parent that contains the
-file passed in the anchor-file argument.  This is the directory from which I want."
+file passed in the anchor-file argument.  This is the directory I want."
 
   (if (not buffer-file-name)
       ;; Certain buffer (e.g., *scratch*) return nil from buffer-file-name.  In that case,

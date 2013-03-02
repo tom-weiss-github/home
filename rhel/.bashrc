@@ -54,6 +54,7 @@ alias tlocbb1='/bin/ls -tr ~/bb1/var/log/debesys/*cme* | tail -1 | xargs tail -f
 alias rmoc='/bin/ls -tr /var/log/*cme* | tail -1 | xargs rm'
 alias edoc='emacs -nw `/bin/ls -tr /var/log/*cme* | tail -1`'
 alias soc='kill `cat /var/run/cme.pid`'
+alias oc?='cat /var/run/cme.pid; ps -ef | grep cme'
 alias rmvol='rm /var/lib/order-connector/*'
 alias pbin='pushd `git rev-parse --show-toplevel`/build/x86-64/debug/bin'
 alias pext='pushd `git rev-parse --show-toplevel`/ext'
