@@ -2,6 +2,7 @@ from optparse import OptionParser
 import os
 import subprocess
 import sys
+import atexit
 
 DEV_ROOT = "/home/debesys/dev-root"
 
@@ -99,6 +100,21 @@ parser.set_defaults( no_execute=False )
 
 ( options, args ) = parser.parse_args()
 
+# Check for a pidfile to see if the daemon already runs
+pidfile = "/var/run/get-repo.pid"
+try:
+    pf = file(pidfile,'r')
+    pid = int(pf.read().strip())
+    pf.close()
+except IOError:
+    pid = None
+
+if pid:
+    message = "pidfile %s already exists, already running?\n"
+    sys.stderr.write(message % pidfile)
+    sys.exit(1)
+
+
 if( 1 != len(args) ):
     print( "You must pass the branch to create." )
     sys.exit( 0 )
@@ -151,6 +167,44 @@ if( False == options.no_execute and
     print( "Error: {0} already exists.".format( cached_repo ) )
     sys.exit( 1 )
 
+try:
+    pid = os.fork()
+    if pid > 0:
+        # exit first parent
+        sys.exit(0)
+except OSError, e:
+    sys.stderr.write("fork #1 failed: %d (%s)\n" % (e.errno, e.strerror))
+    sys.exit(1)
+
+# decouple from parent environment
+os.chdir("/")
+os.setsid()
+# Keep the current umask value.
+
+# do second fork
+try:
+    pid = os.fork()
+    if pid > 0:
+        # exit from second parent
+        sys.exit(0)
+except OSError, e:
+    sys.stderr.write("fork #2 failed: %d (%s)\n" % (e.errno, e.strerror))
+    sys.exit(1)
+
+# redirect standard file descriptors
+sys.stdout.flush()
+sys.stderr.flush()
+si = file("/dev/null", 'r')
+so = file("/dev/null", 'a+')
+se = file("/dev/null", 'a+', 0)
+os.dup2(si.fileno(), sys.stdin.fileno())
+os.dup2(so.fileno(), sys.stdout.fileno())
+os.dup2(se.fileno(), sys.stderr.fileno())
+
+# write pidfile
+atexit.register( os.remove, pidfile )
+pid = str(os.getpid())
+file(pidfile,'w+').write("%s\n" % pid)
 create_new_repo( "next", options.verbose, options.no_execute )
 
 sys.exit( 0 )
