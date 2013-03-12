@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function lssr_()
+function lssr()
 {
     local directory=/var/lib/order-connector
     if [ "$1" == "bb1" ]; then
@@ -9,7 +9,7 @@ function lssr_()
     /bin/ls -tr $directory/*_send_recv_* | tail -1
 }
 
-function tlsr_()
+function tlsr()
 {
     lssr_ "$1"
     local directory=/var/lib/order-connector
@@ -19,7 +19,7 @@ function tlsr_()
     /bin/ls -tr $directory/*_send_recv_* | tail -1 | xargs tail -f | sed -u "s/\x01/  /g" | grep --line-buffered -v 35=0
 }
 
-function tlsrh_()
+function tlsrh()
 {
     lssr_ "$1"
     local directory=/var/lib/order-connector
@@ -29,7 +29,7 @@ function tlsrh_()
     /bin/ls -tr $directory/*_send_recv_* | tail -1 | xargs tail -f | sed -u "s/\x01/  /g"
 }
 
-function edsr_()
+function edsr()
 {
     local directory=/var/lib/order-connector
     if [ "$1" == "bb1" ]; then
@@ -38,7 +38,7 @@ function edsr_()
     emacs -nw `/bin/ls -tr $directory/*_send_recv_* | tail -1`
 }
 
-function lsoc_()
+function lsoc()
 {
     local log_files=/var/log/*cme*
     if [ "$1" == "bb1" ]; then
@@ -47,7 +47,7 @@ function lsoc_()
     /bin/ls -tr $log_files | tail -1
 }
 
-function tloc_()
+function tloc()
 {
     local log_files=/var/log/*cme*
     if [ "$1" == "bb1" ]; then
@@ -56,7 +56,7 @@ function tloc_()
     /bin/ls -tr $log_files | tail -1 | xargs tail -f
 }
 
-function edoc_()
+function edoc()
 {
     local log_files=/var/log/*cme*
     if [ "$1" == "bb1" ]; then
@@ -65,7 +65,7 @@ function edoc_()
     emacs -nw `/bin/ls -tr $log_files | tail -1`
 }
 
-function rmoc_()
+function rmoc()
 {
     local log_files=/var/log/*cme*
     if [ "$1" == "bb1" ]; then

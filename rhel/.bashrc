@@ -14,6 +14,9 @@ GIT_PS1_SHOWDIRTYSTATE=true
 export PS1="\h\[\033[1;30m\]\$(__git_ps1) \[\033[0;0m\]\w \n>"
 #             \[\033[1;34m\] Start color dark grey.
 #                                        \[\033[0;0m\] Stop color.
+#. ~/githome/rhel/.git-prompt-alternate.sh
+#export PS1="\h \[\033[1;30m\]\$(parse_git_branch) \[\033[0;0m\]\w \n>"
+
 export EDITOR="emacs -nw"
 # ALTERNATE_EDITOR causes emacs to be opened if emacsclient is invoked and no instance is running.
 export ALTERNATE_EDITOR=emacs
@@ -39,14 +42,6 @@ alias ff='find . -type d -path "*/build" -prune -o -path "*/.git" -prune -o -pat
 alias git-add-mod='git status | grep modified | cut -d " " -f 4 | xargs --max-args=1 git add -v'
 alias glog='git glog | head'
 alias galias='git config --list | grep alias'
-alias tlsrh='/bin/ls -tr /var/lib/order-connector/*_send_recv_* | tail -1 | xargs tail -f | sed -u "s/\x01/  /g"'
-alias tlsrhbb1='/bin/ls -tr ~/bb1/var/lib/order-connector/*_send_recv_* | tail -1 | xargs tail -f | sed -u "s/\x01/  /g"'
-alias tlsr='/bin/ls -tr /var/lib/order-connector/*_send_recv_* | tail -1 | xargs tail -f | sed -u "s/\x01/  /g" | grep --line-buffered -v 35=0'
-alias edsr='emacs -nw `/bin/ls -tr /var/lib/order-connector/*_send_recv_* | tail -1`'
-alias tloc='/bin/ls -tr /var/log/*cme* | tail -1 | xargs tail -f'
-alias tlocbb1='/bin/ls -tr ~/bb1/var/log/debesys/*cme* | tail -1 | xargs tail -f'
-alias rmoc='/bin/ls -tr /var/log/*cme* | tail -1 | xargs rm'
-alias edoc='emacs -nw `/bin/ls -tr /var/log/*cme* | tail -1`'
 alias soc='kill `cat /var/run/cme.pid`'
 alias oc?='cat /var/run/cme.pid; ps -ef | grep cme'
 alias rmvol='rm /var/lib/order-connector/*'

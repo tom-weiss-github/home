@@ -137,6 +137,8 @@ if( False == options.no_execute and
     print( "Didn't find a valid repository at {0}.".format( cached_repo ) )
     sys.exit( 1 )
 
+
+
 if( True == options.verbose ):
     print_with_border( "mv {0} {1}".format( cached_repo, new_repo ), "-" )
 if( False == options.no_execute ):
@@ -216,3 +218,7 @@ sys.exit( 0 )
 # checkout -t origin/<br>".
 
 # For shared branch, the branch must already exist instead of not exist.
+
+# Tried altering the algorithm to copy the cached repo instead of renaming it and
+# cloning a new one.  That seems to have worked, but some git commands showed very
+# slow performance.  Not able to find the root cause.

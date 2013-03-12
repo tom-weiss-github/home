@@ -30,9 +30,6 @@
 ;; map f2 to goto line number
 (global-set-key (quote[f2]) (quote goto-line))
 
-;; map f3 to toggle read-write access
-(global-set-key (quote[f3]) (quote toggle-read-only))
-
 ;; Map f11/f12 to set background/foreground: this will prompt for
 ;; the color on the bottom.
 (global-set-key (quote[f11]) (quote set-background-color))
@@ -135,8 +132,8 @@
 
 ;; Load my custom find grep.
 (load-file "~/.emacs.d/custom-find-grep.el")
+(global-set-key (quote[f3]) (quote set-fg-suffix))
 (global-set-key (quote[f4]) (quote fg))
-(global-set-key (quote[f6]) (quote set-fg-suffix))
 
 ;; Was experimenting with these two but never had a good use for them,
 ;; hence they haven't been added to any keyboard binding.
@@ -390,6 +387,8 @@
 ;; C-x r b Bounce to a bookmark.
 ;; C-x r l List bookmarks.
 
+;; To change read-write:
+;; toggle-read-only
 
 ;; Get help on some function
 ;; C-h f (describe function)
