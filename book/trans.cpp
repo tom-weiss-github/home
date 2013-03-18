@@ -1,9 +1,7 @@
-
-// g++ -o trans -std=c++11 trans.cpp
 #include <iostream>
 #include <algorithm>
 
-int main(int argc, char* argv[])
+int main(int /*argc*/, char** /*argv[]*/)
 {
     std::string orig( "abcdefg" );
     std::string nice;
@@ -19,4 +17,6 @@ int main(int argc, char* argv[])
 
     std::cout << "orig=" << orig << std::endl;
     std::cout << "nice=" << nice << std::endl;
+
+    return 0;
 }

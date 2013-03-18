@@ -3,9 +3,9 @@ CFLAGS=-std=c++11 -c -Wall -Wextra -Werror -ggdb -O0
 BIN=bin
 OBJ=obj
 MKDIR=mkdir -p
-.PHONY : clean all trans
+.PHONY : clean all trans rvalues crash
 
-all: $(BIN)/trans
+all: $(BIN)/trans $(BIN)/rvalues
 
 trans: $(BIN)/trans
 $(BIN)/trans: $(OBJ)/trans.o
@@ -21,6 +21,15 @@ $(BIN)/rvalues: $(OBJ)/rvalues.o
 	$(MKDIR) $(BIN)
 	$(CC) -o $@ $<
 $(OBJ)/rvalues.o: rvalues.cpp
+	$(MKDIR) $(OBJ)
+	$(CC) $(CFLAGS) -o $@ $<
+
+
+crash: $(BIN)/crash
+$(BIN)/crash: $(OBJ)/crash.o
+	$(MKDIR) $(BIN)
+	$(CC) -o $@ $<
+$(OBJ)/crash.o: crash.cpp
 	$(MKDIR) $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $<
 

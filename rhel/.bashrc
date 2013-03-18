@@ -7,9 +7,11 @@ fi
 
 # User specific aliases and functions
 
-GIT_PS1_SHOWDIRTYSTATE=true
-. ~/githome/rhel/.git-prompt.sh
-. ~/githome/rhel/.git-completion.sh
+# This seems to really slow down the __git_ps1 function, sometimes up to 1 second,
+# which is too long for the prompt to return.
+# GIT_PS1_SHOWDIRTYSTATE=true
+source ~/githome/rhel/.git-prompt.sh
+source ~/githome/rhel/.git-completion.sh
 
 export PS1="\h\[\033[1;30m\]\$(__git_ps1) \[\033[0;0m\]\w \n>"
 #             \[\033[1;34m\] Start color dark grey.
