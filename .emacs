@@ -1,20 +1,13 @@
 ;; Author: Tom Weiss
 ;; Email:  weiss@cs.wisc.edu
 ;;
-;; This file is not part of GNU Emacs.
+;; This file is not part of GNU Emacs, duh.
 
 ;; This forces emacs to save files in UNIX format.
 ;;(global-set-key (quote[f5]) (set-buffer-file-coding-system (quote undecided-unix) nil))
 
 ;; Should force emacs to display line numbers.
 (line-number-mode 1)
-
-;; To be explored further:
-;; When using the electric buffer list, I'd prefer if the window split
-;; is horizontal.  The following two variables should allow me to
-;; control how the split happens when I invoke the ebl.
-;; (split-width-threshold 0)
-;; (split-height-threshold nil) If nil, emacs is not allowed to split vertically
 
 ;; Map F1 to open the electric buffer list, perhaps wider than normal.
 (load-file "~/.emacs.d/custom-electric-buffer-list.el")
