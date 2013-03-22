@@ -4,6 +4,10 @@
 ;; Author: Tom Weiss
 ;; email:  weiss@cs.wisc.edu
 ;;
+;; Useful tag related commands:
+;; find-tag
+;; tags-search
+;; tags-loop-continue (M-,)
 
 (load-file "~/.emacs.d/find-best-root.el")
 
@@ -20,21 +24,6 @@
       (if (not (file-exists-p expected-tag-file-absolute-path))
           (call-interactively 'create-tag-file))
 
-      ;; while count < 100
-      ;;(setq count 100)
-      ;;(not (eq count 0))
-      ;;(setq count (- count 1))
-      ;;;(message (int-to-string count))
-      ;;(or nil nil))
-      ;; (while (not (eq count 0))
-      ;;   (message (int-to-string count))
-      ;;   (message (symbol-name (process-status "ETAGS")))
-      ;;   (if (file-exists-p expected-tag-file-absolute-path)
-      ;;       (progn
-      ;;         (message (concat "left loop at " (int-to-string count)))
-      ;;         (setq count 0))
-      ;;     (setq count (- count 1))))
-
       ;; Hopefully the TAGS file exists now.
       (if (file-exists-p expected-tag-file-absolute-path)
           (progn (visit-tags-table expected-tag-file-absolute-path)
@@ -47,11 +36,13 @@
 
 (defun create-tag-file ()
   (interactive)
-  "Create the TAGS file if it doesn't exist."
+  "Create the TAGS file."
 
   (let ( (expected-tag-file-absolute-path "")
          (etags-command "")
-         (best-path (find-best-root "makefile" t)) )
+         (best-path (find-best-root "makefile" t))
+         (seconds-to-wait 20)
+         (seconds-waited 20) )
     (progn
       (if (eq "" best-path)
           (error "The current buffer isn't in a source tree, TAGS cannot be created")
@@ -64,42 +55,35 @@
           (delete-file expected-tag-file-absolute-path)
         )
 
-      (setq etags-command (concat "find "
-                                  best-path
-                                  " -type f "
-                                  " -iname '*.c' -or "
-                                  " -iname '*.cpp' -or "
+      (setq etags-command (concat "find " best-path " -type f "
                                   " -iname '*.h' "
-                                  " | etags "
-                                  " --output="
-                                  best-path
-                                  "TAGS"
-                                  " - "
-                                  ))
-      (message (concat "Creating " best-path "TAGS... "))
+                                  " -iname '*.hpp' "
+                                  " -iname '*.c' "
+                                  " -iname '*.cpp' "
+                                  " | etags --language=c++ --output=" best-path "TAGS" " - "  ))
       (start-process-shell-command "ETAGS" "ETAGS" etags-command)
-      (setq count 1000)
-      (while (not (eq count 0))
-        ;;(message (int-to-string count))
+
+      ;; I've noticed that the shell process may return before the
+      ;; tags processing is fully complete.  That may cause the caller
+      ;; visiting a partically completed tag file.  This loop will
+      ;; wait for the command to complete, with a timeout.
+      (while (not (eq seconds-waited 0))
         ;;(message (symbol-name (process-status "ETAGS")))
+        (message (concat "Creating " best-path "TAGS"
+                         (make-string (- seconds-to-wait seconds-waited) 46) ;; 46 is ASCII for "."
+                         " (max " (int-to-string seconds-to-wait)
+                         " seconds)"))
         (sit-for 1)
         (if (not (process-status "ETAGS"))
             (progn
-              ;;(message (concat "left loop at " (int-to-string count)))
-              (setq count 0))
-          (setq count (- count 1))))
+              (setq seconds-waited 0))
+          (setq seconds-waited (- seconds-waited 1))))
 
       (message (concat "Finished creating " best-path "TAGS"))
       )
     )
   )
 
-;; find-tag
-;; tags-search
-;; tags-loop-continue (M-,)
+;; Useful way to view the results of process-status.
+;; (message (symbol-name (process-status "ETAGS"))
 
-;; TAGS
-;; Documentation:
-;; http://www.gnu.org/software/emacs/manual/html_node/emacs/List-Tags.html#List-Tags
-;; find . \( -name "*.cpp" -o -name "*.h" -o -name "*.c" -o -name "*.inl" \) -print | c:/emacs-24.1/bin/etags.exe --output=pcr-119133-tags --language=c++ -
-;;                                                                                               (leave out for TAGS to be the name)

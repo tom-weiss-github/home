@@ -41,7 +41,7 @@ alias rw=~/githome/setxtitle.sh
 unset PROMPT_COMMAND
 alias m='make -Rr -j 8 -C `git rev-parse --show-toplevel`'
 # Use optimize-find.py to help decide which directories and extensions to filter.
-alias ff='find . -type d -path "*/build" -prune -o -path "*/.git" -prune -o -path "*/ext" -prune -o -path "*/pycommon" -prune -o \( \! -iname "*.ico" -and \! -iname "TAGS" -and \! -iname "FILES" -and \! -iname "BROWSE" -and \! -iname "*.cs" -and \! -iname "*.png" -and \! -iname "*.jar" -and \! -iname "*.pyc" -and \! -iname "*.o" -and \! -iname "*.d" -and \! -iname "*.a" -and \! -name "*.so" -and \! -iname "*.bin" -and \! -iname "*pdf" -and \! -iname "*.java"  -and \! -iname "*xml" -and \! -iname "*.scala" -and \! -iname "*png" -and \! -iname "*.txt" -and \! -iname "*.html" -and \! -iname "*.php" -and \! -iname "*.css" -and \! -iname "*.js" -and \! -iname "*.cs" -and \! -iname "*.json" -and \! -iname "*.sql" -and \! -iname "*.dat" \) -print0 | xargs -0 grep -iHn'
+#alias ff='find . -type d -path "*/build" -prune -o -path "*/.git" -prune -o -path "*/ext" -prune -o -path "*/pycommon" -prune -o \( \! -iname "*.ico" -and \! -iname "TAGS" -and \! -iname "FILES" -and \! -iname "BROWSE" -and \! -iname "*.cs" -and \! -iname "*.png" -and \! -iname "*.jar" -and \! -iname "*.pyc" -and \! -iname "*.o" -and \! -iname "*.d" -and \! -iname "*.a" -and \! -name "*.so" -and \! -iname "*.bin" -and \! -iname "*pdf" -and \! -iname "*.java"  -and \! -iname "*xml" -and \! -iname "*.scala" -and \! -iname "*png" -and \! -iname "*.txt" -and \! -iname "*.html" -and \! -iname "*.php" -and \! -iname "*.css" -and \! -iname "*.js" -and \! -iname "*.cs" -and \! -iname "*.json" -and \! -iname "*.sql" -and \! -iname "*.dat" \) -print0 | xargs -0 grep -iHn'
 
 ff_dir=' -path "*/build" -prune -o '
 ff_dir+=' -path "*/.git" -prune -o '
@@ -70,7 +70,7 @@ ff_file+=' -and \! -iname "*.so" '
 ff_file+=' -and \! -iname "*.sql" '
 ff_file+=' -and \! -iname "*.txt" '
 ff_file+=' -and \! -iname "*.xml" '
-alias fff="find . -type d $ff_dir \( $ff_file \) -print0 | xargs -0 grep -iHn"
+alias ff="find . -type d $ff_dir \( $ff_file \) -print0 | xargs -0 grep -iHn"
 
 alias git-add-mod='git status | grep modified | cut -d " " -f 4 | xargs --max-args=1 git add -v'
 alias glog='git glog | head'
@@ -83,7 +83,7 @@ alias pext='pushd `git rev-parse --show-toplevel`/ext'
 alias cdrt='cd `git rev-parse --show-toplevel`'
 alias prt='pushd `git rev-parse --show-toplevel`'
 alias dr="cd ~/dev-root"
-alias edcfg='emacs -nw `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/cme_oc_config.xml'
+alias edcfg='emacs -nw /etc/debesys/cme_oc_config.xml'
 alias run='`git rev-parse --show-toplevel`/run'
 alias envs='echo PATH $PATH; echo LD_LIBRARY_PATH $LD_LIBRARY_PATH; echo C_INCLUDE_PATH $C_INCLUDE_PATH; echo CPLUS_INCLUDE_PATH $CPLUS_INCLUDE_PATH; echo PYTHONPATH $PYTHONPATH; echo PYTHONHOME $PYTHONHOME; echo SWIG_LIB $SWIG_LIB; echo DEBENV_ENGAGED $DEBENV_ENGAGED'
 alias bb1='ssh root@10.202.0.61'
@@ -105,23 +105,24 @@ function rmbranch()
 
 function cpcfg_()
 {
-    cp -v /home/debesys/configs/cme_oc_config.xml `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/cme_oc_config.xml;
-    cp -v `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/lbm_config.xml `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/lbm_config.orig.xml;
-    cp -v `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/lbm_config_backbone.xml `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/lbm_config_backbone.orig.xml;
+    cp -v `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/cme_oc_config.xml /etc/debesys/cme_oc_config.LATEST.xml;
+    cp -v `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/lbm_config.xml /etc/debesys/lbm_config.xml;
+    cp -v `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/lbm_config.xml /etc/debesys/lbm_config.orig.xml;
+    cp -v `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/lbm_config_backbone.xml /etc/debesys/lbm_config_backbone.orig.xml;
 }
 alias cpcfg=cpcfg_
 
 function bblbm_()
 {
-    rm -v `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/lbm_config.xml;
-    cp -v `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/lbm_config_backbone.orig.xml `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/lbm_config.xml;
+    rm -v /etc/debesys/lbm_config.xml;
+    cp -v /etc/debesys/lbm_config_backbone.orig.xml /etc/debesys/lbm_config.xml;
 }
 alias bblbm=bblbm_
 
 function dvlbm_()
 {
-    rm -v `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/lbm_config.xml;
-    cp -v `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/lbm_config.orig.xml `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/lbm_config.xml;
+    rm -v /etc/debesys/lbm_config.xml;
+    cp -v /etc/debesys/lbm_config.orig.xml /etc/debesys/lbm_config.xml;
 }
 alias dvlbm=dvlbm_
 
