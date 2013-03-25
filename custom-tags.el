@@ -55,12 +55,11 @@
           (delete-file expected-tag-file-absolute-path)
         )
 
+      ;; Note an '-or' is required to connect -iname options.
       (setq etags-command (concat "find " best-path " -type f "
                                   " -iname '*.h' "
-                                  " -iname '*.hpp' "
-                                  " -iname '*.c' "
-                                  " -iname '*.cpp' "
                                   " | etags --language=c++ --output=" best-path "TAGS" " - "  ))
+      (message etags-command)
       (start-process-shell-command "ETAGS" "ETAGS" etags-command)
 
       ;; I've noticed that the shell process may return before the

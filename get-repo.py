@@ -3,6 +3,7 @@ import os
 import subprocess
 import sys
 import atexit
+import shutil
 
 DEV_ROOT = "/home/debesys/dev-root"
 
@@ -137,6 +138,43 @@ if( False == options.no_execute and
     print( "Didn't find a valid repository at {0}.".format( cached_repo ) )
     sys.exit( 1 )
 
+
+
+#
+# For some reason, this technique of copying the repo causes problems like
+# unexplained differences in ext files and very long git status execution.
+# Perhaps try cloning from next and then set the origin back to github.
+#
+
+# if( True == options.verbose ):
+#     print_with_border( "cd {0}".format( cached_repo ), "-" )
+# if( False == options.no_execute ):
+#     os.chdir( cached_repo )
+
+# command( [ "git", "checkout", "master"], True, options.verbose, options.no_execute )
+# command( [ "git", "fetch" ], True, options.verbose, options.no_execute )
+# command( [ "git", "merge", "origin/master" ], True, options.verbose, options.no_execute )
+# command( [ "git", "submodule", "update" ], True, options.verbose, options.no_execute )
+
+# if True == options.verbose:
+#     print_with_border("cp -r {0} {1}.".format(cached_repo, new_repo), "-")
+# if False == options.no_execute:
+#     shutil.copytree(cached_repo, new_repo)
+
+# if( True == options.verbose ):
+#     print_with_border( "cd {0}".format( new_repo ), "-" )
+# if( False == options.no_execute ):
+#     os.chdir( new_repo )
+
+# if( True == BranchExists( branch_name, new_repo, options.verbose, options.no_execute ) ):
+#     print( "Error: {0} already exists in {1}.".format( branch_name, new_repo ) )
+#     sys.exit( 1 )
+
+# command( [ "git", "branch", branch_name ], True, options.verbose, options.no_execute )
+# command( [ "git", "checkout", branch_name ], True, options.verbose, options.no_execute )
+
+# print_with_border("Repository {0} is now ready to use.".format(new_repo), "X")
+# print("")
 
 
 if( True == options.verbose ):

@@ -58,21 +58,28 @@ SYMBOL should be one of 'grep-command', 'grep-template',
                                       "-path \"*/ext\" -prune -o "
                                       "-path \"*/pycommon\" -prune -o "
                                       "\"(\" "
-                                      "\! -iname \"*.ico\" "
-                                      "-and \! -iname \"TAGS\" "
-                                      "-and \! -iname \"BROWSE\" "
+                                      "\! -iname \"BROWSE\" "
                                       "-and \! -iname \"FILES\" "
-                                      "-and \! -iname \"*.cs\" "
-                                      "-and \! -iname \"*.png\" "
-                                      "-and \! -iname \"*.jar\" "
-                                      "-and \! -iname \"*.pyc\" "
-                                      "-and \! -iname \"*.o\" "
-                                      "-and \! -iname \"*.d\" "
+                                      "-and \! -iname \"TAGS\" "
                                       "-and \! -iname \"*.a\" "
-                                      "-and \! -iname \"*.so\" "
                                       "-and \! -iname \"*.bin\" "
-                                      "-and \! -iname \"*.sql\" "
+                                      "-and \! -iname \"*.cs\" "
+                                      "-and \! -iname \"*.css\" "
+                                      "-and \! -iname \"*.d\" "
                                       "-and \! -iname \"*.dat\" "
+                                      "-and \! -iname \"*.html\" "
+                                      "-and \! -iname \"*.ico\" "
+                                      "-and \! -iname \"*.jar\" "
+                                      "-and \! -iname \"*.json\"  "
+                                      "-and \! -iname \"*.o\" "
+                                      "-and \! -iname \"*.pdf\" "
+                                      "-and \! -iname \"*.php\" "
+                                      "-and \! -iname \"*.png\" "
+                                      "-and \! -iname \"*.pyc\" "
+                                      "-and \! -iname \"*.so\" "
+                                      "-and \! -iname \"*.sql\" "
+                                      "-and \! -iname \"*.txt\" "
+                                      "-and \! -iname \"*.xml\" "
                                       "\")\" "
                                       "-print0 | xargs -0 grep -nHi -e "))
            ))
@@ -93,7 +100,11 @@ SYMBOL should be one of 'grep-command', 'grep-template',
 ;; that if a file with an extension I want to filter out was in the same directory as the file which was open, then find would
 ;; return an error.
 (defun fg ()
-  "A custom find grep that dynamically sets the search path based on the buffer."
+  "A custom find grep that dynamically sets the search path based on the buffer.
+Regular Expression Examples:
+-E \"struct.*hash\"  When using special characters, enclose regexp in quotes.
+-E \"^text$\"        ^ Matches beginning of line,  $ matches end of line.
+-E \"main\\(.*\\)\"  .* Matches everything, parenthesis require escaping."
   (interactive)
   (let ((fg-tt-filters find-filters ))
     (setq my-find-grep-command "find \"")

@@ -113,7 +113,7 @@ function lslr()
 {
     local log_files=/var/log/*ledgerrequestserver*
     if [ "$1" == "bb1" ]; then
-        log_files=~/bb1/var/log/debesys/*ledgerupdateserver*
+        log_files=~/bb1/var/log/debesys/*ledgerrequestserver*
     fi
     /bin/ls /bin/ls -tr $log_files | tail -1
 }
@@ -141,6 +141,42 @@ function rmlr()
     local log_files=/var/log/*ledgerrequestserver*
     if [ "$1" == "bb1" ]; then
         log_files=~/bb1/var/log/debesys/*ledgerrequestserver*
+    fi
+    rm -v `/bin/ls -tr $log_files | tail -1`
+}
+
+function lsbr()
+{
+    local log_files=/var/log/*bouncerd*
+    if [ "$1" == "bb1" ]; then
+        log_files=~/bb1/var/log/debesys/*bouncerd*
+    fi
+    /bin/ls /bin/ls -tr $log_files | tail -1
+}
+
+function tlbr()
+{
+    local log_files=/var/log/*bouncerd*
+    if [ "$1" == "bb1" ]; then
+        log_files=~/bb1/var/log/debesys/*bouncerd*
+    fi
+    /bin/ls -tr /bin/ls -tr $log_files | tail -1 | xargs tail -f
+}
+
+function edbr()
+{
+    local log_files=/var/log/*bouncerd*
+    if [ "$1" == "bb1" ]; then
+        log_files=~/bb1/var/log/debesys/*bouncerd*
+    fi
+    emacs -nw `/bin/ls -tr $log_files | tail -1`
+}
+
+function rmbr()
+{
+    local log_files=/var/log/*bouncerd*
+    if [ "$1" == "bb1" ]; then
+        log_files=~/bb1/var/log/debesys/*bouncerd*
     fi
     rm -v `/bin/ls -tr $log_files | tail -1`
 }
