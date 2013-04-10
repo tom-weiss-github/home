@@ -1,2 +1,16 @@
 lsb_release -i -r
 Print vendor and version information of linux distribution.
+
+find / -type f -size +1000k | xargs -n 1 ls -l --block-size=M
+Find all files over 1000 kbs and then print the size of each of those
+files in mbs.
+
+df -h
+Print disk usage.
+
+ls | xargs -n 1 -i echo \{\}, | xargs -n 4
+This command is to illustrate some features of xargs.  The \{\} combined
+with -i allow the output from the piped command to be inserted in the
+middle of the command xargs is building.  The -n allows some number of
+inputs to be combined together.  This will print four items separated
+by commas on each line.

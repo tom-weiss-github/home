@@ -103,6 +103,21 @@ function rmbranch()
     git branch -d $1;
 }
 
+function git-sync_()
+{
+    echo "pushd `git rev-parse --show-toplevel`";
+    pushd `git rev-parse --show-toplevel`;
+    echo "git checkout master";
+    git checkout master;
+    echo "git pull";
+    git pull;
+    echo "git submodule update";
+    git submodule update;
+    echo "popd";
+    popd;
+}
+alias git-sync=git-sync_
+
 function cpcfg_()
 {
     cp -v `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/cme_oc_config.xml /etc/debesys/cme_oc_config.LATEST.xml;

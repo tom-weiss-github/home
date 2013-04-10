@@ -404,6 +404,25 @@
 ;; example of regular expression search-replace:
 ;; M-x replace-regexp TEXT[ ]* <enter> ' = ' (that's space equals space)
 
+;; replace-regexp example:
+;; had:
+;; <port>1</port>
+;; <port>2</port>
+;; ...
+;; <port>N</port>
+;; wanted:
+;; <port>1</port>
+;; <tag>1</tag>
+;; <port>2</port>
+;; <tag>2</tag>
+;; ...
+;; <port>N</port>
+;; <tag>N</tag>
+;; <port>\([0-9]+\)</port>
+;;         group 1 in parenthesis
+;; <port>\1</port>C-qC-j<tag>\1</tag>
+;;       \1 means what was matched in group 1
+;;       C-qC-j is newline (CTRL+q, CTRL+j)
 
 ;; Toggle line wrap
 ;; M-x toggle-truncate-lines
@@ -414,6 +433,3 @@
 
 ;; To remove ^M characters, use CTRL-Q CTRL-M to specify the ^M character.
 
-;; Future Work
-;; - Write lisp function to automatically create TAGS if they don't exist.
-;; - Write lisp function to create ebrowse information if it doesn't exist.
