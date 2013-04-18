@@ -52,7 +52,7 @@ function tloc()
     if [ "$1" == "bb1" ]; then
         log_files=~/bb1/var/log/debesys/*cme*
     fi
-    /bin/ls -tr $log_files | tail -1 | xargs tail -f
+    /bin/ls -tr $log_files | tail -1 | xargs tail -f | sed -u "s/\x01/ /g"
 }
 
 function edoc()

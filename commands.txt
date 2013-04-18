@@ -8,9 +8,19 @@ files in mbs.
 df -h
 Print disk usage.
 
+lsof
+Print open files (which may not be shown in find or ls if the file
+has been deleted, but a file descriptor is still open).
+
 ls | xargs -n 1 -i echo \{\}, | xargs -n 4
 This command is to illustrate some features of xargs.  The \{\} combined
 with -i allow the output from the piped command to be inserted in the
 middle of the command xargs is building.  The -n allows some number of
 inputs to be combined together.  This will print four items separated
 by commas on each line.
+
+find . -mtime +10 | xargs rm -v
+Remove files older than 10 days.
+
+git log --graph --date-order --date=relative --pretty=oneline | head -1 | sed s/*/Git_Commit:/g | sed s/\ /_/
+Simple sed usage example.  Format the latest git log in a particular format.
