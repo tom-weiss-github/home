@@ -144,8 +144,11 @@ if( False == options.no_execute and
 # For some reason, this technique of copying the repo causes problems like
 # unexplained differences in ext files and very long git status execution.
 # Perhaps try cloning from next and then set the origin back to github.
+# Running strace git status is showing me that at some point during the
+# command it get stuck for a long time.  Not clear what's causing that.
 #
 
+# To use this method, uncomment everything below to the end.
 # if( True == options.verbose ):
 #     print_with_border( "cd {0}".format( cached_repo ), "-" )
 # if( False == options.no_execute ):
@@ -155,11 +158,7 @@ if( False == options.no_execute and
 # command( [ "git", "fetch" ], True, options.verbose, options.no_execute )
 # command( [ "git", "merge", "origin/master" ], True, options.verbose, options.no_execute )
 # command( [ "git", "submodule", "update" ], True, options.verbose, options.no_execute )
-
-# if True == options.verbose:
-#     print_with_border("cp -r {0} {1}.".format(cached_repo, new_repo), "-")
-# if False == options.no_execute:
-#     shutil.copytree(cached_repo, new_repo)
+# command( [ "cp", "--recursive", cached_repo, new_repo ], True, options.verbose, options.no_execute )
 
 # if( True == options.verbose ):
 #     print_with_border( "cd {0}".format( new_repo ), "-" )
@@ -175,6 +174,8 @@ if( False == options.no_execute and
 
 # print_with_border("Repository {0} is now ready to use.".format(new_repo), "X")
 # print("")
+
+
 
 
 if( True == options.verbose ):
@@ -257,6 +258,4 @@ sys.exit( 0 )
 
 # For shared branch, the branch must already exist instead of not exist.
 
-# Tried altering the algorithm to copy the cached repo instead of renaming it and
-# cloning a new one.  That seems to have worked, but some git commands showed very
-# slow performance.  Not able to find the root cause.
+
