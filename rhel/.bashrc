@@ -92,6 +92,7 @@ alias ocperf="ssh root@192.168.254.180"
 alias stperf="ssh root@192.168.254.187"
 alias repo="python ~/githome/get-repo.py"
 alias dbd='sudo mount -o user=intad/tweiss -t cifs //chifs01.int.tt.local/Share /mnt/dbd/'
+alias cli_mt='run `git rev-parse --show-toplevel`/ext/linux/x86-64/release/bin/cli_mt 10.203.0.43:2181'
 
 # To view the definition of a function, do 'type <function>'.
 function cf() { emacsclient -n `find . -name $1`; }

@@ -12,4 +12,8 @@
 
 ;; make clean-all & make
 
-;; Next: Load into emacs.
+;; Useful information
+;; http://stackoverflow.com/questions/13218664/setting-up-autocomplete-to-work-with-semantic
+
+;; Next: follow instructions on the guide to see if I can get something working.
+
