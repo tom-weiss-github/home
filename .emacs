@@ -435,4 +435,4 @@
 ;; to paste, go to spot and do M-x yank-rectangle
 
 ;; To remove ^M characters, use CTRL-Q CTRL-M to specify the ^M character.
-
+;; Test comment.
