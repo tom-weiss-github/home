@@ -6,8 +6,6 @@
 ;; This forces emacs to save files in UNIX format.
 ;;(global-set-key (quote[f5]) (set-buffer-file-coding-system (quote undecided-unix) nil))
 
-;; (load-file "~/Downloads/cedet-bzr/trunk/cedet-devel-load.el")
-;; (semantic-mode 1)
 
 ;; Should force emacs to display line numbers.
 (line-number-mode 1)

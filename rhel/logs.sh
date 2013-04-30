@@ -39,7 +39,7 @@ function edsr()
 
 function lsoc()
 {
-    local log_files=/var/log/*cme*
+    local log_files=/var/log/debesys/*cme*
     if [ "$1" == "bb1" ]; then
         log_files=~/bb1/var/log/debesys/*cme*
     fi
@@ -48,7 +48,7 @@ function lsoc()
 
 function tloc()
 {
-    local log_files=/var/log/*cme*
+    local log_files=/var/log/debesys/*cme*
     if [ "$1" == "bb1" ]; then
         log_files=~/bb1/var/log/debesys/*cme*
     fi
@@ -57,7 +57,7 @@ function tloc()
 
 function edoc()
 {
-    local log_files=/var/log/*cme*
+    local log_files=/var/log/debesys/*cme*
     if [ "$1" == "bb1" ]; then
         log_files=~/bb1/var/log/debesys/*cme*
     fi
@@ -66,7 +66,7 @@ function edoc()
 
 function rmoc()
 {
-    local log_files=/var/log/*cme*
+    local log_files=/var/log/debesys/*cme*
     if [ "$1" == "bb1" ]; then
         log_files=~/bb1/var/log/debesys/*cme*
     fi
@@ -75,7 +75,7 @@ function rmoc()
 
 function lslu()
 {
-    local log_files=/var/log/*ledger_up-*
+    local log_files=/var/log/debesys/*ledger_up-*
     if [ "$1" == "bb1" ]; then
         log_files=~/bb1/var/log/debesys/*ledger_up-*
     fi
@@ -84,7 +84,7 @@ function lslu()
 
 function tllu()
 {
-    local log_files=/var/log/*ledger_up-*
+    local log_files=/var/log/debesys/*ledger_up-*
     if [ "$1" == "bb1" ]; then
         log_files=~/bb1/var/log/debesys/*ledger_up-*
     fi
@@ -93,7 +93,7 @@ function tllu()
 
 function edlu()
 {
-    local log_files=/var/log/*ledger_up-*
+    local log_files=/var/log/debesys/*ledger_up-*
     if [ "$1" == "bb1" ]; then
         log_files=~/bb1/var/log/debesys/*ledger_up-*
     fi
@@ -102,7 +102,7 @@ function edlu()
 
 function rmlu()
 {
-    local log_files=/var/log/*ledger_up-*
+    local log_files=/var/log/debesys/*ledger_up-*
     if [ "$1" == "bb1" ]; then
         log_files=~/bb1/var/log/debesys/*ledger_up-*
     fi
@@ -111,7 +111,7 @@ function rmlu()
 
 function lslr()
 {
-    local log_files=/var/log/*ledger_req-*
+    local log_files=/var/log/debesys/*ledger_req-*
     if [ "$1" == "bb1" ]; then
         log_files=~/bb1/var/log/debesys/*ledger_req-*
     fi
@@ -120,7 +120,7 @@ function lslr()
 
 function tllr()
 {
-    local log_files=/var/log/*ledger_req-*
+    local log_files=/var/log/debesys/*ledger_req-*
     if [ "$1" == "bb1" ]; then
         log_files=~/bb1/var/log/debesys/*ledger_req-*
     fi
@@ -129,7 +129,7 @@ function tllr()
 
 function edlr()
 {
-    local log_files=/var/log/*ledger_req-*
+    local log_files=/var/log/debesys/*ledger_req-*
     if [ "$1" == "bb1" ]; then
         log_files=~/bb1/var/log/debesys/*ledger_req-*
     fi
@@ -138,7 +138,7 @@ function edlr()
 
 function rmlr()
 {
-    local log_files=/var/log/*ledger_req-*
+    local log_files=/var/log/debesys/*ledger_req-*
     if [ "$1" == "bb1" ]; then
         log_files=~/bb1/var/log/debesys/*ledger_req-*
     fi
@@ -147,7 +147,7 @@ function rmlr()
 
 function lsbr()
 {
-    local log_files=/var/log/*bouncerd*
+    local log_files=/var/log/debesys/*bouncerd*
     if [ "$1" == "bb1" ]; then
         log_files=~/bb1/var/log/debesys/*bouncerd*
     fi
@@ -156,7 +156,7 @@ function lsbr()
 
 function tlbr()
 {
-    local log_files=/var/log/*bouncerd*
+    local log_files=/var/log/debesys/*bouncerd*
     if [ "$1" == "bb1" ]; then
         log_files=~/bb1/var/log/debesys/*bouncerd*
     fi
@@ -165,7 +165,7 @@ function tlbr()
 
 function edbr()
 {
-    local log_files=/var/log/*bouncerd*
+    local log_files=/var/log/debesys/*bouncerd*
     if [ "$1" == "bb1" ]; then
         log_files=~/bb1/var/log/debesys/*bouncerd*
     fi
@@ -174,7 +174,7 @@ function edbr()
 
 function rmbr()
 {
-    local log_files=/var/log/*bouncerd*
+    local log_files=/var/log/debesys/*bouncerd*
     if [ "$1" == "bb1" ]; then
         log_files=~/bb1/var/log/debesys/*bouncerd*
     fi

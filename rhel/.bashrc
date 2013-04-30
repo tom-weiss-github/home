@@ -31,6 +31,7 @@ export PATH=$PATH:/home/debesys/Downloads/meld-1.6.1/bin
 
 . ~/githome/rhel/logs.sh
 
+alias init='source ~/.bashrc'
 alias edbrc='emacs -nw ~/githome/rhel/.bashrc'
 alias ee='emacs -nw'
 alias c='emacsclient -n'
@@ -73,7 +74,7 @@ ff_file+=' -and \! -iname "*.xml" '
 alias ff="find . -type d $ff_dir \( $ff_file \) -print0 | xargs -0 grep -iHn"
 
 alias git-add-mod='git status | grep modified | cut -d " " -f 4 | xargs --max-args=1 git add -v'
-alias glog='git glog | head'
+alias glog='git glog | head -n 15'
 alias galias='git config --list | grep alias'
 alias soc='kill `cat /var/run/cme.pid`'
 alias oc?='cat /var/run/cme.pid; ps -ef | grep cme'
@@ -83,12 +84,16 @@ alias pext='pushd `git rev-parse --show-toplevel`/ext'
 alias cdrt='cd `git rev-parse --show-toplevel`'
 alias prt='pushd `git rev-parse --show-toplevel`'
 alias dr="cd ~/dev-root"
-alias edcfg='emacs -nw /etc/debesys/cme_oc_config.xml'
+alias edcfg='emacs -nw /etc/debesys/cme_oc_config.conf'
 alias run='`git rev-parse --show-toplevel`/run'
+alias lszk='`git rev-parse --show-toplevel`/run python `git rev-parse --show-toplevel`/darwin/dashboard/lszk.py'
+alias rmzk='`git rev-parse --show-toplevel`/run python `git rev-parse --show-toplevel`/darwin/dashboard/rmzk.py'
 alias envs='echo PATH $PATH; echo LD_LIBRARY_PATH $LD_LIBRARY_PATH; echo C_INCLUDE_PATH $C_INCLUDE_PATH; echo CPLUS_INCLUDE_PATH $CPLUS_INCLUDE_PATH; echo PYTHONPATH $PYTHONPATH; echo PYTHONHOME $PYTHONHOME; echo SWIG_LIB $SWIG_LIB; echo DEBENV_ENGAGED $DEBENV_ENGAGED'
 alias bb1='ssh root@10.202.0.61'
 alias mbb1="sshfs root@10.202.0.61:/ ~/bb1"
+alias m180='sshfs root@192.168.254.180:/ ~/180'
 alias ocperf="ssh root@192.168.254.180"
+alias m187='sshfs root@192.168.254.187:/ ~/187'
 alias stperf="ssh root@192.168.254.187"
 alias repo="python ~/githome/get-repo.py"
 alias dbd='sudo mount -o user=intad/tweiss -t cifs //chifs01.int.tt.local/Share /mnt/dbd/'
@@ -122,7 +127,7 @@ alias git-sync=git-sync_
 
 function cpcfg_()
 {
-    cp -v `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/cme_oc_config.xml /etc/debesys/cme_oc_config.LATEST.xml;
+    cp -v `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/cme_oc_config.conf /etc/debesys/cme_oc_config.LATEST.conf;
     cp -v `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/lbm_config.xml /etc/debesys/lbm_config.xml;
     cp -v `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/lbm_config.xml /etc/debesys/lbm_config.orig.xml;
     cp -v `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/lbm_config_backbone.xml /etc/debesys/lbm_config_backbone.orig.xml;

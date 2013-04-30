@@ -259,3 +259,24 @@ sys.exit( 0 )
 # For shared branch, the branch must already exist instead of not exist.
 
 
+# Explored cloning a local repo and then changing the remote.  This worked fine
+# for the main repo, but not for the submodules.  Those seem to initialize from
+# the remote site.  In order to resolve this, I tried to manually clone the submodules
+# with a depth of 1.  In the end this didn't show much improvement over the current
+# method.
+# (from /home/debesys/dev-root)
+# git clone --no-hardlinks /home/debesys/dev-root/next new
+# cd next
+# git config --get remote.origin.url
+# cd new
+# git remote rm origin
+# git remote add origin (next's url from above command)
+# Script for manually cloning submodules:
+#!/bin/bash
+# git submodule init
+# for i in $(git submodule | sed -e 's/.* //'); do
+#     spath=$(git config -f .gitmodules --get submodule.$i.path)
+#     surl=$(git config -f .gitmodules --get submodule.$i.url)
+#     git clone --depth 1 $surl $spath
+# done
+# git submodule update

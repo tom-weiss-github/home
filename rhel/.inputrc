@@ -6,3 +6,12 @@
 
 # Cause Esc-w to copy the region, but not kill it.
 "\ew":copy-region-as-kill
+
+# Type command beginning (e.g., 'cd /') and
+# press up arrow to see commands that start with
+# that command.  Similar to C-R for effectively
+# searching command line history.
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+set show-all-if-ambiguous on
+set completion-ignore-case on
