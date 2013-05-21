@@ -13,16 +13,9 @@
 	excludesfile = /home/debesys/.gitignore_global
 
 [diff]
-#        tool = ediff
          tool = meld
-
-[difftool "ediff"]
-        cmd = ~/githome/ediff.sh $LOCAL $REMOTE $MERGED
 
 [merge]
-#        tool = ediff
          tool = meld
+         conflictstyle = diff3
 
-[mergetool "ediff"]
-        cmd = ~/githome/ediff.sh $LOCAL $REMOTE $MERGED $BASE
-        trustExitCode = true

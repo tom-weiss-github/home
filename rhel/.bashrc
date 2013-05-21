@@ -31,11 +31,11 @@ export PATH=$PATH:/home/debesys/Downloads/meld-1.6.1/bin
 
 . ~/githome/rhel/logs.sh
 
-alias init='source ~/.bashrc'
+alias sb='source ~/.bashrc'
 alias edbrc='emacs -nw ~/githome/rhel/.bashrc'
 alias ee='emacs -nw'
 alias c='emacsclient -n'
-alias ls='ls -aFC --color=always'
+alias ls='ls -aFCh --color=always'
 alias h='history'
 alias hg='history | grep'
 alias rw=~/githome/setxtitle.sh
@@ -77,7 +77,7 @@ alias git-add-mod='git status | grep modified | cut -d " " -f 4 | xargs --max-ar
 alias glog='git glog | head -n 15'
 alias galias='git config --list | grep alias'
 alias soc='kill `cat /var/run/cme.pid`'
-alias oc?='cat /var/run/cme.pid; ps -ef | grep cme'
+alias oc?='cat /var/run/cme.pid; ps -ef | grep cme | grep -v grep'
 alias rmvol='rm /var/lib/order-connector/*'
 alias pbin='pushd `git rev-parse --show-toplevel`/build/x86-64/debug/bin'
 alias pext='pushd `git rev-parse --show-toplevel`/ext'
@@ -88,6 +88,7 @@ alias edcfg='emacs -nw /etc/debesys/cme_oc_config.conf'
 alias run='`git rev-parse --show-toplevel`/run'
 alias lszk='`git rev-parse --show-toplevel`/run python `git rev-parse --show-toplevel`/darwin/dashboard/lszk.py'
 alias rmzk='`git rev-parse --show-toplevel`/run python `git rev-parse --show-toplevel`/darwin/dashboard/rmzk.py'
+alias oczk="lszk /srv/alive/oc -r; lszk /srv/oc -r"
 alias envs='echo PATH $PATH; echo LD_LIBRARY_PATH $LD_LIBRARY_PATH; echo C_INCLUDE_PATH $C_INCLUDE_PATH; echo CPLUS_INCLUDE_PATH $CPLUS_INCLUDE_PATH; echo PYTHONPATH $PYTHONPATH; echo PYTHONHOME $PYTHONHOME; echo SWIG_LIB $SWIG_LIB; echo DEBENV_ENGAGED $DEBENV_ENGAGED'
 alias bb1='ssh root@10.202.0.61'
 alias mbb1="sshfs root@10.202.0.61:/ ~/bb1"
@@ -98,6 +99,8 @@ alias stperf="ssh root@192.168.254.187"
 alias repo="python ~/githome/get-repo.py"
 alias dbd='sudo mount -o user=intad/tweiss -t cifs //chifs01.int.tt.local/Share /mnt/dbd/'
 alias cli_mt='run `git rev-parse --show-toplevel`/ext/linux/x86-64/release/bin/cli_mt 10.203.0.43:2181'
+alias jtrader="/usr/java/jdk1.7.0_03/bin/java -cp JTrader.jar JTrader &"
+alias ttr="`git rev-parse --show-toplevel`/run python t_trader/tt/ttrader/t_trader.py"
 
 # To view the definition of a function, do 'type <function>'.
 function cf() { emacsclient -n `find . -name $1`; }
@@ -109,6 +112,14 @@ function rmbranch()
     echo "git branch -d $1";
     git branch -d $1;
 }
+
+function koc_()
+{
+    ps -ef | grep cme;
+    ps -ef | grep cme | grep -v grep | cut -d " " -f 3 | xargs kill -9;
+    if [ -f /var/run/cme.pid ]; then rm -v /var/run/cme.pid; fi;
+}
+alias koc=koc_
 
 function git-sync_()
 {
