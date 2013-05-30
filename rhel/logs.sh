@@ -180,3 +180,39 @@ function rmbr()
     fi
     rm -v `/bin/ls -tr $log_files | tail -1`
 }
+
+function lses()
+{
+    local log_files=/var/log/debesys/*edgeserver*
+    if [ "$1" == "bb1" ]; then
+        log_files=~/bb1/var/log/debesys/*edgeserver*
+    fi
+    /bin/ls /bin/ls -tr $log_files | tail -1
+}
+
+function tles()
+{
+    local log_files=/var/log/debesys/*edgeserver*
+    if [ "$1" == "bb1" ]; then
+        log_files=~/bb1/var/log/debesys/*edgeserver*
+    fi
+    /bin/ls -tr /bin/ls -tr $log_files | tail -1 | xargs tail -f
+}
+
+function edes()
+{
+    local log_files=/var/log/debesys/*edgeserver*
+    if [ "$1" == "bb1" ]; then
+        log_files=~/bb1/var/log/debesys/*edgeserver*
+    fi
+    emacs -nw `/bin/ls -tr $log_files | tail -1`
+}
+
+function rmes()
+{
+    local log_files=/var/log/debesys/*edgeserver*
+    if [ "$1" == "bb1" ]; then
+        log_files=~/bb1/var/log/debesys/*edgeserver*
+    fi
+    rm -v `/bin/ls -tr $log_files | tail -1`
+}

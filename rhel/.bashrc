@@ -88,7 +88,7 @@ alias edcfg='emacs -nw /etc/debesys/cme_oc_config.conf'
 alias run='`git rev-parse --show-toplevel`/run'
 alias lszk='`git rev-parse --show-toplevel`/run python `git rev-parse --show-toplevel`/darwin/dashboard/lszk.py'
 alias rmzk='`git rev-parse --show-toplevel`/run python `git rev-parse --show-toplevel`/darwin/dashboard/rmzk.py'
-alias oczk="lszk /srv/alive/oc -r; lszk /srv/oc -r"
+alias oczk='lszk /srv/alive/oc -r; lszk /srv/oc -r | xargs --delimiter="\n" -n 1 echo "     "'
 alias envs='echo PATH $PATH; echo LD_LIBRARY_PATH $LD_LIBRARY_PATH; echo C_INCLUDE_PATH $C_INCLUDE_PATH; echo CPLUS_INCLUDE_PATH $CPLUS_INCLUDE_PATH; echo PYTHONPATH $PYTHONPATH; echo PYTHONHOME $PYTHONHOME; echo SWIG_LIB $SWIG_LIB; echo DEBENV_ENGAGED $DEBENV_ENGAGED'
 alias bb1='ssh root@10.202.0.61'
 alias mbb1="sshfs root@10.202.0.61:/ ~/bb1"
@@ -101,6 +101,7 @@ alias dbd='sudo mount -o user=intad/tweiss -t cifs //chifs01.int.tt.local/Share 
 alias cli_mt='run `git rev-parse --show-toplevel`/ext/linux/x86-64/release/bin/cli_mt 10.203.0.43:2181'
 alias jtrader="/usr/java/jdk1.7.0_03/bin/java -cp JTrader.jar JTrader &"
 alias ttr="`git rev-parse --show-toplevel`/run python t_trader/tt/ttrader/t_trader.py"
+alias grp="git rev-parse --short"
 
 # To view the definition of a function, do 'type <function>'.
 function cf() { emacsclient -n `find . -name $1`; }

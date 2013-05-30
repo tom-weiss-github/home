@@ -388,6 +388,7 @@
 ;; C-h f (describe function)
 
 ;; Regular Expressions
+;; M-x re-builder is an interactive regular expression builder.
 ;; http://www.xemacs.org/Documentation/21.5/html/xemacs_15.html#SEC125 - Has the regular expression syntax.
 ;; M C-s  --> regular expression forward incremental search (isearch-forward-regexp).
 ;; example M C-s .*text

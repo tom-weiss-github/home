@@ -33,3 +33,25 @@ values, the second command gives the total number.
 
 for i in {1..10}; do command; done
 Run a command in a loop on the command line.
+
+Wireshark Filters
+-----------------
+ip.src == 10.140.18.67 || ip.dst == 10.140.18.67
+
+Xming
+-----
+Steps to set up X11 forwarding from RHEL to Windows.
+- Install Xming (default installation).
+- Install Xmingfonts (required for emacs).
+- Install putty.
+- Install puttygen.
+- In putty configure the following settings:
+  - Session -> Saved Sessions Give the session a name
+    and save/load it to make sure the rest are not lost.
+  - Connection -> Data -> Auto-login username 'debesys'
+  - Connection -> Data -> Seconds between keep alive 120
+  - SSH -> Auth -> private key from linux machine.
+   Take the private key and use puttygen to convert the
+   format.  Make sure the public key is in authorized_keys.
+   - X11 -> Enable X11 Forwarding.
+  - Session -> Host '10.202.7.144'

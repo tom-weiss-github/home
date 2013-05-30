@@ -29,7 +29,7 @@ int main(int /*argc*/, char** /*argv[]*/)
 {
     Callback cb;
     Caller::CB funcCb = std::bind(&Callback::print, // member function
-                                  cb,               // object instance
+                                  &cb,               // object instance
                                   std::placeholders::_1, std::placeholders::_2);
     Caller caller(funcCb);
     caller.Trigger();
