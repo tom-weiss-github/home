@@ -6,12 +6,15 @@ if [ -f /etc/bashrc ]; then
 fi
 
 # User specific aliases and functions
+ulimit -c unlimited
 
 # This seems to really slow down the __git_ps1 function, sometimes up to 1 second,
 # which is too long for the prompt to return.
 # GIT_PS1_SHOWDIRTYSTATE=true
 source ~/githome/rhel/.git-prompt.sh
 source ~/githome/rhel/.git-completion.sh
+
+source ~/amazon_keys.sh
 
 export PS1="\h\[\033[1;30m\]\$(__git_ps1) \[\033[0;0m\]\w \n>"
 #             \[\033[1;34m\] Start color dark grey.
@@ -40,7 +43,7 @@ alias h='history'
 alias hg='history | grep'
 alias rw=~/githome/setxtitle.sh
 unset PROMPT_COMMAND
-alias m='make -Rr -j 8 -C `git rev-parse --show-toplevel`'
+
 # Use optimize-find.py to help decide which directories and extensions to filter.
 #alias ff='find . -type d -path "*/build" -prune -o -path "*/.git" -prune -o -path "*/ext" -prune -o -path "*/pycommon" -prune -o \( \! -iname "*.ico" -and \! -iname "TAGS" -and \! -iname "FILES" -and \! -iname "BROWSE" -and \! -iname "*.cs" -and \! -iname "*.png" -and \! -iname "*.jar" -and \! -iname "*.pyc" -and \! -iname "*.o" -and \! -iname "*.d" -and \! -iname "*.a" -and \! -name "*.so" -and \! -iname "*.bin" -and \! -iname "*pdf" -and \! -iname "*.java"  -and \! -iname "*xml" -and \! -iname "*.scala" -and \! -iname "*png" -and \! -iname "*.txt" -and \! -iname "*.html" -and \! -iname "*.php" -and \! -iname "*.css" -and \! -iname "*.js" -and \! -iname "*.cs" -and \! -iname "*.json" -and \! -iname "*.sql" -and \! -iname "*.dat" \) -print0 | xargs -0 grep -iHn'
 
@@ -78,6 +81,7 @@ alias glog='git glog | head -n 15'
 alias galias='git config --list | grep alias'
 alias soc='kill `cat /var/run/cme.pid`'
 alias oc?='cat /var/run/cme.pid; ps -ef | grep cme | grep -v grep'
+alias emacs?='ps -ef | grep emacs | grep -v "grep emacs" | grep -v "emacs -nw"'
 alias rmvol='rm /var/lib/order-connector/*'
 alias pbin='pushd `git rev-parse --show-toplevel`/build/x86-64/debug/bin'
 alias pext='pushd `git rev-parse --show-toplevel`/ext'
@@ -90,18 +94,23 @@ alias lszk='`git rev-parse --show-toplevel`/run python `git rev-parse --show-top
 alias rmzk='`git rev-parse --show-toplevel`/run python `git rev-parse --show-toplevel`/darwin/dashboard/rmzk.py'
 alias oczk='lszk /srv/alive/oc -r; lszk /srv/oc -r | xargs --delimiter="\n" -n 1 echo "     "'
 alias envs='echo PATH $PATH; echo LD_LIBRARY_PATH $LD_LIBRARY_PATH; echo C_INCLUDE_PATH $C_INCLUDE_PATH; echo CPLUS_INCLUDE_PATH $CPLUS_INCLUDE_PATH; echo PYTHONPATH $PYTHONPATH; echo PYTHONHOME $PYTHONHOME; echo SWIG_LIB $SWIG_LIB; echo DEBENV_ENGAGED $DEBENV_ENGAGED'
-alias bb1='ssh root@10.202.0.61'
-alias mbb1="sshfs root@10.202.0.61:/ ~/bb1"
+alias dev61='ssh root@10.202.0.61'
+alias sim73='ssh root@10.202.0.73'
+alias sim81='ssh root@10.202.0.81'
+alias mdev61="sshfs root@10.202.0.61:/ ~/dev61"
+alias msim73="sshfs root@10.202.0.73:/ ~/sim73"
+alias msim81="sshfs root@10.202.0.81:/ ~/sim81"
 alias m180='sshfs root@192.168.254.180:/ ~/180'
 alias ocperf="ssh root@192.168.254.180"
 alias m187='sshfs root@192.168.254.187:/ ~/187'
 alias stperf="ssh root@192.168.254.187"
 alias repo="python ~/githome/get-repo.py"
-alias dbd='sudo mount -o user=intad/tweiss -t cifs //chifs01.int.tt.local/Share /mnt/dbd/'
+alias dbd='sudo mount -o user=intad/tweiss -t cifs //chifs01.int.tt.local/Share/Dead_By_Dawn /mnt/dbd/'
 alias cli_mt='run `git rev-parse --show-toplevel`/ext/linux/x86-64/release/bin/cli_mt 10.203.0.43:2181'
 alias jtrader="/usr/java/jdk1.7.0_03/bin/java -cp JTrader.jar JTrader &"
-alias ttr="`git rev-parse --show-toplevel`/run python t_trader/tt/ttrader/t_trader.py"
+alias ttr='`git rev-parse --show-toplevel`/run python `git rev-parse --show-toplevel`/t_trader/tt/ttrader/t_trader.py --disable-ledger'
 alias grp="git rev-parse --short"
+alias chrome="/opt/google/chrome/google-chrome --enable-plugins &"
 
 # To view the definition of a function, do 'type <function>'.
 function cf() { emacsclient -n `find . -name $1`; }
@@ -140,25 +149,71 @@ alias git-sync=git-sync_
 function cpcfg_()
 {
     cp -v `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/cme_oc_config.conf /etc/debesys/cme_oc_config.LATEST.conf;
-    cp -v `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/lbm_config.xml /etc/debesys/lbm_config.xml;
-    cp -v `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/lbm_config.xml /etc/debesys/lbm_config.orig.xml;
-    cp -v `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/lbm_config_backbone.xml /etc/debesys/lbm_config_backbone.orig.xml;
+    cp -v `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/lbm_config.xml /etc/debesys/lbm.conf;
+    cp -v `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/lbm_config.xml /etc/debesys/lbm.dev.conf;
+    #cp -v `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/lbm_config_backbone.xml /etc/debesys/lbm.backbone.conf;
+    cp -v ~/dev61/etc/debesys/lbm.conf /etc/debesys/lbm.backbone.conf
+    cp -v ~/sim73/etc/debesys/lbm.conf /etc/debesys/lbm.sim.conf
 }
 alias cpcfg=cpcfg_
 
-function bblbm_()
+function devlbm_()
 {
-    rm -v /etc/debesys/lbm_config.xml;
-    cp -v /etc/debesys/lbm_config_backbone.orig.xml /etc/debesys/lbm_config.xml;
+    rm -v /etc/debesys/lbm.conf;
+    cp -v /etc/debesys/lbm.backbone.conf /etc/debesys/lbm.conf;
+    cp -v /etc/debesys/lbm.backbone.conf /etc/debesys/lbm_config.xml; # T Trader
 }
-alias bblbm=bblbm_
+alias devlbm=devlbm_
 
-function dvlbm_()
+function devlbm_()
 {
-    rm -v /etc/debesys/lbm_config.xml;
-    cp -v /etc/debesys/lbm_config.orig.xml /etc/debesys/lbm_config.xml;
+    rm -v /etc/debesys/lbm.conf;
+    cp -v /etc/debesys/lbm.dev.conf /etc/debesys/lbm.conf;
+    cp -v /etc/debesys/lbm.dev.conf /etc/debesys/lbm_config.xml; # T Trader
 }
-alias dvlbm=dvlbm_
+alias devlbm=devlbm_
+
+function simlbm_()
+{
+    rm -v /etc/debesys/lbm.conf;
+    cp -v /etc/debesys/lbm.sim.conf /etc/debesys/lbm.conf;
+    cp -v /etc/debesys/lbm.sim.conf /etc/debesys/lbm_config.xml; # T Trader
+}
+alias demolbm=demolbm_
+
+function m_()
+{
+    # The $@ variable contains all the arguments.
+    make -Rr -j 8 -C `git rev-parse --show-toplevel` "$@"
+    if [ $? == 0 ]; then
+        echo COMPILE SUCCESSFUL!
+    else
+        echo COMPILE FAILED!
+    fi
+}
+alias m=m_
+
+function cleanvm_()
+{
+    ssh -i ~/.ssh/aws.pem root@10.203.0.136 "rm -rfv /etc/debesys";
+    ssh -i ~/.ssh/aws.pem root@10.203.0.136 "rm -rfv /opt/debesys";
+    ssh -i ~/.ssh/aws.pem root@10.203.0.136 "rm -v /etc/init.d/cme";
+}
+alias cleanvm=cleanvm_
+
+function em_()
+{
+    isemacs=`emacs?`
+    if [[ -z $isemacs ]]; then
+        echo emacs is not running, starting emacs $@;
+        emacs "$@" &
+    else
+        echo emacs is running, sending $@
+        echo $isemacs;
+        emacsclient -n "$@"
+    fi
+}
+alias em=em_
 
 if [ ! -f /var/log/profiles ]
 then

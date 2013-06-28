@@ -180,6 +180,7 @@
       '((top . 5) (left . 3)
         (width . 220) (height . 63)))
 
+(setq ruby-indent-level 4)
 
 ;; C++ Stuff
 ;; =========

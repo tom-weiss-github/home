@@ -1,0 +1,2 @@
+To prevent ssh connections from timing out on servers, add 'ServerAliveInterval 60'
+to the /etc/ssh/ssh_config file.

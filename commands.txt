@@ -38,6 +38,7 @@ Wireshark Filters
 -----------------
 ip.src == 10.140.18.67 || ip.dst == 10.140.18.67
 
+
 Xming
 -----
 Steps to set up X11 forwarding from RHEL to Windows.
@@ -55,3 +56,6 @@ Steps to set up X11 forwarding from RHEL to Windows.
    format.  Make sure the public key is in authorized_keys.
    - X11 -> Enable X11 Forwarding.
   - Session -> Host '10.202.7.144'
+
+View a file's permissions as numbers.
+stat -c '%a' [file]
