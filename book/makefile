@@ -1,5 +1,6 @@
 CC=g++
-CFLAGS=-std=c++11 -c -Wall -Wextra -Werror -ggdb -O0
+# CFLAGS=-std=c++11 -c -Wall -Wextra -Werror -ggdb -O0
+CFLAGS=-c -Wall -Wextra -Werror -ggdb -O0
 BIN=bin
 OBJ=obj
 MKDIR=mkdir -p

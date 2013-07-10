@@ -34,6 +34,14 @@ values, the second command gives the total number.
 for i in {1..10}; do command; done
 Run a command in a loop on the command line.
 
+abrt-cli list -f | grep Directory | cut -d" " -f 7 | xargs -n 1 abrt-cli rm
+
+Disable ip messaging from local machine to some ip address (e.g., 10.203.0.43).
+sudo service iptables start
+sudo iptables -A OUTPUT -d "10.203.0.43" -j DROP
+sudo iptables -D OUTPUT -d "10.203.0.43" -j DROP
+sudo service iptables stop
+
 Wireshark Filters
 -----------------
 ip.src == 10.140.18.67 || ip.dst == 10.140.18.67

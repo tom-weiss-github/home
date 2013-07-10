@@ -9,7 +9,7 @@ fi
 log=$2
 touch $log
 
-while[ 1 ]
+for (( ; ; ))
 do
     date >> $log
     ping -c 5 $1 >> $log

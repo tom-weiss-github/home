@@ -105,7 +105,7 @@ alias ocperf="ssh root@192.168.254.180"
 alias m187='sshfs root@192.168.254.187:/ ~/187'
 alias stperf="ssh root@192.168.254.187"
 alias repo="python ~/githome/get-repo.py"
-alias dbd='sudo mount -o user=intad/tweiss -t cifs //chifs01.int.tt.local/Share/Dead_By_Dawn /mnt/dbd/'
+alias mdbd='sudo mount -o user=intad/tweiss -t cifs //chifs01.int.tt.local/Share/Dead_By_Dawn /mnt/dbd/'
 alias cli_mt='run `git rev-parse --show-toplevel`/ext/linux/x86-64/release/bin/cli_mt 10.203.0.43:2181'
 alias jtrader="/usr/java/jdk1.7.0_03/bin/java -cp JTrader.jar JTrader &"
 alias ttr='`git rev-parse --show-toplevel`/run python `git rev-parse --show-toplevel`/t_trader/tt/ttrader/t_trader.py --disable-ledger'
@@ -150,20 +150,12 @@ function cpcfg_()
 {
     cp -v `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/cme_oc_config.conf /etc/debesys/cme_oc_config.LATEST.conf;
     cp -v `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/lbm_config.xml /etc/debesys/lbm.conf;
-    cp -v `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/lbm_config.xml /etc/debesys/lbm.dev.conf;
+    cp -v `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/lbm_config.xml /etc/debesys/lbm.local.conf;
     #cp -v `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/lbm_config_backbone.xml /etc/debesys/lbm.backbone.conf;
-    cp -v ~/dev61/etc/debesys/lbm.conf /etc/debesys/lbm.backbone.conf
+    cp -v ~/dev61/etc/debesys/lbm.conf /etc/debesys/lbm.dev.conf
     cp -v ~/sim73/etc/debesys/lbm.conf /etc/debesys/lbm.sim.conf
 }
 alias cpcfg=cpcfg_
-
-function devlbm_()
-{
-    rm -v /etc/debesys/lbm.conf;
-    cp -v /etc/debesys/lbm.backbone.conf /etc/debesys/lbm.conf;
-    cp -v /etc/debesys/lbm.backbone.conf /etc/debesys/lbm_config.xml; # T Trader
-}
-alias devlbm=devlbm_
 
 function devlbm_()
 {
@@ -173,13 +165,21 @@ function devlbm_()
 }
 alias devlbm=devlbm_
 
+function locallbm_()
+{
+    rm -v /etc/debesys/lbm.conf;
+    cp -v /etc/debesys/lbm.local.conf /etc/debesys/lbm.conf;
+    cp -v /etc/debesys/lbm.local.conf /etc/debesys/lbm_config.xml; # T Trader
+}
+alias locallbm=locallbm_
+
 function simlbm_()
 {
     rm -v /etc/debesys/lbm.conf;
     cp -v /etc/debesys/lbm.sim.conf /etc/debesys/lbm.conf;
     cp -v /etc/debesys/lbm.sim.conf /etc/debesys/lbm_config.xml; # T Trader
 }
-alias demolbm=demolbm_
+alias simlbm=simlbm_
 
 function m_()
 {

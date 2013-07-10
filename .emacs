@@ -278,8 +278,8 @@
 
 ;;set the title and task bar icon to contain the name of the file that is
 ;;being edited
-(setq frame-title-format "%b")
-(setq icon-title-format  "%b")
+(setq frame-title-format "emacs %b")
+(setq icon-title-format  "emacs %b")
 
 ;;comment one line (to use, esc-x c return)
 (fset 'c
