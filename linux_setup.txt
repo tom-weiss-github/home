@@ -1,0 +1,9 @@
+
+Stop Blinking Cursor
+====================
+(RHEL) Gnome-Terminal
+To prevent F1 from launching help when using emacs within the terminal, go to keyboard shortcuts and use backspace in combination with clicking to disable that keyboard shortcut.
+The following command will disable gnome-terminal cursor blinking: gconftool-2 -s /apps/gnome-terminal/profiles/Default/cursor_blink_mode -t string off
+
+(ubuntu)
+(12.04) gsettings set org.gnome.desktop.interface cursor-blink false

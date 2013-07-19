@@ -215,6 +215,15 @@ function em_()
 }
 alias em=em_
 
+function gdb_()
+{
+    if [ -f ~/.gdbinit ]; then
+        echo ~/.gdbinit exists, likely from emacs;
+    fi
+    gdb
+}
+alias gdb=gdb_
+
 if [ ! -f /var/log/profiles ]
 then
     touch /var/log/profiles

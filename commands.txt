@@ -19,6 +19,10 @@ middle of the command xargs is building.  The -n allows some number of
 inputs to be combined together.  This will print four items separated
 by commas on each line.
 
+abrt-cli list -f | grep Directory | cut -d" " -f 7 | xargs -i -n 1 sh -c 'echo directory {} has UUID; cat {}/uuid; echo '
+This command will print all the abrt directories and and a file in the directory.
+It uses sh -c to use the directory for 2 commands.
+
 find . -mtime +10 | xargs rm -v
 Remove files older than 10 days.
 
@@ -41,6 +45,17 @@ sudo service iptables start
 sudo iptables -A OUTPUT -d "10.203.0.43" -j DROP
 sudo iptables -D OUTPUT -d "10.203.0.43" -j DROP
 sudo service iptables stop
+
+tcpdump
+-------
+tcpdump -D
+Lists all the interfaces, the number is used for -i on future commands.
+
+tcpdump -i 1 dst 10.140.18.67 and port 16058
+Show all messages from destination and port.
+
+tcpdump -i 1 host 10.140.18.67 and port 16058
+Show all message to and from ip and port.
 
 Wireshark Filters
 -----------------
