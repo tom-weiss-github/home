@@ -21,6 +21,10 @@
     (load-file "~/.emacs.d/custom-gdb-functions.el")
 )
 
+;; Load Scala.
+(add-to-list 'load-path "~/.emacs.d/scala-mode")
+(require 'scala-mode-auto)
+
 ;; map f2 to goto line number
 (global-set-key (quote[f2]) (quote goto-line))
 
@@ -236,6 +240,8 @@
 ;; The following command is useful to execute (C-x C-e) inside the
 ;; scratch buffer to list all the available fonts.
 ;; (insert (prin1-to-string (x-list-fonts "*")))
+;; Another useful font:
+;; (setq my-os-dependent-font "Monospace-14")
 (setq my-os-dependent-font (if (eq system-type 'windows-nt)
                                "Source Code Pro"
                              "-misc-fixed-medium-r-normal--25-*-75-75-c-90-iso8859-1" ))
@@ -365,6 +371,9 @@
 ;; ESC-x insert-kbd-macro      prints the macro, do this in the .emacs file
 ;; ESC-x [macro name]   executes the named keyboard macro
 
+
+;; Tail a file:
+;; auto-revert-tail-mode
 
 ;; repeat n times: ctrl-u <number of times> command
 

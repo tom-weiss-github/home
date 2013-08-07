@@ -14,7 +14,9 @@ ulimit -c unlimited
 source ~/githome/rhel/.git-prompt.sh
 source ~/githome/rhel/.git-completion.sh
 
-source ~/amazon_keys.sh
+if [ -f ~/amazon_keys.sh ]; then
+    source ~/amazon_keys.sh
+fi
 
 export PS1="\h\[\033[1;30m\]\$(__git_ps1) \[\033[0;0m\]\w \n>"
 #             \[\033[1;34m\] Start color dark grey.
@@ -27,9 +29,12 @@ export EDITOR="emacs -nw"
 export ALTERNATE_EDITOR=emacs
 # Don't quote environment variables with tilde.
 export LBM_LICENSE_FILENAME=~/29WestLicense.txt
+
 # Cause the dynamic linker to resolve all symbols at program startup.  Useful to ensure uncalled
-# functions won't fail resolution at runtime.
-export LD_BIND_NOW=yes
+# functions won't fail resolution at runtime.  I had to turn off this because the ringer development
+# in scala caused an LBM symbol to not be recognized and failed to run.  To unset use:
+# unset LD_BIND_NOW
+# export LD_BIND_NOW=yes
 export PATH=$PATH:/home/debesys/Downloads/meld-1.6.1/bin
 
 . ~/githome/rhel/logs.sh
@@ -97,9 +102,11 @@ alias envs='echo PATH $PATH; echo LD_LIBRARY_PATH $LD_LIBRARY_PATH; echo C_INCLU
 alias dev61='ssh root@10.202.0.61'
 alias sim73='ssh root@10.202.0.73'
 alias sim81='ssh root@10.202.0.81'
+alias prod54='ssh root@10.202.0.54'
 alias mdev61="sshfs root@10.202.0.61:/ ~/dev61"
 alias msim73="sshfs root@10.202.0.73:/ ~/sim73"
 alias msim81="sshfs root@10.202.0.81:/ ~/sim81"
+alias mprod54="sshfs root@10.202.0.54:/ ~/prod54"
 alias m180='sshfs root@192.168.254.180:/ ~/180'
 alias ocperf="ssh root@192.168.254.180"
 alias m187='sshfs root@192.168.254.187:/ ~/187'
@@ -224,9 +231,63 @@ function gdb_()
 }
 alias gdb=gdb_
 
+function mkchefec2()
+{
+    if [ -z "$1" ]; then
+        echo Usage: you must pass the node name.
+        return
+    fi
+
+    # rhel 6.4 ami-7d0c6314
+
+    echo ./run python deploy/chef/scripts/ec2_server.py --size m1.medium --ami ami-7d0c6314 --manager "Tom Weiss" --user ec2-user --environment dev -a $1
+    ./run python deploy/chef/scripts/ec2_server.py --size m1.medium --ami ami-7d0c6314 --manager "Tom Weiss" --user ec2-user --environment dev -a $1
+
+    local ip=`knife node show $1 | grep IP | tr -s ' ' | cut -d" " -f 2`
+    if [ -z ip ]; then
+        echo "Not able to find IP address of AWS instance."
+        return
+    fi
+
+    # In order to run the sshfs command with the user root, we need to replace root's
+    # authorized_keys with ec2-user's authorized_keys.  The root use does not otherwise
+    # allow for mounting the file system with write permission.
+    echo ssh -t ec2-user@$ip -i ~/.ssh/aws.pem "sudo cp /root/.ssh/authorized_keys /root/.ssh/authorized_keys_orig"
+    ssh -t ec2-user@$ip -i ~/.ssh/aws.pem "sudo cp /root/.ssh/authorized_keys /root/.ssh/authorized_keys_orig"
+    echo ssh -t ec2-user@$ip -i ~/.ssh/aws.pem "sudo cp /home/ec2-user/.ssh/authorized_keys /root/.ssh/authorized_keys"
+    ssh -t ec2-user@$ip -i ~/.ssh/aws.pem "sudo cp /home/ec2-user/.ssh/authorized_keys /root/.ssh/authorized_keys"
+
+    mkdir -pv ~/$1
+    echo sshfs root@$ip:/ ~/$1 -o IdentityFile=~/.ssh/aws.pem
+    sshfs root@$ip:/ ~/$1 -o IdentityFile=~/.ssh/aws.pem
+}
+
+function rmchefec2()
+{
+    if [ -z "$1" ]; then
+        echo Usage: you must pass the node name.
+        return
+    fi
+
+    echo ./run python deploy/chef/scripts/ec2_server.py -d $1
+    ./run python deploy/chef/scripts/ec2_server.py -d $1
+
+    echo sudo umount ~/$1
+    sudo umount ~/$1
+
+    echo rmdir ~/$1
+    rmdir ~/$1
+}
+
+
 if [ ! -f /var/log/profiles ]
 then
-    touch /var/log/profiles
-    chmod a+rw /var/log/profiles
+    if [ -w /var/log/profiles ]; then
+        touch /var/log/profiles
+        chmod a+rw /var/log/profiles
+    fi
 fi
-echo .bashrc ran at $(date) >> /var/log/profiles
+
+if [ -w /var/log/profiles ]; then
+    echo .bashrc ran at $(date) >> /var/log/profiles
+fi

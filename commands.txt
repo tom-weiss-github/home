@@ -40,12 +40,6 @@ Run a command in a loop on the command line.
 
 abrt-cli list -f | grep Directory | cut -d" " -f 7 | xargs -n 1 abrt-cli rm
 
-Disable ip messaging from local machine to some ip address (e.g., 10.203.0.43).
-sudo service iptables start
-sudo iptables -A OUTPUT -d "10.203.0.43" -j DROP
-sudo iptables -D OUTPUT -d "10.203.0.43" -j DROP
-sudo service iptables stop
-
 tcpdump
 -------
 tcpdump -D
@@ -82,3 +76,49 @@ Steps to set up X11 forwarding from RHEL to Windows.
 
 View a file's permissions as numbers.
 stat -c '%a' [file]
+
+
+selinux
+-------
+getenforce
+setenforce
+/etc/selinux/config
+chcon -v -R type=var_log_t /dir1/dir2 (change label)
+ls -Z <file> (view label)
+
+
+networking
+----------
+Disable ip messaging from local machine to some ip address (e.g., 10.203.0.43).
+sudo service iptables start
+sudo iptables -A OUTPUT -d "10.203.0.43" -j DROP
+sudo iptables -D OUTPUT -d "10.203.0.43" -j DROP
+sudo service iptables stop
+
+Physical ports can be in one of two modes:
+1) access (a.k.a., untagged, single vlan)
+2) trunk (a.k.a., vlan tagging, dot1q, 802.1q, multiple vlan, multiple layer 3 interfaces)
+
+ifconfig
+Prints network information.
+ethN is a physical port.  If there is a IPV4 address then the port is in access
+mode.  Otherwise the port is in trunk mode.  If you examine the MAC of a vlan
+it will correspond to the MAC of one of the physical ports, which is the port
+being used by the vlan.
+
+/etc/sysconfig/network-scripts/ifcfg-X
+Each file describes a layer 3 interface available to the operating system.
+
+ethtool ethN
+Another way to get information about an interface.
+
+lldptool -tnl ethN
+(yum install TT-LLDP-SETUP --nogpgcheck)
+Package created to provide extra information about switch connections.
+
+/etc/udev/rules.d/70-persistent-net.rules
+Contains configuration which maps ethN names to MAC addresses.
+
+ifup/ifdown
+Bring an inteface up or down.  Check in /etc/sysconfig/network-scripts/ifcfg-X
+for a list of all the interfaces.
