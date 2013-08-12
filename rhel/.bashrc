@@ -36,6 +36,14 @@ export LBM_LICENSE_FILENAME=~/29WestLicense.txt
 # unset LD_BIND_NOW
 # export LD_BIND_NOW=yes
 export PATH=$PATH:/home/debesys/Downloads/meld-1.6.1/bin
+export PATH=$PATH:/opt/scala-2.9.3/bin/
+
+# Cause scala project to be built, workstation must have sbt installed.
+# http://www.scala-sbt.org/release/docs/Getting-Started/Setup.html
+# Choose sbt.rpm download.
+# sudo rpm -i /mnt/dbd/sbt.rpm
+export build_juno=1
+export build_ringer=1
 
 . ~/githome/rhel/logs.sh
 
@@ -115,7 +123,7 @@ alias repo="python ~/githome/get-repo.py"
 alias mdbd='sudo mount -o user=intad/tweiss -t cifs //chifs01.int.tt.local/Share/Dead_By_Dawn /mnt/dbd/'
 alias cli_mt='run `git rev-parse --show-toplevel`/ext/linux/x86-64/release/bin/cli_mt 10.203.0.43:2181'
 alias jtrader="/usr/java/jdk1.7.0_03/bin/java -cp JTrader.jar JTrader &"
-alias ttr='`git rev-parse --show-toplevel`/run python `git rev-parse --show-toplevel`/t_trader/tt/ttrader/t_trader.py --disable-ledger'
+alias ttr='`git rev-parse --show-toplevel`/run python `git rev-parse --show-toplevel`/t_trader/tt/ttrader/t_trader.py --disable-ledger --stdout'
 alias grp="git rev-parse --short"
 alias chrome="/opt/google/chrome/google-chrome --enable-plugins &"
 
@@ -156,9 +164,8 @@ alias git-sync=git-sync_
 function cpcfg_()
 {
     cp -v `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/cme_oc_config.conf /etc/debesys/cme_oc_config.LATEST.conf;
-    cp -v `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/lbm_config.xml /etc/debesys/lbm.conf;
-    cp -v `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/lbm_config.xml /etc/debesys/lbm.local.conf;
-    #cp -v `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/lbm_config_backbone.xml /etc/debesys/lbm.backbone.conf;
+    cp -v `git rev-parse --show-toplevel`/config/lbm_config_lo.xml /etc/debesys/lbm.conf;
+    cp -v `git rev-parse --show-toplevel`/config/lbm_config_lo.xml /etc/debesys/lbm.local.conf;
     cp -v ~/dev61/etc/debesys/lbm.conf /etc/debesys/lbm.dev.conf
     cp -v ~/sim73/etc/debesys/lbm.conf /etc/debesys/lbm.sim.conf
 }
@@ -174,6 +181,7 @@ alias devlbm=devlbm_
 
 function locallbm_()
 {
+    sudo ifconfig lo multicast # ensure multicast is enabled on loopback
     rm -v /etc/debesys/lbm.conf;
     cp -v /etc/debesys/lbm.local.conf /etc/debesys/lbm.conf;
     cp -v /etc/debesys/lbm.local.conf /etc/debesys/lbm_config.xml; # T Trader
@@ -238,6 +246,8 @@ function mkchefec2()
         return
     fi
 
+    pushd `git rev-parse --show-toplevel`
+
     # rhel 6.4 ami-7d0c6314
 
     echo ./run python deploy/chef/scripts/ec2_server.py --size m1.medium --ami ami-7d0c6314 --manager "Tom Weiss" --user ec2-user --environment dev -a $1
@@ -260,6 +270,8 @@ function mkchefec2()
     mkdir -pv ~/$1
     echo sshfs root@$ip:/ ~/$1 -o IdentityFile=~/.ssh/aws.pem
     sshfs root@$ip:/ ~/$1 -o IdentityFile=~/.ssh/aws.pem
+
+    popd
 }
 
 function rmchefec2()
@@ -269,6 +281,8 @@ function rmchefec2()
         return
     fi
 
+    pushd `git rev-parse --show-toplevel`
+
     echo ./run python deploy/chef/scripts/ec2_server.py -d $1
     ./run python deploy/chef/scripts/ec2_server.py -d $1
 
@@ -277,6 +291,20 @@ function rmchefec2()
 
     echo rmdir ~/$1
     rmdir ~/$1
+
+    popd
+}
+
+function upld()
+{
+    if [ -z "$1" ]; then
+        echo Usage: you must bass the tag.
+        return
+    fi
+
+    pushd `git rev-parse --show-toplevel`
+    ./run python ./deploy/chef/scripts/upload_debesys.py --tag $1
+    popd
 }
 
 

@@ -79,6 +79,7 @@ SYMBOL should be one of 'grep-command', 'grep-template',
                                       "-and \! -iname \"*.so\" "
                                       "-and \! -iname \"*.sql\" "
                                       "-and \! -iname \"*.txt\" "
+                                      "-and \! -iname \"*.class\" "
                                       "-and \! -iname \"*.xml\" "
                                       "\")\" "
                                       "-print0 | xargs -0 grep -nHi -e "))
