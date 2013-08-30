@@ -30,8 +30,8 @@
 
 ;; Map f11/f12 to set background/foreground: this will prompt for
 ;; the color on the bottom.
-(global-set-key (quote[f11]) (quote set-background-color))
-(global-set-key (quote[f12]) (quote set-foreground-color))
+(global-set-key (quote[f11]) (quote comment-region))
+(global-set-key (quote[f12]) (quote uncomment-region))
 
 ;; Map C-x C-f to set the correct file cache and then call open-file.
 (load-file "~/.emacs.d/custom-file-cache.el")

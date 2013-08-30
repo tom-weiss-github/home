@@ -42,8 +42,8 @@ export PATH=$PATH:/opt/scala-2.9.3/bin/
 # http://www.scala-sbt.org/release/docs/Getting-Started/Setup.html
 # Choose sbt.rpm download.
 # sudo rpm -i /mnt/dbd/sbt.rpm
-export build_juno=1
-export build_ringer=1
+# export build_juno=1
+# export build_ringer=1
 
 . ~/githome/rhel/logs.sh
 
@@ -107,14 +107,26 @@ alias lszk='`git rev-parse --show-toplevel`/run python `git rev-parse --show-top
 alias rmzk='`git rev-parse --show-toplevel`/run python `git rev-parse --show-toplevel`/darwin/dashboard/rmzk.py'
 alias oczk='lszk /srv/alive/oc -r; lszk /srv/oc -r | xargs --delimiter="\n" -n 1 echo "     "'
 alias envs='echo PATH $PATH; echo LD_LIBRARY_PATH $LD_LIBRARY_PATH; echo C_INCLUDE_PATH $C_INCLUDE_PATH; echo CPLUS_INCLUDE_PATH $CPLUS_INCLUDE_PATH; echo PYTHONPATH $PYTHONPATH; echo PYTHONHOME $PYTHONHOME; echo SWIG_LIB $SWIG_LIB; echo DEBENV_ENGAGED $DEBENV_ENGAGED'
-alias dev61='ssh root@10.202.0.61'
+
+export d036_ip=10.202.0.36
+alias d036="ssh root@$d036_ip"
+alias md036="mkdir -p ~/d036; sshfs root@$d036_ip:/ ~/d036"
+
+export d064_ip=10.202.0.64
+alias d064="ssh root@$d064_ip"
+alias md064="mkdir -p ~/d064; sshfs root@$d064_ip:/ ~/d064"
+
+export dev61_ip=10.202.0.61
+alias dev61="ssh root@$dev61_ip"
+alias mdev61="mkdir -p ~/dev61; sshfs root@$dev61_ip:/ ~/dev61"
+
 alias sim73='ssh root@10.202.0.73'
 alias sim81='ssh root@10.202.0.81'
 alias prod54='ssh root@10.202.0.54'
-alias mdev61="sshfs root@10.202.0.61:/ ~/dev61"
+
 alias msim73="sshfs root@10.202.0.73:/ ~/sim73"
 alias msim81="sshfs root@10.202.0.81:/ ~/sim81"
-alias mprod54="sshfs root@10.202.0.54:/ ~/prod54"
+alias mprod54="mkdir -p ~/prod54; sshfs root@10.202.0.54:/ ~/prod54"
 alias m180='sshfs root@192.168.254.180:/ ~/180'
 alias ocperf="ssh root@192.168.254.180"
 alias m187='sshfs root@192.168.254.187:/ ~/187'
@@ -233,9 +245,14 @@ alias em=em_
 function gdb_()
 {
     if [ -f ~/.gdbinit ]; then
+        echo !!!
+        echo !!!!!!
         echo ~/.gdbinit exists, likely from emacs;
+        echo !!!!!!
+        echo !!!
     fi
     gdb
+    # perhaps investigate using -n option
 }
 alias gdb=gdb_
 
@@ -307,6 +324,15 @@ function upld()
     popd
 }
 
+function knife()
+{
+    pushd `git rev-parse --show-toplevel`/deploy/chef >> /dev/null
+    if [ $? != 0 ]; then
+        return
+    fi
+    /usr/bin/knife "$@"
+    popd >> /dev/null
+}
 
 if [ ! -f /var/log/profiles ]
 then

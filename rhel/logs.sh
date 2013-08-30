@@ -1,4 +1,147 @@
 #!/bin/bash
+
+# operations
+# ls - ls
+# tl - tail -f
+# ed - emacs -nw
+# rm - rm
+
+# log file aliases
+# cme cme.log
+# sr (send-recv)
+# br bouncer.log
+# lu (ledger_up.log)
+# lr (ledger_req.log)
+# es (edgeserver.log)
+
+# mount
+# ssh (visit)
+
+# hosts
+# deb61
+# ...
+
+# tloc dev61
+# edoc dev61
+# mount dev61
+# visit dev30
+
+# first function combines action and file.
+# the argument is which host alias.
+# a second argument
+
+declare host_alias_ip
+declare host_alias_mount
+declare log_name
+
+host_aliases=(
+    d61
+    d81
+)
+
+function host2ip()
+{
+    if [ "$1" == "d61" ]; then
+        host_alias_ip=10.202.0.61
+    elif [ "$1" == "d81" ]; then
+        host_alias_ip=10.202.0.81
+    else
+        host_alias_ip=0.0.0.0
+    fi
+}
+
+# service_aliases=(
+#     cme
+#     br
+#     lu
+#     lr
+#     es
+#     ase
+#     ri
+# )
+
+function alias2logname()
+{
+    if [ "$1" == "br" ]; then
+        log_name="bouncerd"
+    elif [ "$1" == "es" ]; then
+        log_name="edgeserver"
+    else
+        log_name=$1
+    fi
+}
+
+# lslg service location
+# tllg
+# edlg
+# rmlg
+
+
+function lslg()
+{
+    if [ -z "$1" ]; then
+        echo Usage: you must pass the log name or alias
+        echo lslg cme d61
+        return
+    fi
+
+    # If the second argument is empty, then assume localhost
+    if [ -z "$2" ]; then
+        ha="local"
+    else
+        ha=$2
+    fi
+
+    alias2logname $1
+    ls -l ~/mnt/$ha/var/log/debesys/$1.log
+}
+
+function lshosts()
+{
+    for ha in ${host_aliases[*]}
+    do
+        host2ip $ha
+        printf "%s %s\n" $ha $host_alias_ip
+    done
+}
+
+function mlghosts()
+{
+    for ha in ${host_aliases[*]}
+    do
+        if [ -d ~/mnt/$ha ]; then
+            printf "%s exists, skipping\n" ~/mnt/$ha
+            continue
+        fi
+        host2ip $ha
+        mkdir -pv ~/mnt/$ha
+        sshfs root@$host_alias_ip:/ ~/mnt/$ha
+    done
+
+    # A special alias that points to the local host.
+    if [ ! -d ~/mnt/local ]; then
+        ln -vs / ~/mnt/local
+    fi
+}
+
+function umlghosts()
+{
+    for ha in ${host_aliases[*]}
+    do
+        host2ip $ha
+        if [ ! -d ~/mnt/$ha ]; then
+            printf "%s does not exist, skipping\n" ~/mnt/$ha
+            continue
+        fi
+        fusermount -u ~/mnt/$ha
+        rmdir -v ~/mnt/$ha
+    done
+
+    if [ -d ~/mnt/local ]; then
+        rm -v ~/mnt/local
+    fi
+}
+
 function lssr()
 {
     local directory=/var/lib/order-connector
@@ -69,6 +212,8 @@ function tloc()
     echo ""
     /bin/ls -tr $log_files | tail -1 | xargs tail -f | sed -u "s/\x01/ /g"
 }
+alias tloc='tail -f /var/log/debesys/cme.log | sed -u "s/\x01/ /g"'
+alias tlocdev61='tail -f ~/dev61/var/log/debesys/cme.log | sed -u "s/\x01/ /g"'
 
 function edoc()
 {

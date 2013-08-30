@@ -40,6 +40,9 @@ Run a command in a loop on the command line.
 
 abrt-cli list -f | grep Directory | cut -d" " -f 7 | xargs -n 1 abrt-cli rm
 
+curl http://ipecho.net/plain
+Get the external IP address of some host as seen by the Internet.
+
 tcpdump
 -------
 tcpdump -D

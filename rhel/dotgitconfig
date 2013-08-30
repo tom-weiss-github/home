@@ -5,6 +5,7 @@
 [alias]
 	st = status
 	co = checkout
+        br = branch
 	glog = log --graph --date-order --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
         myglog = log --graph --date-order --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --author=\"Tom Weiss\"
 	serve = !git daemon --reuseaddr --verbose --base-path=. --export-all ./.git

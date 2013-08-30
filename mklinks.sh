@@ -1,6 +1,16 @@
 
 pushd $HOME
 
+if [ -d /etc/sbt ]; then  # If directory exists, then it's likely sbt is installed
+    if [ ! -f /etc/sbt/sbtopts ]; then
+        sudo ln -sv $HOME/githome/sbtopts /etc/sbt/sbtopts
+    else
+        echo Skipping $HOME/githome/sbtopts since /etc/sbt/sbtopts already exists.
+    fi
+else
+    echo Skipping $HOME/githome/sbtopts since sbt does not seem to be installed.
+fi
+
 # Files in home directory whose link name is identical.
 for f in .bash_profile .bashrc .inputrc .tcshrc
 do
