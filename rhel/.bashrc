@@ -185,26 +185,32 @@ alias cpcfg=cpcfg_
 
 function devlbm_()
 {
+    rm -v /etc/debesys/env_is
     rm -v /etc/debesys/lbm.conf;
     cp -v /etc/debesys/lbm.dev.conf /etc/debesys/lbm.conf;
-    cp -v /etc/debesys/lbm.dev.conf /etc/debesys/lbm_config.xml; # T Trader
+    echo "dev" > /etc/debesys/env_is
+    cat /etc/debesys/env_is
 }
 alias devlbm=devlbm_
 
 function locallbm_()
 {
+    rm -v /etc/debesys/env_is
     sudo ifconfig lo multicast # ensure multicast is enabled on loopback
     rm -v /etc/debesys/lbm.conf;
     cp -v /etc/debesys/lbm.local.conf /etc/debesys/lbm.conf;
-    cp -v /etc/debesys/lbm.local.conf /etc/debesys/lbm_config.xml; # T Trader
+    echo "local" > /etc/debesys/env_is
+    cat /etc/debesys/env_is
 }
 alias locallbm=locallbm_
 
 function simlbm_()
 {
+    rm -v /etc/debesys/env_is
     rm -v /etc/debesys/lbm.conf;
     cp -v /etc/debesys/lbm.sim.conf /etc/debesys/lbm.conf;
-    cp -v /etc/debesys/lbm.sim.conf /etc/debesys/lbm_config.xml; # T Trader
+    echo "sim" > /etc/debesys/env_is
+    cat /etc/debesys/env_is
 }
 alias simlbm=simlbm_
 
