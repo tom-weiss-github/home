@@ -108,29 +108,6 @@ alias rmzk='`git rev-parse --show-toplevel`/run python `git rev-parse --show-top
 alias oczk='lszk /srv/alive/oc -r; lszk /srv/oc -r | xargs --delimiter="\n" -n 1 echo "     "'
 alias envs='echo PATH $PATH; echo LD_LIBRARY_PATH $LD_LIBRARY_PATH; echo C_INCLUDE_PATH $C_INCLUDE_PATH; echo CPLUS_INCLUDE_PATH $CPLUS_INCLUDE_PATH; echo PYTHONPATH $PYTHONPATH; echo PYTHONHOME $PYTHONHOME; echo SWIG_LIB $SWIG_LIB; echo DEBENV_ENGAGED $DEBENV_ENGAGED'
 
-export d036_ip=10.202.0.36
-alias d036="ssh root@$d036_ip"
-alias md036="mkdir -p ~/d036; sshfs root@$d036_ip:/ ~/d036"
-
-export d064_ip=10.202.0.64
-alias d064="ssh root@$d064_ip"
-alias md064="mkdir -p ~/d064; sshfs root@$d064_ip:/ ~/d064"
-
-export dev61_ip=10.202.0.61
-alias dev61="ssh root@$dev61_ip"
-alias mdev61="mkdir -p ~/dev61; sshfs root@$dev61_ip:/ ~/dev61"
-
-alias sim73='ssh root@10.202.0.73'
-alias sim81='ssh root@10.202.0.81'
-alias prod54='ssh root@10.202.0.54'
-
-alias msim73="sshfs root@10.202.0.73:/ ~/sim73"
-alias msim81="sshfs root@10.202.0.81:/ ~/sim81"
-alias mprod54="mkdir -p ~/prod54; sshfs root@10.202.0.54:/ ~/prod54"
-alias m180='sshfs root@192.168.254.180:/ ~/180'
-alias ocperf="ssh root@192.168.254.180"
-alias m187='sshfs root@192.168.254.187:/ ~/187'
-alias stperf="ssh root@192.168.254.187"
 alias repo="python ~/githome/get-repo.py"
 alias mdbd='sudo mount -o user=intad/tweiss -t cifs //chifs01.int.tt.local/Share/Dead_By_Dawn /mnt/dbd/'
 alias cli_mt='run `git rev-parse --show-toplevel`/ext/linux/x86-64/release/bin/cli_mt 10.203.0.43:2181'
@@ -290,9 +267,9 @@ function mkchefec2()
     echo ssh -t ec2-user@$ip -i ~/.ssh/aws.pem "sudo cp /home/ec2-user/.ssh/authorized_keys /root/.ssh/authorized_keys"
     ssh -t ec2-user@$ip -i ~/.ssh/aws.pem "sudo cp /home/ec2-user/.ssh/authorized_keys /root/.ssh/authorized_keys"
 
-    mkdir -pv ~/$1
-    echo sshfs root@$ip:/ ~/$1 -o IdentityFile=~/.ssh/aws.pem
-    sshfs root@$ip:/ ~/$1 -o IdentityFile=~/.ssh/aws.pem
+    mkdir -pv ~/mnt/$1
+    echo sshfs root@$ip:/ ~/mnt/$1 -o IdentityFile=~/.ssh/aws.pem
+    sshfs root@$ip:/ ~/mnt/$1 -o IdentityFile=~/.ssh/aws.pem
 
     popd
 }
@@ -309,11 +286,11 @@ function rmchefec2()
     echo ./run python deploy/chef/scripts/ec2_server.py -d $1
     ./run python deploy/chef/scripts/ec2_server.py -d $1
 
-    echo sudo umount ~/$1
-    sudo umount ~/$1
+    echo sudo umount ~/mnt/$1
+    sudo umount ~/mnt/$1
 
-    echo rmdir ~/$1
-    rmdir ~/$1
+    echo rmdir ~/mnt/$1
+    rmdir ~/mnt/$1
 
     popd
 }
@@ -321,7 +298,7 @@ function rmchefec2()
 function upld()
 {
     if [ -z "$1" ]; then
-        echo Usage: you must bass the tag.
+        echo Usage: you must pass the tag.
         return
     fi
 
@@ -332,6 +309,25 @@ function upld()
 
 function knife()
 {
+    git rev-parse --show-toplevel >> /dev/null
+    if [ $? != 0 ]; then
+        echo "You need to be in a repository to run knife."
+        return
+    fi
+
+    if [[ $@ == *-i* ]]; then
+
+        if [ `pwd` != `git rev-parse --show-toplevel`/deploy/chef ]; then
+            # The pushd operation below is going to change the current working directory since
+            # current working directory isn't in the correct spot.  Once done, the file parameter
+            # passed in with -i is likely wrong.
+            echo "This function is not safe to use when using the -i option in a knife command"
+            echo "because the -i option likely has a relative path which will be invalid once"
+            echo "the current working directory is changed."
+            return
+        fi
+    fi
+
     pushd `git rev-parse --show-toplevel`/deploy/chef >> /dev/null
     if [ $? != 0 ]; then
         return
