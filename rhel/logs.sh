@@ -1,37 +1,10 @@
 #!/bin/bash
 
-# operations
-# ls - ls
-# tl - tail -f
-# ed - emacs -nw
-# rm - rm
-
-# log file aliases
-# cme cme.log
-# sr (send-recv)
-# br bouncer.log
-# lu (ledger_up.log)
-# lr (ledger_req.log)
-# es (edgeserver.log)
-
-# mount
-# ssh (visit)
-
-# hosts
-# deb61
-# ...
-
-# tloc dev61
-# edoc dev61
-# mount dev61
-# visit dev30
-
-# first function combines action and file.
-# the argument is which host alias.
-# a second argument
-
 function lghelp()
 {
+    echo "lslg log host"
+    echo "tllg log host"
+    echo "edlg log host"
     echo "alias2logname help    see log aliases"
     echo "lshosts               see host aliases"
     echo "mlghosts              mount all hosts"
@@ -44,6 +17,8 @@ declare host_alias_mount
 declare log_name
 
 host_aliases=(
+    d30
+    d54
     d61
     d62
     d64
@@ -56,6 +31,10 @@ function host2ip()
         host_alias_ip=10.202.0.61
     elif [ "$1" == "d62" ]; then
         host_alias_ip=10.202.0.62
+    elif [ "$1" == "d30" ]; then
+        host_alias_ip=10.202.0.30
+    elif [ "$1" == "d54" ]; then
+        host_alias_ip=10.202.0.54
     elif [ "$1" == "d64" ]; then
         host_alias_ip=10.202.0.64
     elif [ "$1" == "d81" ]; then
@@ -162,12 +141,13 @@ function mlghosts()
 {
     for ha in ${host_aliases[*]}
     do
-        if [ -d ~/mnt/$ha ]; then
-            printf "%s exists, skipping\n" ~/mnt/$ha
+        if [ -d ~/mnt/$ha ] && [ "$(/bin/ls -A ~/mnt/$ha)" ]; then
+            printf "%s exists and is not empty, skipping\n" ~/mnt/$ha
             continue
         fi
         host2ip $ha
         mkdir -pv ~/mnt/$ha
+        echo sshfs root@$host_alias_ip:/ ~/mnt/$ha
         sshfs root@$host_alias_ip:/ ~/mnt/$ha
     done
 

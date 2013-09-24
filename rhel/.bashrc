@@ -52,7 +52,7 @@ alias edbrc='emacs -nw ~/githome/rhel/.bashrc'
 alias ee='emacs -nw'
 alias c='emacsclient -n'
 alias ls='ls -aFCh --color=always'
-alias h='history'
+alias h='history | tail -n 50'
 alias hg='history | grep'
 alias rw=~/githome/setxtitle.sh
 unset PROMPT_COMMAND
@@ -250,8 +250,8 @@ function mkchefec2()
 
     # rhel 6.4 ami-7d0c6314
 
-    echo ./run python deploy/chef/scripts/ec2_server.py --size m1.medium --ami ami-7d0c6314 --manager "Tom Weiss" --user ec2-user --environment dev -a $1
-    ./run python deploy/chef/scripts/ec2_server.py --size m1.medium --ami ami-7d0c6314 --manager "Tom Weiss" --user ec2-user --environment dev -a $1
+    echo ./run python deploy/chef/scripts/ec2_server.py --size m1.medium --ami ami-7d0c6314 --manager "Tom Weiss" --user ec2-user --environment dev --role base -a $1
+    ./run python deploy/chef/scripts/ec2_server.py --size m1.medium --ami ami-7d0c6314 --manager "Tom Weiss" --user ec2-user --environment dev --role base -a $1
 
     local ip=`knife node show $1 | grep IP | tr -s ' ' | cut -d" " -f 2`
     if [ -z ip ]; then
@@ -307,7 +307,7 @@ function upld()
     popd
 }
 
-function knife()
+function knf()
 {
     git rev-parse --show-toplevel >> /dev/null
     if [ $? != 0 ]; then
@@ -315,17 +315,10 @@ function knife()
         return
     fi
 
-    if [[ $@ == *-i* ]]; then
-
-        if [ `pwd` != `git rev-parse --show-toplevel`/deploy/chef ]; then
-            # The pushd operation below is going to change the current working directory since
-            # current working directory isn't in the correct spot.  Once done, the file parameter
-            # passed in with -i is likely wrong.
-            echo "This function is not safe to use when using the -i option in a knife command"
-            echo "because the -i option likely has a relative path which will be invalid once"
-            echo "the current working directory is changed."
-            return
-        fi
+    # If any of the arguments contains the substring 'ssh', then directly call knife.
+    if [[ $@ == *ssh* ]]; then
+        /usr/bin/knife "$@"
+        return
     fi
 
     pushd `git rev-parse --show-toplevel`/deploy/chef >> /dev/null
