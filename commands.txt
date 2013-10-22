@@ -5,8 +5,15 @@ find / -type f -size +1000k | xargs -n 1 ls -l --block-size=M
 Find all files over 1000 kbs and then print the size of each of those
 files in mbs.
 
+find . -mtime +10 | xargs -n 1 --no-run-if-empty rm -v
+Remove files older than 10 days.  The -n 1 ensure that if there are large numbers of files the
+rm command won't be too long, instead a new command will be created for each file.
+
 df -h
 Print disk usage.
+
+du -hs <directory>
+Print disk usage of some directory, recursive.
 
 lsof
 Print open files (which may not be shown in find or ls if the file
@@ -23,8 +30,7 @@ abrt-cli list -f | grep Directory | cut -d" " -f 7 | xargs -i -n 1 sh -c 'echo d
 This command will print all the abrt directories and and a file in the directory.
 It uses sh -c to use the directory for 2 commands.
 
-find . -mtime +10 | xargs rm -v
-Remove files older than 10 days.
+
 
 echo -n `date +"%Y-%m-%d-%H-%M-%S"`; git log --abbrev-commit --graph --date-order --date=relative --pretty=oneline | head -1 | sed -e 's/^*[ \t]*/_/g' | sed 's/\ /_/g' | sed 's/[^a-zA-Z0-9_]//g'
 Simple sed usage example.  Format the latest git log in a particular format.

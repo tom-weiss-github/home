@@ -18,6 +18,7 @@ declare log_name
 
 host_aliases=(
     d30
+    d31
     d54
     d61
     d62
@@ -33,6 +34,8 @@ function host2ip()
         host_alias_ip=10.202.0.62
     elif [ "$1" == "d30" ]; then
         host_alias_ip=10.202.0.30
+    elif [ "$1" == "d31" ]; then
+        host_alias_ip=10.202.0.31
     elif [ "$1" == "d54" ]; then
         host_alias_ip=10.202.0.54
     elif [ "$1" == "d64" ]; then
@@ -87,7 +90,7 @@ function lslg()
     fi
 
     alias2logname $1
-    ls -l ~/mnt/$ha/var/log/debesys/$1.log
+    ls -lh ~/mnt/$ha/var/log/debesys/$1.log
 }
 
 function tllg()

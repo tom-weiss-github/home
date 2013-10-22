@@ -103,8 +103,9 @@ alias prt='pushd `git rev-parse --show-toplevel`'
 alias dr="cd ~/dev-root"
 alias edcfg='emacs -nw /etc/debesys/cme_oc_config.conf'
 alias run='`git rev-parse --show-toplevel`/run'
-alias lszk='`git rev-parse --show-toplevel`/run python `git rev-parse --show-toplevel`/darwin/dashboard/lszk.py'
-alias rmzk='`git rev-parse --show-toplevel`/run python `git rev-parse --show-toplevel`/darwin/dashboard/rmzk.py'
+alias ttknife='`git rev-parse --show-toplevel`/ttknife'
+alias lszk='`git rev-parse --show-toplevel`/run python `git rev-parse --show-toplevel`/darwin/dashboard/lszk.py -z 10.203.0.49'
+alias rmzk='`git rev-parse --show-toplevel`/run python `git rev-parse --show-toplevel`/darwin/dashboard/rmzk.py -z 10.203.0.49'
 alias oczk='lszk /srv/alive/oc -r; lszk /srv/oc -r | xargs --delimiter="\n" -n 1 echo "     "'
 alias envs='echo PATH $PATH; echo LD_LIBRARY_PATH $LD_LIBRARY_PATH; echo C_INCLUDE_PATH $C_INCLUDE_PATH; echo CPLUS_INCLUDE_PATH $CPLUS_INCLUDE_PATH; echo PYTHONPATH $PYTHONPATH; echo PYTHONHOME $PYTHONHOME; echo SWIG_LIB $SWIG_LIB; echo DEBENV_ENGAGED $DEBENV_ENGAGED'
 
@@ -112,7 +113,7 @@ alias repo="python ~/githome/get-repo.py"
 alias mdbd='sudo mount -o user=intad/tweiss -t cifs //chifs01.int.tt.local/Share/Dead_By_Dawn /mnt/dbd/'
 alias cli_mt='run `git rev-parse --show-toplevel`/ext/linux/x86-64/release/bin/cli_mt 10.203.0.43:2181'
 alias jtrader="/usr/java/jdk1.7.0_03/bin/java -cp JTrader.jar JTrader &"
-alias ttr='`git rev-parse --show-toplevel`/run python `git rev-parse --show-toplevel`/t_trader/tt/ttrader/t_trader.py --disable-ledger --stdout'
+alias ttr='`git rev-parse --show-toplevel`/run python `git rev-parse --show-toplevel`/t_trader/tt/ttrader/t_trader.py --stdout'
 alias grp="git rev-parse --short"
 alias chrome="/opt/google/chrome/google-chrome --enable-plugins &"
 
@@ -242,16 +243,29 @@ alias gdb=gdb_
 function mkchefec2()
 {
     if [ -z "$1" ]; then
-        echo Usage: you must pass the node name.
+        echo 'Usage: you must pass the node name, mkchefec2 node [rhel|centos]'
         return
     fi
 
     pushd `git rev-parse --show-toplevel`
 
-    # rhel 6.4 ami-7d0c6314
+    if [ -z "$2" ]; then
+        echo 'Usage: you must pass the operating system, mkchefec2 node [rhel|centos]'
+        return
+    fi
 
-    echo ./run python deploy/chef/scripts/ec2_server.py --size m1.medium --ami ami-7d0c6314 --manager "Tom Weiss" --user ec2-user --environment dev --role base -a $1
-    ./run python deploy/chef/scripts/ec2_server.py --size m1.medium --ami ami-7d0c6314 --manager "Tom Weiss" --user ec2-user --environment dev --role base -a $1
+    if [ "rhel" == "$2" ]; then
+        target_os="ami-7d0c6314" # rhel 6.4, us east
+        user="ec2-user"
+    elif [ "centos" == "$2" ]; then
+        target_os="ami-eb6b0182" # centos 6 with updates, us east
+        user="root"
+    else
+        target_os="unknown"
+    fi
+
+    echo ./run python deploy/chef/scripts/ec2_server.py --size m1.medium --ami $target_os --manager "Tom Weiss" --user $user --environment dev --recipe base -a $1
+    ./run python deploy/chef/scripts/ec2_server.py --size m1.medium --ami $target_os --manager "Tom Weiss" --user $user --environment dev --recipe base -a $1
 
     local ip=`knife node show $1 | grep IP | tr -s ' ' | cut -d" " -f 2`
     if [ -z ip ]; then
@@ -262,10 +276,12 @@ function mkchefec2()
     # In order to run the sshfs command with the user root, we need to replace root's
     # authorized_keys with ec2-user's authorized_keys.  The root use does not otherwise
     # allow for mounting the file system with write permission.
-    echo ssh -t ec2-user@$ip -i ~/.ssh/aws.pem "sudo cp /root/.ssh/authorized_keys /root/.ssh/authorized_keys_orig"
-    ssh -t ec2-user@$ip -i ~/.ssh/aws.pem "sudo cp /root/.ssh/authorized_keys /root/.ssh/authorized_keys_orig"
-    echo ssh -t ec2-user@$ip -i ~/.ssh/aws.pem "sudo cp /home/ec2-user/.ssh/authorized_keys /root/.ssh/authorized_keys"
-    ssh -t ec2-user@$ip -i ~/.ssh/aws.pem "sudo cp /home/ec2-user/.ssh/authorized_keys /root/.ssh/authorized_keys"
+    if [ "rhel" == "$2" ]; then
+        echo ssh -t ec2-user@$ip -i ~/.ssh/aws.pem "sudo cp /root/.ssh/authorized_keys /root/.ssh/authorized_keys_orig"
+        ssh -t ec2-user@$ip -i ~/.ssh/aws.pem "sudo cp /root/.ssh/authorized_keys /root/.ssh/authorized_keys_orig"
+        echo ssh -t ec2-user@$ip -i ~/.ssh/aws.pem "sudo cp /home/ec2-user/.ssh/authorized_keys /root/.ssh/authorized_keys"
+        ssh -t ec2-user@$ip -i ~/.ssh/aws.pem "sudo cp /home/ec2-user/.ssh/authorized_keys /root/.ssh/authorized_keys"
+    fi
 
     mkdir -pv ~/mnt/$1
     echo sshfs root@$ip:/ ~/mnt/$1 -o IdentityFile=~/.ssh/aws.pem

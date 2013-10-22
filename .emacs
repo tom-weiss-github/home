@@ -444,4 +444,11 @@
 ;; to paste, go to spot and do M-x yank-rectangle
 
 ;; To remove ^M characters, use CTRL-Q CTRL-M to specify the ^M character.
-;; Test comment.
+
+;; Replace regular expression across file:
+;; find-grep-dired
+;; t (toggle all) or m (mark individual)
+;; Q (query-replace-regexp)
+;; (proceed with query-replace-regexp syntax)
+;; (C-x s !) to save all buffers modified.
+
