@@ -30,7 +30,8 @@ abrt-cli list -f | grep Directory | cut -d" " -f 7 | xargs -i -n 1 sh -c 'echo d
 This command will print all the abrt directories and and a file in the directory.
 It uses sh -c to use the directory for 2 commands.
 
-
+knife search "recipe:zookeeper AND environment:dev" -a ipaddress | grep ipaddress | tail -1 | tr -s " " | cut -d":" -f 2
+Similar to other cut examples, but this one uses the tr command to trim extra whitespace to assist cut.
 
 echo -n `date +"%Y-%m-%d-%H-%M-%S"`; git log --abbrev-commit --graph --date-order --date=relative --pretty=oneline | head -1 | sed -e 's/^*[ \t]*/_/g' | sed 's/\ /_/g' | sed 's/[^a-zA-Z0-9_]//g'
 Simple sed usage example.  Format the latest git log in a particular format.
