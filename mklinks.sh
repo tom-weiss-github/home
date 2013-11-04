@@ -41,7 +41,7 @@ else
 fi
 
 if [ ! -f $HOME/.gitignore_global ]; then
-    ln -sv $HOME/githome/rhel/dotgitconfig $HOME/dotgitignore_global
+    ln -sv $HOME/githome/rhel/dotgitignore_global $HOME/.gitignore_global
 else
     echo Skipping $HOME/.gitignore_global, already exists.
 fi

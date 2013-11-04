@@ -50,6 +50,11 @@ abrt-cli list -f | grep Directory | cut -d" " -f 7 | xargs -n 1 abrt-cli rm
 curl http://ipecho.net/plain
 Get the external IP address of some host as seen by the Internet.
 
+knife node delete NODE_NAME
+knife client delete NODE_NAME
+rpm -q chef
+rpm -e chef-11.4.4-2.el6.x86_64;rm -rf /var/chef/; rm -rf /etc/chef/; rm -rf /opt/chef
+
 tcpdump
 -------
 tcpdump -D
@@ -77,15 +82,37 @@ Steps to set up X11 forwarding from RHEL to Windows.
   - Session -> Saved Sessions Give the session a name
     and save/load it to make sure the rest are not lost.
   - Connection -> Data -> Auto-login username 'debesys'
-  - Connection -> Data -> Seconds between keep alive 120
-  - SSH -> Auth -> private key from linux machine.
-   Take the private key and use puttygen to convert the
-   format.  Make sure the public key is in authorized_keys.
+    (or whatever username you want to log in with)
+  - Connection -> Seconds between keep alive 120
+  - Copy private key from linux machine into c:\Users\USER\.ssh\tmp_key
+    (the keys can be created on a linux machine with ssh-keygen)
+    Launch puttygen.
+    Select Conversions Menu.
+    Open the c:\Users\USER\.ssh\tmp_key file.
+    Select the 'Save private key' button and name with extension .ppk.
+    SSH -> Auth -> Private key file for authentication -> Browse to the
+    ppk file just created.
    - X11 -> Enable X11 Forwarding.
-  - Session -> Host '10.202.7.144'
+  - Session -> Host <IP of host>
+  - Save.
 
 View a file's permissions as numbers.
 stat -c '%a' [file]
+
+gnome
+-----
+To stop cursor from blinking launch gnome-keyboard-properties and uncheck cursor blinking textbox
+(may need to restart terminal to take effect).  This command may work on some version:
+gconftool-2 -s /apps/gnome-terminal/profiles/Default/cursor_blink_mode -t string off
+General -> Font: Monospace 14
+Check 'Use custom default terminal size' 240 columns 25 rows
+Colors -> Text Color: #10F015
+Colors -> Background Color: #000000
+Scrolling -> check Unlimited
+To prevent function keys from being caught in emacs -nw mode, open the Keyboard Shortcuts
+and uncheck "Enable the menu shortcut key (F10 by default).  Then go through all the
+shortcuts and use backspace in combination with clicking to disable the shortcuts mapped
+to function keys.
 
 
 selinux
@@ -95,7 +122,6 @@ setenforce
 /etc/selinux/config
 chcon -v -R type=var_log_t /dir1/dir2 (change label)
 ls -Z <file> (view label)
-
 
 networking
 ----------

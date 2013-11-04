@@ -56,6 +56,7 @@ alias h='history | tail -n 50'
 alias hg='history | grep'
 alias rw=~/githome/setxtitle.sh
 unset PROMPT_COMMAND
+alias vm16='ssh tweiss@10.202.0.16 -i ~/.ssh/id_rsa'
 
 # Use optimize-find.py to help decide which directories and extensions to filter.
 #alias ff='find . -type d -path "*/build" -prune -o -path "*/.git" -prune -o -path "*/ext" -prune -o -path "*/pycommon" -prune -o \( \! -iname "*.ico" -and \! -iname "TAGS" -and \! -iname "FILES" -and \! -iname "BROWSE" -and \! -iname "*.cs" -and \! -iname "*.png" -and \! -iname "*.jar" -and \! -iname "*.pyc" -and \! -iname "*.o" -and \! -iname "*.d" -and \! -iname "*.a" -and \! -name "*.so" -and \! -iname "*.bin" -and \! -iname "*pdf" -and \! -iname "*.java"  -and \! -iname "*xml" -and \! -iname "*.scala" -and \! -iname "*png" -and \! -iname "*.txt" -and \! -iname "*.html" -and \! -iname "*.php" -and \! -iname "*.css" -and \! -iname "*.js" -and \! -iname "*.cs" -and \! -iname "*.json" -and \! -iname "*.sql" -and \! -iname "*.dat" \) -print0 | xargs -0 grep -iHn'
@@ -103,7 +104,8 @@ alias prt='pushd `git rev-parse --show-toplevel`'
 alias dr="cd ~/dev-root"
 alias edcfg='emacs -nw /etc/debesys/cme_oc_config.conf'
 alias run='`git rev-parse --show-toplevel`/run'
-alias ttknife='`git rev-parse --show-toplevel`/ttknife'
+alias ttknife='`git rev-parse --show-toplevel`/run `git rev-parse --show-toplevel`/ttknife'
+alias envvers='knife environment list | xargs -n 1 -i knife environment show \{\} -a cookbook_versions'
 alias lszk='`git rev-parse --show-toplevel`/run python `git rev-parse --show-toplevel`/darwin/dashboard/lszk.py'
 alias rmzk='`git rev-parse --show-toplevel`/run python `git rev-parse --show-toplevel`/darwin/dashboard/rmzk.py'
 alias oczk='lszk /srv/alive/oc -r; lszk /srv/oc -r | xargs --delimiter="\n" -n 1 echo "     "'
@@ -264,8 +266,8 @@ function mkchefec2()
         target_os="unknown"
     fi
 
-    echo ./run python deploy/chef/scripts/ec2_server.py --size m1.medium --ami $target_os --manager "Tom Weiss" --user $user --environment dev --recipe base -a $1
-    ./run python deploy/chef/scripts/ec2_server.py --size m1.medium --ami $target_os --manager "Tom Weiss" --user $user --environment dev --recipe base -a $1
+    echo ./run python deploy/chef/scripts/ec2_server.py --size m1.medium --ami $target_os --manager "Tom Weiss" --user $user --environment int-dev-live --recipe base -a $1
+    ./run python deploy/chef/scripts/ec2_server.py --size m1.medium --ami $target_os --manager "Tom Weiss" --user $user --environment int-dev-live --recipe base -a $1
 
     local ip=`knife node show $1 | grep IP | tr -s ' ' | cut -d" " -f 2`
     if [ -z ip ]; then
@@ -318,9 +320,19 @@ function upld()
         return
     fi
 
+    echo export build_juno=1
+    export build_juno=1
+    echo export build_ringer=1
+    export build_ringer=1
+
     pushd `git rev-parse --show-toplevel`
     ./run python ./deploy/chef/scripts/upload_debesys.py --tag $1
     popd
+
+    echo unset build_juno
+    unset build_juno
+    echo unset build_ringer
+    unset build_ringer
 }
 
 function knf()
