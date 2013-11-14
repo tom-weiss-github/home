@@ -103,7 +103,9 @@ gnome
 -----
 To stop cursor from blinking launch gnome-keyboard-properties and uncheck cursor blinking textbox
 (may need to restart terminal to take effect).  This command may work on some version:
-gconftool-2 -s /apps/gnome-terminal/profiles/Default/cursor_blink_mode -t string off
+gconftool-2 --set /apps/gnome-terminal/profiles/Default/cursor_blink_mode -t string off
+gconftool-2 --set /desktop/gnome/interface/cursor_blink --type bool false
+(may need to reboot to take effect)
 General -> Font: Monospace 14
 Check 'Use custom default terminal size' 240 columns 25 rows
 Colors -> Text Color: #10F015

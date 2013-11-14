@@ -35,7 +35,7 @@ export LBM_LICENSE_FILENAME=~/29WestLicense.txt
 # in scala caused an LBM symbol to not be recognized and failed to run.  To unset use:
 # unset LD_BIND_NOW
 # export LD_BIND_NOW=yes
-export PATH=$PATH:/home/debesys/Downloads/meld-1.6.1/bin
+export PATH=$PATH:~/Downloads/meld-1.6.1/bin
 export PATH=$PATH:/opt/scala-2.9.3/bin/
 
 # Cause scala project to be built, workstation must have sbt installed.
@@ -245,15 +245,21 @@ alias gdb=gdb_
 function mkchefec2()
 {
     if [ -z "$1" ]; then
-        echo 'Usage: you must pass the node name, mkchefec2 node [rhel|centos]'
+        echo 'Usage: you must pass the node name, mkchefec2 node [rhel|centos] [size]'
         return
     fi
 
     pushd `git rev-parse --show-toplevel`
 
     if [ -z "$2" ]; then
-        echo 'Usage: you must pass the operating system, mkchefec2 node [rhel|centos]'
+        echo 'Usage: you must pass the operating system, mkchefec2 node [rhel|centos] [size]'
         return
+    fi
+
+    if [ -z "$3" ]; then
+        ebs_size=""
+    else
+        ebs_size="--ebs-size $3"
     fi
 
     if [ "rhel" == "$2" ]; then
@@ -266,8 +272,8 @@ function mkchefec2()
         target_os="unknown"
     fi
 
-    echo ./run python deploy/chef/scripts/ec2_server.py --size m1.medium --ami $target_os --manager "Tom Weiss" --user $user --environment int-dev-live --recipe base -a $1
-    ./run python deploy/chef/scripts/ec2_server.py --size m1.medium --ami $target_os --manager "Tom Weiss" --user $user --environment int-dev-live --recipe base -a $1
+    echo ./run python deploy/chef/scripts/ec2_server.py --size m1.medium --ami $target_os --manager "Tom Weiss" --user $user --environment int-dev-live --recipe base $ebs_size -a $1
+    ./run python deploy/chef/scripts/ec2_server.py --size m1.medium --ami $target_os --manager "Tom Weiss" --user $user --environment int-dev-live --recipe base $ebs_size -a $1
 
     local ip=`knife node show $1 | grep IP | tr -s ' ' | cut -d" " -f 2`
     if [ -z ip ]; then
@@ -357,14 +363,15 @@ function knf()
     popd >> /dev/null
 }
 
-if [ ! -f /var/log/profiles ]
-then
-    if [ -w /var/log/profiles ]; then
-        touch /var/log/profiles
-        chmod a+rw /var/log/profiles
-    fi
-fi
+# Uncomment to debug command to see when this file is sourced.
+# if [ ! -f /var/log/profiles ]
+# then
+#     if [ -w /var/log/profiles ]; then
+#         sudo touch /var/log/profiles
+#         sudo chmod a+rw /var/log/profiles
+#     fi
+# fi
 
-if [ -w /var/log/profiles ]; then
-    echo .bashrc ran at $(date) >> /var/log/profiles
-fi
+# if [ -w /var/log/profiles ]; then
+#     echo .bashrc ran at $(date) >> /var/log/profiles
+# fi

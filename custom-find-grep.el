@@ -88,7 +88,10 @@ SYMBOL should be one of 'grep-command', 'grep-template',
 (setq custom-find-grep-path-suffix "")
 (defun set-fg-suffix (suffix)
   "Set an optional suffix for the search.  This is useful for more fine grained searching."
-  (interactive "sEnter Search Suffix: ")
+  (interactive (list (read-from-minibuffer
+                      (concat "Enter Search Suffix (currently '"
+                              custom-find-grep-path-suffix
+                              "'): ") nil nil nil 'custom-find-grep-path-suffix)))
   (if (string= "" suffix)
       (message "The optional search suffix is now empty.")
     (message (concat "The optional search suffix is now '" suffix "'."))
