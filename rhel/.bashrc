@@ -196,8 +196,9 @@ alias simlbm=simlbm_
 
 function m_()
 {
-    # The $@ variable contains all the arguments.
-    make -Rr -j 8 -C `git rev-parse --show-toplevel` "$@"
+    # The $@ variable contains all the arguments.  The parenthesis run in a subshell
+    # which keeps the effect of set -x (echoing commands) from being permanent.
+    ( set -x; make -Rr -j `nproc` -C `git rev-parse --show-toplevel` "$@" )
     if [ $? == 0 ]; then
         echo COMPILE SUCCESSFUL!
     else

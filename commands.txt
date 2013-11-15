@@ -133,6 +133,9 @@ sudo iptables -A OUTPUT -d "10.203.0.43" -j DROP
 sudo iptables -D OUTPUT -d "10.203.0.43" -j DROP
 sudo service iptables stop
 
+(stop networking for a while)
+sudo service iptables start; sudo iptables -A OUTPUT -d "10.203.0.43" -j DROP; sleep 60; sudo iptables -D OUTPUT -d "10.203.0.43" -j DROP; sudo service iptables stop
+
 Physical ports can be in one of two modes:
 1) access (a.k.a., untagged, single vlan)
 2) trunk (a.k.a., vlan tagging, dot1q, 802.1q, multiple vlan, multiple layer 3 interfaces)
