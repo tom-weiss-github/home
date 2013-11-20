@@ -1,11 +1,11 @@
-from optparse import OptionParser
+import argparse
 import os
 import subprocess
 import sys
 import atexit
 import shutil
 
-DEV_ROOT = "/home/debesys/dev-root"
+DEV_ROOT = "{0}/dev-root".format(os.getenv("HOME"))
 
 def print_with_border( message, border_character ):
     border = border_character * len(message)
@@ -82,27 +82,26 @@ def create_new_repo( repo_name, verbose, no_execute ):
     command( ["git", "submodule", "update"], True, verbose, no_execute )
 
 
-usage = "\n%prog branch"
-parser = OptionParser( usage=usage )
+descr = "\nget-repo.py branch"
+parser = argparse.ArgumentParser(description=descr)
 
-parser.add_option( "-v", "--verbose",
+parser.add_argument( "-v", "--verbose", default=False,
                    action="store_true", dest="verbose",
                    help="(Optional) Run in verbose mode." )
 
-parser.add_option( "-n", "--no-execute",
-                  action="store_true", dest="no_execute",
-                  help="(Optional) Commands will not be executed.  "
-                  "When used with -v, this allows users to see what "
-                  "actions the script will perform without actually "
-                  "executing them." )
+parser.add_argument( "-n", "--no-execute", default=False,
+                     action="store_true", dest="no_execute",
+                     help="(Optional) Commands will not be executed.  "
+                     "When used with -v, this allows users to see what "
+                     "actions the script will perform without actually "
+                     "executing them." )
 
-parser.set_defaults( verbose=False )
-parser.set_defaults( no_execute=False )
+parser.add_argument("branch", help="The new branch name")
 
-( options, args ) = parser.parse_args()
+args = parser.parse_args()
 
 # Check for a pidfile to see if the daemon already runs
-pidfile = "/var/run/get-repo.pid"
+pidfile = "{0}/get-repo.pid".format(DEV_ROOT)
 try:
     pf = file(pidfile,'r')
     pid = int(pf.read().strip())
@@ -115,12 +114,7 @@ if pid:
     sys.stderr.write(message % pidfile)
     sys.exit(1)
 
-
-if( 1 != len(args) ):
-    print( "You must pass the branch to create." )
-    sys.exit( 0 )
-
-branch_name = args[0]
+branch_name = args.branch
 
 new_repo = DEV_ROOT + "/" + branch_name
 cached_repo = DEV_ROOT + "/next"
@@ -131,9 +125,9 @@ if( os.path.exists( new_repo ) ):
 
 if( False == os.path.exists( cached_repo ) ):
     print( "Didn't find {0} repository, creating.".format( cached_repo ) )
-    create_new_repo( "next", options.verbose, options.no_execute )
+    create_new_repo( "next", args.verbose, args.no_execute )
 
-if( False == options.no_execute and
+if( False == args.no_execute and
     False == IsRepo( cached_repo ) ):
     print( "Didn't find a valid repository at {0}.".format( cached_repo ) )
     sys.exit( 1 )
@@ -149,28 +143,28 @@ if( False == options.no_execute and
 #
 
 # To use this method, uncomment everything below to the end.
-# if( True == options.verbose ):
+# if( True == args.verbose ):
 #     print_with_border( "cd {0}".format( cached_repo ), "-" )
-# if( False == options.no_execute ):
+# if( False == args.no_execute ):
 #     os.chdir( cached_repo )
 
-# command( [ "git", "checkout", "master"], True, options.verbose, options.no_execute )
-# command( [ "git", "fetch" ], True, options.verbose, options.no_execute )
-# command( [ "git", "merge", "origin/master" ], True, options.verbose, options.no_execute )
-# command( [ "git", "submodule", "update" ], True, options.verbose, options.no_execute )
-# command( [ "cp", "--recursive", cached_repo, new_repo ], True, options.verbose, options.no_execute )
+# command( [ "git", "checkout", "master"], True, args.verbose, args.no_execute )
+# command( [ "git", "fetch" ], True, args.verbose, args.no_execute )
+# command( [ "git", "merge", "origin/master" ], True, args.verbose, args.no_execute )
+# command( [ "git", "submodule", "update" ], True, args.verbose, args.no_execute )
+# command( [ "cp", "--recursive", cached_repo, new_repo ], True, args.verbose, args.no_execute )
 
-# if( True == options.verbose ):
+# if( True == args.verbose ):
 #     print_with_border( "cd {0}".format( new_repo ), "-" )
-# if( False == options.no_execute ):
+# if( False == args.no_execute ):
 #     os.chdir( new_repo )
 
-# if( True == BranchExists( branch_name, new_repo, options.verbose, options.no_execute ) ):
+# if( True == BranchExists( branch_name, new_repo, args.verbose, args.no_execute ) ):
 #     print( "Error: {0} already exists in {1}.".format( branch_name, new_repo ) )
 #     sys.exit( 1 )
 
-# command( [ "git", "branch", branch_name ], True, options.verbose, options.no_execute )
-# command( [ "git", "checkout", branch_name ], True, options.verbose, options.no_execute )
+# command( [ "git", "branch", branch_name ], True, args.verbose, args.no_execute )
+# command( [ "git", "checkout", branch_name ], True, args.verbose, args.no_execute )
 
 # print_with_border("Repository {0} is now ready to use.".format(new_repo), "X")
 # print("")
@@ -178,32 +172,32 @@ if( False == options.no_execute and
 
 
 
-if( True == options.verbose ):
+if( True == args.verbose ):
     print_with_border( "mv {0} {1}".format( cached_repo, new_repo ), "-" )
-if( False == options.no_execute ):
+if( False == args.no_execute ):
     os.rename( cached_repo, new_repo )
 
-if( True == options.verbose ):
+if( True == args.verbose ):
     print_with_border( "cd {0}".format( new_repo ), "-" )
-if( False == options.no_execute ):
+if( False == args.no_execute ):
     os.chdir( new_repo )
 
-if( True == BranchExists( branch_name, new_repo, options.verbose, options.no_execute ) ):
+if( True == BranchExists( branch_name, new_repo, args.verbose, args.no_execute ) ):
     print( "Error: {0} already exists in {1}.".format( branch_name, new_repo ) )
     sys.exit( 1 )
 
-command( [ "git", "checkout", "master"], True, options.verbose, options.no_execute )
-command( [ "git", "fetch" ], True, options.verbose, options.no_execute )
-command( [ "git", "merge", "origin/master" ], True, options.verbose, options.no_execute )
-command( [ "git", "submodule", "update" ], True, options.verbose, options.no_execute )
-command( [ "git", "branch", branch_name ], True, options.verbose, options.no_execute )
-command( [ "git", "checkout", branch_name ], True, options.verbose, options.no_execute )
+command( [ "git", "checkout", "master"], True, args.verbose, args.no_execute )
+command( [ "git", "fetch" ], True, args.verbose, args.no_execute )
+command( [ "git", "merge", "origin/master" ], True, args.verbose, args.no_execute )
+command( [ "git", "submodule", "update" ], True, args.verbose, args.no_execute )
+command( [ "git", "branch", branch_name ], True, args.verbose, args.no_execute )
+command( [ "git", "checkout", branch_name ], True, args.verbose, args.no_execute )
 
 
 print_with_border( "Repository {0} is now ready to use, creating {1} for future use.".format( new_repo, cached_repo ), "X" )
 print( "" )
 
-if( False == options.no_execute and
+if( False == args.no_execute and
     True == os.path.exists( cached_repo ) ):
     print( "Error: {0} already exists.".format( cached_repo ) )
     sys.exit( 1 )
@@ -246,7 +240,7 @@ os.dup2(se.fileno(), sys.stderr.fileno())
 atexit.register( os.remove, pidfile )
 pid = str(os.getpid())
 file(pidfile,'w+').write("%s\n" % pid)
-create_new_repo( "next", options.verbose, options.no_execute )
+create_new_repo( "next", args.verbose, args.no_execute )
 
 sys.exit( 0 )
 
