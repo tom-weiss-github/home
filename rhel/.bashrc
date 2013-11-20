@@ -57,6 +57,7 @@ alias hg='history | grep'
 alias rw=~/githome/setxtitle.sh
 unset PROMPT_COMMAND
 alias vm16='ssh tweiss@10.202.0.16 -i ~/.ssh/id_rsa'
+alias clk='python ~/githome/world_time.py'
 
 # Use optimize-find.py to help decide which directories and extensions to filter.
 #alias ff='find . -type d -path "*/build" -prune -o -path "*/.git" -prune -o -path "*/ext" -prune -o -path "*/pycommon" -prune -o \( \! -iname "*.ico" -and \! -iname "TAGS" -and \! -iname "FILES" -and \! -iname "BROWSE" -and \! -iname "*.cs" -and \! -iname "*.png" -and \! -iname "*.jar" -and \! -iname "*.pyc" -and \! -iname "*.o" -and \! -iname "*.d" -and \! -iname "*.a" -and \! -name "*.so" -and \! -iname "*.bin" -and \! -iname "*pdf" -and \! -iname "*.java"  -and \! -iname "*xml" -and \! -iname "*.scala" -and \! -iname "*png" -and \! -iname "*.txt" -and \! -iname "*.html" -and \! -iname "*.php" -and \! -iname "*.css" -and \! -iname "*.js" -and \! -iname "*.cs" -and \! -iname "*.json" -and \! -iname "*.sql" -and \! -iname "*.dat" \) -print0 | xargs -0 grep -iHn'
@@ -142,12 +143,28 @@ function git-sync_()
 {
     echo "pushd `git rev-parse --show-toplevel`";
     pushd `git rev-parse --show-toplevel`;
+    if [ $? != 0 ]; then
+        echo "Aborting."
+        return
+    fi
     echo "git checkout master";
     git checkout master;
+    if [ $? != 0 ]; then
+        echo "Aborting."
+        return
+    fi
     echo "git pull";
     git pull;
+    if [ $? != 0 ]; then
+        echo "Aborting."
+        return
+    fi
     echo "git submodule update";
     git submodule update;
+    if [ $? != 0 ]; then
+        echo "Aborting."
+        return
+    fi
     echo "popd";
     popd;
 }
