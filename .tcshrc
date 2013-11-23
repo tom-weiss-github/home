@@ -33,8 +33,7 @@ set path = ($path /cygdrive/c/tt/bin)
 set path = ($path /cygdrive/c/tt/ttm)
 set path = ($path /cygdrive/c/Progra~1/process_monitor)
 set path = ($path /cygdrive/c/Progra~2/doxygen/bin)
-set path = ($path /cygdrive/c/Progra~1/MKS-2009/IntegrityClient/bin)
-set path = ($path /cygdrive/c/Progra~2/MKS/IntegrityClient/bin)
+set path = ($path /cygdrive/c/Progra~2/Integrity/IntegrityClient10/bin)
 set path = ($path /cygdrive/c/Progra~1/Wireshark)
 set path = ($path /cygdrive/c/Progra~1/MICROS~4/Common/Tools) # C:\Program Files\Microsoft Visual Studio\Common\Tools
 set path = ($path /cygdrive/c/Progra~1/MICROS~2.NET/Common7/IDE)  # C:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE
@@ -98,10 +97,11 @@ alias relay 'echo "start C:\\tt\\bin\CME-HFillServer.exe l2c NOSVC";echo "start 
 alias vsbtec 'btecLauncher.cmd'
 alias vstocom 'tocomLauncher.cmd'
 alias vsose 'oseLauncher.cmd'
+alias vshkex 'hkexLauncher.cmd'
 alias vssgx 'sgxLauncher.cmd'
 alias vscore 'EverythingLauncher.cmd'
 alias vspulse 'pulseLauncher.cmd'
-alias fetch 'python T:/Development/Tools/fetch.py -b'
+alias fetch 'python T:/Development/Tools/fetch.beta.py -b'
 alias wiz 'python c:/tt-dev/wiz_sandbox/dev/ec/wiz.py '
 alias sywiz 'si resync -R -S c:/tt-dev/wiz_sandbox/main.pj'
 alias sqehome 'pushd T:/SQE/Users/Tom_Weiss'
@@ -124,6 +124,8 @@ alias btecl 'python T:/Development/CoreBuilds/Tools/Scripts/lsproj.py btec_commo
 alias tocoml 'python T:/Development/CoreBuilds/Tools/Scripts/lsproj.py tocom_common-7.\!:1;python T:/Development/CoreBuilds/Tools/Scripts/lsproj.py tocom_os-7.\!:1;python T:/Development/CoreBuilds/Tools/Scripts/lsproj.py tocom_ps-7.\!:1'
 alias sgxl 'python T:/Development/CoreBuilds/Tools/Scripts/lsproj.py sgx_common-7.\!:1;python T:/Development/CoreBuilds/Tools/Scripts/lsproj.py sgx_os-7.\!:1;python T:/Development/CoreBuilds/Tools/Scripts/lsproj.py sgx_ps-7.\!:1'
 alias osel 'python T:/Development/CoreBuilds/Tools/Scripts/lsproj.py ose_common-7.\!:1;python T:/Development/CoreBuilds/Tools/Scripts/lsproj.py ose_os-7.\!:1;python T:/Development/CoreBuilds/Tools/Scripts/lsproj.py ose_ps-7.\!:1'
+alias hkexl 'python T:/Development/CoreBuilds/Tools/Scripts/lsproj.py hkex_common-7.\!:1;python T:/Development/CoreBuilds/Tools/Scripts/lsproj.py hkex_os-7.\!:1;python T:/Development/CoreBuilds/Tools/Scripts/lsproj.py hkex_ps-7.\!:1'
+
 
 
 
@@ -180,6 +182,8 @@ alias ou 'python c:/tt-dev/scripts/service_help.py -m start -s order'
 alias od 'python c:/tt-dev/scripts/service_help.py -m stop -s order'
 alias pu 'python c:/tt-dev/scripts/service_help.py -m start -s price'
 alias pd 'python c:/tt-dev/scripts/service_help.py -m stop -s price'
+alias ppu 'net start ose_PriceProxy'
+alias ppd 'net stop ose_PriceProxy'
 alias fu 'python c:/tt-dev/scripts/service_help.py -m start -s fill'
 alias fd 'python c:/tt-dev/scripts/service_help.py -m stop -s fill'
 alias pofu 'python c:/tt-dev/scripts/service_help.py -m start -s price; python c:/tt-dev/scripts/service_help.py -m start -s fill; python c:/tt-dev/scripts/service_help.py -m start -s order'
