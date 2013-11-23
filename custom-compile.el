@@ -175,6 +175,7 @@ input."
          (gw-vcxproj "unset")
          (btec-version (getenv "TT_BTEC_VERSION"))
          (ose-version (getenv "TT_OSE_VERSION"))
+         (hkex-version (getenv "TT_HKEX_VERSION"))
          (sgx-version (getenv "TT_SGX_VERSION"))
          (tocom-version (getenv "TT_TOCOM_VERSION")) )
 
@@ -204,6 +205,19 @@ input."
             )
           (if (string= "price" custom-compile-msbuild-project)
               (setq gw-vcxproj "ose_prices.vcxproj")
+            )
+          )
+      )
+
+    (if (not (equal hkex-version nil))
+        (progn
+          (setq gw-name "/hkex")
+          (setq gw-version hkex-version)
+          (if (string= "order" custom-compile-msbuild-project)
+              (setq gw-vcxproj "hkex_orders.vcxproj")
+            )
+          (if (string= "price" custom-compile-msbuild-project)
+              (setq gw-vcxproj "hkex_prices.vcxproj")
             )
           )
       )
@@ -277,6 +291,7 @@ buffer, some user settings, and the source tree that the file lives in."
         ;; the correct one will be set again.
         (setenv "TT_BTEC_VERSION" nil)
         (setenv "TT_OSE_VERSION" nil)
+        (setenv "TT_HKEX_VERSION" nil)
         (setenv "TT_SGX_VERSION" nil)
         (setenv "TT_TOCOM_VERSION" nil)
         (eval-build-envs lisp-env-file)
