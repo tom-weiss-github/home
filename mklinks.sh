@@ -1,4 +1,6 @@
 
+# The command to create a soft link in Windows is: mklink link target.
+
 pushd $HOME
 
 if [ -d /etc/sbt ]; then  # If directory exists, then it's likely sbt is installed

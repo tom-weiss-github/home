@@ -99,6 +99,16 @@ Steps to set up X11 forwarding from RHEL to Windows.
 View a file's permissions as numbers.
 stat -c '%a' [file]
 
+ssh
+---
+View fingerprint:
+ssh-keygen -lf ~/.ssh/id_rsa.pub
+
+Customize keys used per host via ~/.ssh/config:
+Host *github.com
+     IdentityFile ~/.ssh/github_rsa
+     User git
+
 gnome
 -----
 To stop cursor from blinking launch gnome-keyboard-properties and uncheck cursor blinking textbox
