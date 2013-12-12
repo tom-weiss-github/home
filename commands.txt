@@ -45,6 +45,15 @@ values, the second command gives the total number.
 for i in {1..10}; do command; done
 Run a command in a loop on the command line.
 
+files=`aws s3 ls s3://deploy-debesys | grep debesys_ | tr -s " " | cut -d" " -f 4`
+for old in $files; do
+    echo old $old
+    new=${old//debesys_/debesys-}
+    echo new $new
+    aws s3 mv s3://deploy-debesys/$old s3://deploy-debesys/$new
+done
+Rename all files in S3 with a new name based on a regular expression.
+
 abrt-cli list -f | grep Directory | cut -d" " -f 7 | xargs -n 1 abrt-cli rm
 
 curl http://ipecho.net/plain

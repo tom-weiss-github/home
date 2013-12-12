@@ -38,12 +38,11 @@ export LBM_LICENSE_FILENAME=~/29WestLicense.txt
 export PATH=$PATH:~/Downloads/meld-1.6.1/bin
 export PATH=$PATH:/opt/scala-2.9.3/bin/
 
-# Cause scala project to be built, workstation must have sbt installed.
-# http://www.scala-sbt.org/release/docs/Getting-Started/Setup.html
-# Choose sbt.rpm download.
-# sudo rpm -i /mnt/dbd/sbt.rpm
-# export build_juno=1
-# export build_ringer=1
+# To run ringer:
+# cp ringer.conf/srl_config_ringer.xml from some machine in int-dev-sim
+# cp deploy/chef/cookbooks/srlabs/files/default/smds.lic /etc/debesys/
+export JAVA_HOME=/usr/java/jdk1.7.0_17
+# run /usr/java/jdk1.7.0_17/bin/java -Dversion="0.0.0" -cp ./ringer/target/Ringer.jar Ringer --srl-config /etc/debesys/srl_config_ringer.xml -v -o
 
 . ~/githome/rhel/logs.sh
 
@@ -55,6 +54,7 @@ alias ls='ls -aFCh --color=always'
 alias h='history | tail -n 50'
 alias hg='history | grep'
 alias rw=~/githome/setxtitle.sh
+alias rwbr='~/githome/setxtitle.sh $(__git_ps1)'
 unset PROMPT_COMMAND
 alias vm16='ssh tweiss@10.202.0.16 -i ~/.ssh/id_rsa'
 alias clk='python ~/githome/world_time.py'
@@ -119,6 +119,41 @@ alias jtrader="/usr/java/jdk1.7.0_03/bin/java -cp JTrader.jar JTrader &"
 alias ttr='`git rev-parse --show-toplevel`/run python `git rev-parse --show-toplevel`/t_trader/tt/ttrader/t_trader.py --stdout'
 alias grp="git rev-parse --short"
 # alias chrome="/opt/google/chrome/google-chrome --enable-plugins &"
+
+function external()
+{
+    usage="external on|off"
+    if [ -z "$1" ]; then
+        echo $usage
+        return
+    fi
+
+    if [ "on" == "$1" ]; then
+        export PRE_EXTERNAL_PS1=$PS1
+        export PS1="\[\033[0;31m\]EXTERNAL DEBESYS\[\033[0;0m\] \h\[\033[1;30m\]\$(__git_ps1) \[\033[0;0m\]\w \n>"
+        echo -en "\033]0;terminal - EXTERNAL DEBESYS\007"
+        alias ttknife='`git rev-parse --show-toplevel`/run `git rev-parse --show-toplevel`/ttknife -C ~/.chef/knife.external.rb'
+        alias ttknife
+        echo
+        echo '######## ##     ## ######## ######## ########  ##    ##    ###    ##'
+        echo '##        ##   ##     ##    ##       ##     ## ###   ##   ## ##   ##'
+        echo '##         ## ##      ##    ##       ##     ## ####  ##  ##   ##  ##'
+        echo '######      ###       ##    ######   ########  ## ## ## ##     ## ##'
+        echo '##         ## ##      ##    ##       ##   ##   ##  #### ######### ##'
+        echo '##        ##   ##     ##    ##       ##    ##  ##   ### ##     ## ##'
+        echo '######## ##     ##    ##    ######## ##     ## ##    ## ##     ## ########'
+        echo
+        # http://patorjk.com/software/taag/#p=display&h=1&v=1&f=Banner3&t=EXTERNAL
+    elif [ "off" == "$1" ]; then
+        if [ ! -z "$PRE_EXTERNAL_PS1" ]; then
+            export PS1=$PRE_EXTERNAL_PS1
+        fi
+        alias ttknife='`git rev-parse --show-toplevel`/run `git rev-parse --show-toplevel`/ttknife'
+        alias ttknife
+    else
+        echo $usage
+    fi
+}
 
 # To view the definition of a function, do 'type <function>'.
 function cf() { emacsclient -n `find . -name $1`; }
@@ -263,14 +298,14 @@ alias gdb=gdb_
 function mkchefec2()
 {
     if [ -z "$1" ]; then
-        echo 'Usage: you must pass the node name, mkchefec2 node [rhel|centos] [size]'
+        echo 'Usage: you must pass the node name, mkchefec2 node_name [rhel|centos] [size]'
         return
     fi
 
     pushd `git rev-parse --show-toplevel`
 
     if [ -z "$2" ]; then
-        echo 'Usage: you must pass the operating system, mkchefec2 node [rhel|centos] [size]'
+        echo 'Usage: you must pass the operating system, mkchefec2 node_name [rhel|centos] [size]'
         return
     fi
 

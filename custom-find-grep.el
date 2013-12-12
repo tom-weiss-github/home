@@ -56,6 +56,7 @@ SYMBOL should be one of 'grep-command', 'grep-template',
                                       "-path \"*/build\" -prune -o "
                                       "-path \"*/.git\" -prune -o "
                                       "-path \"*/ext\" -prune -o "
+                                      "-path \"*/ringer/target\" -prune -o "
                                       "-path \"*/pycommon\" -prune -o "
                                       "\"(\" "
                                       "\! -iname \"BROWSE\" "
