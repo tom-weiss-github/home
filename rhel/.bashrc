@@ -46,6 +46,8 @@ export JAVA_HOME=/usr/java/jdk1.7.0_17
 
 . ~/githome/rhel/logs.sh
 
+alias todo='emacs -nw ~/todo.txt'
+alias rooms='cat ~/githome/rooms.txt'
 alias sb='source ~/.bashrc'
 alias edbrc='emacs -nw ~/githome/rhel/.bashrc'
 alias ee='emacs -nw'
@@ -58,6 +60,7 @@ alias rwbr='~/githome/setxtitle.sh $(__git_ps1)'
 unset PROMPT_COMMAND
 alias vm16='ssh tweiss@10.202.0.16 -i ~/.ssh/id_rsa'
 alias clk='python ~/githome/world_time.py'
+alias gdb='gdb -n'
 
 # Use optimize-find.py to help decide which directories and extensions to filter.
 #alias ff='find . -type d -path "*/build" -prune -o -path "*/.git" -prune -o -path "*/ext" -prune -o -path "*/pycommon" -prune -o \( \! -iname "*.ico" -and \! -iname "TAGS" -and \! -iname "FILES" -and \! -iname "BROWSE" -and \! -iname "*.cs" -and \! -iname "*.png" -and \! -iname "*.jar" -and \! -iname "*.pyc" -and \! -iname "*.o" -and \! -iname "*.d" -and \! -iname "*.a" -and \! -name "*.so" -and \! -iname "*.bin" -and \! -iname "*pdf" -and \! -iname "*.java"  -and \! -iname "*xml" -and \! -iname "*.scala" -and \! -iname "*png" -and \! -iname "*.txt" -and \! -iname "*.html" -and \! -iname "*.php" -and \! -iname "*.css" -and \! -iname "*.js" -and \! -iname "*.cs" -and \! -iname "*.json" -and \! -iname "*.sql" -and \! -iname "*.dat" \) -print0 | xargs -0 grep -iHn'
@@ -176,14 +179,20 @@ alias koc=koc_
 
 function git-sync_()
 {
+    usage="git-sync branch"
+    if [ -z "$1" ]; then
+        echo $usage
+        return
+    fi
+
     echo "pushd `git rev-parse --show-toplevel`";
     pushd `git rev-parse --show-toplevel`;
     if [ $? != 0 ]; then
         echo "Aborting."
         return
     fi
-    echo "git checkout master";
-    git checkout master;
+    echo "git checkout $1";
+    git checkout "$1";
     if [ $? != 0 ]; then
         echo "Aborting."
         return
@@ -207,23 +216,21 @@ alias git-sync=git-sync_
 
 function cpcfg_()
 {
-    cp -v `git rev-parse --show-toplevel`/build/x86-64/debug/etc/debesys/cme_oc_config.conf /etc/debesys/cme_oc_config.LATEST.conf;
     cp -v `git rev-parse --show-toplevel`/config/lbm_config_lo.xml /etc/debesys/lbm.conf;
     cp -v `git rev-parse --show-toplevel`/config/lbm_config_lo.xml /etc/debesys/lbm.local.conf;
-    cp -v ~/dev61/etc/debesys/lbm.conf /etc/debesys/lbm.dev.conf
-    cp -v ~/sim73/etc/debesys/lbm.conf /etc/debesys/lbm.sim.conf
+    cp -v ~/mnt/d30/etc/debesys/lbm.conf /etc/debesys/lbm.int-dev-live.conf
 }
 alias cpcfg=cpcfg_
 
-function devlbm_()
+function int-dev-live-lbm_()
 {
     rm -v /etc/debesys/env_is
     rm -v /etc/debesys/lbm.conf;
-    cp -v /etc/debesys/lbm.dev.conf /etc/debesys/lbm.conf;
-    echo "dev" > /etc/debesys/env_is
+    cp -v /etc/debesys/lbm.int-dev-live.conf /etc/debesys/lbm.conf;
+    echo "int-dev-live" > /etc/debesys/env_is
     cat /etc/debesys/env_is
 }
-alias devlbm=devlbm_
+alias int-dev-live-lbm=int-dev-live-lbm_
 
 function locallbm_()
 {
@@ -234,23 +241,14 @@ function locallbm_()
     echo "local" > /etc/debesys/env_is
     cat /etc/debesys/env_is
 }
-alias locallbm=locallbm_
-
-function simlbm_()
-{
-    rm -v /etc/debesys/env_is
-    rm -v /etc/debesys/lbm.conf;
-    cp -v /etc/debesys/lbm.sim.conf /etc/debesys/lbm.conf;
-    echo "sim" > /etc/debesys/env_is
-    cat /etc/debesys/env_is
-}
-alias simlbm=simlbm_
+alias local-lbm=locallbm_
 
 function m_()
 {
     # The $@ variable contains all the arguments.  The parenthesis run in a subshell
     # which keeps the effect of set -x (echoing commands) from being permanent.
-    ( set -x; time make -Rr -j `nproc` -C `git rev-parse --show-toplevel` "$@" )
+    local cpus=$(expr `nproc` - 1)
+    ( set -x; time make -Rr -j $cpus -C `git rev-parse --show-toplevel` "$@" )
     if [ $? == 0 ]; then
         echo COMPILE SUCCESSFUL!
     else
@@ -281,20 +279,6 @@ function em_()
 }
 alias em=em_
 
-function gdb_()
-{
-    if [ -f ~/.gdbinit ]; then
-        echo !!!
-        echo !!!!!!
-        echo ~/.gdbinit exists, likely from emacs;
-        echo !!!!!!
-        echo !!!
-    fi
-    gdb
-    # perhaps investigate using -n option
-}
-alias gdb=gdb_
-
 function mkchefec2()
 {
     if [ -z "$1" ]; then
@@ -310,7 +294,7 @@ function mkchefec2()
     fi
 
     if [ -z "$3" ]; then
-        ebs_size=""
+        ebs_size="--ebs-size 20"
     else
         ebs_size="--ebs-size $3"
     fi
@@ -379,19 +363,10 @@ function upld()
         return
     fi
 
-    echo export build_juno=1
-    export build_juno=1
-    echo export build_ringer=1
-    export build_ringer=1
-
     pushd `git rev-parse --show-toplevel`
+    m_ config=release clean
     ./run python ./deploy/chef/scripts/upload_debesys.py --tag $1
     popd
-
-    echo unset build_juno
-    unset build_juno
-    echo unset build_ringer
-    unset build_ringer
 }
 
 function knf()

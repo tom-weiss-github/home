@@ -23,19 +23,18 @@ host_aliases=(
     d33
     d36
     d54
-    d61
-    d62
-    d64
     d81
+    ma31
+    ma32
+    ma33
+    ma35
+    ma36
+    ma37
 )
 
 function host2ip()
 {
-    if [ "$1" == "d61" ]; then
-        host_alias_ip=10.202.0.61
-    elif [ "$1" == "d62" ]; then
-        host_alias_ip=10.202.0.62
-    elif [ "$1" == "d30" ]; then
+    if [ "$1" == "d30" ]; then
         host_alias_ip=10.202.0.30
     elif [ "$1" == "d31" ]; then
         host_alias_ip=10.202.0.31
@@ -47,8 +46,18 @@ function host2ip()
         host_alias_ip=10.202.0.36
     elif [ "$1" == "d54" ]; then
         host_alias_ip=10.202.0.54
-    elif [ "$1" == "d64" ]; then
-        host_alias_ip=10.202.0.64
+    elif [ "$1" == "ma31" ]; then
+        host_alias_ip=10.204.0.31
+    elif [ "$1" == "ma32" ]; then
+        host_alias_ip=10.204.0.32
+    elif [ "$1" == "ma33" ]; then
+        host_alias_ip=10.204.0.33
+    elif [ "$1" == "ma35" ]; then
+        host_alias_ip=10.204.0.35
+    elif [ "$1" == "ma36" ]; then
+        host_alias_ip=10.204.0.36
+    elif [ "$1" == "ma37" ]; then
+        host_alias_ip=10.204.0.37
     elif [ "$1" == "d81" ]; then
         host_alias_ip=10.202.0.81
     else

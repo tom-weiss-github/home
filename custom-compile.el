@@ -311,10 +311,12 @@ buffer, some user settings, and the source tree that the file lives in."
 
 
 (setq d-compile-target "invalid")
+(setq d-compile-cpus "1")
 
 (defun d-set-compile-target (target)
  "Set the compile target."
  (interactive "sEnter Target(s) or ENTER to view: ")
+ (setq d-compile-cpus (int-to-string (- (string-to-int (shell-command-to-string "nproc")) 1)))
  (if (string= "" target)
      (message (concat "Target remains '" d-compile-target "'."))
    (progn
@@ -333,7 +335,8 @@ buffer, some user settings, and the source tree that the file lives in."
 
   (if (file-exists-p d-marker-abs-path)
       (progn
-        (setq d-compile-command "make -rR -j 8 -C ")
+        (setq d-compile-command "make -rR -j ")
+        (setq d-compile-command (concat d-compile-command d-compile-cpus " -C "))
         (setq d-compile-command (concat d-compile-command d-dev-root))
         (setq compile-command (concat d-compile-command " " d-compile-target))
         (call-interactively 'compile)
@@ -341,7 +344,6 @@ buffer, some user settings, and the source tree that the file lives in."
     (message "I don't know how to compile this file.")
     )
 )
-
 
 
 

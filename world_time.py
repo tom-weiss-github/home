@@ -1,3 +1,9 @@
+# -*- mode: python -*-
+
+# The mode can be on the second line:
+#!/usr/bin/env python2.7
+# -*- mode: python -*-
+
 import datetime
 import time
 import re

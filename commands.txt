@@ -36,6 +36,9 @@ Similar to other cut examples, but this one uses the tr command to trim extra wh
 echo -n `date +"%Y-%m-%d-%H-%M-%S"`; git log --abbrev-commit --graph --date-order --date=relative --pretty=oneline | head -1 | sed -e 's/^*[ \t]*/_/g' | sed 's/\ /_/g' | sed 's/[^a-zA-Z0-9_]//g'
 Simple sed usage example.  Format the latest git log in a particular format.
 
+git log --graph --date-order --abbrev-commit --pretty=format:"%h - %an, %ar : %s" > ~/glog.txt
+Print git log to a file.
+
 grep af1518ac-c801-438e-b70d-4fc59e67a079 `lsoc bb1` | sed 's/.*order_sequence: //g' | sed 's/correlation_cl_ord_id.*//g' | sort | uniq --repeated
 grep -c af1518ac-c801-438e-b70d-4fc59e67a079 `lsoc bb1` | sed 's/.*order_sequence: //g' | sed 's/correlation_cl_ord_id.*//g'
 Command to parse log file for GUID and filter out most of the message.  the first sed removes everything before 'order_sequence: ' and
@@ -44,6 +47,13 @@ values, the second command gives the total number.
 
 for i in {1..10}; do command; done
 Run a command in a loop on the command line.
+
+watch -n 5 ls -l
+Repeat a command over and over every 5 seconds.
+
+watch -n 1 ntpstat
+Run a command over and over (once per second).  In this case the command will
+indicate if ntp is synchronized.
 
 files=`aws s3 ls s3://deploy-debesys | grep debesys_ | tr -s " " | cut -d" " -f 4`
 for old in $files; do
@@ -145,6 +155,11 @@ setenforce
 /etc/selinux/config
 chcon -v -R type=var_log_t /dir1/dir2 (change label)
 ls -Z <file> (view label)
+
+yum
+---
+sudo yum provides /bin/ls
+Indicates which package provides a file.
 
 networking
 ----------
