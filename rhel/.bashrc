@@ -55,7 +55,6 @@ alias c='emacsclient -n'
 alias ls='ls -aFCh --color=always'
 alias h='history | tail -n 50'
 alias hg='history | grep'
-alias rw=~/githome/setxtitle.sh
 alias rwbr='~/githome/setxtitle.sh $(__git_ps1)'
 unset PROMPT_COMMAND
 alias vm16='ssh tweiss@10.202.0.16 -i ~/.ssh/id_rsa'
@@ -123,6 +122,22 @@ alias ttr='`git rev-parse --show-toplevel`/run python `git rev-parse --show-topl
 alias grp="git rev-parse --short"
 # alias chrome="/opt/google/chrome/google-chrome --enable-plugins &"
 
+function aws_keys()
+{
+    usage="aws_keys key_file"
+    if [ -z "$1" ]; then
+        echo $usage
+        return
+    fi
+
+    if [ -f "$1" ]; then
+        echo Loading AWS keys from "$1".
+        source $1
+    else
+        echo Error: Didn\'t find "$1", couldn\'t load AWS keys.
+    fi
+}
+
 function external()
 {
     usage="external on|off"
@@ -147,12 +162,14 @@ function external()
         echo '######## ##     ##    ##    ######## ##     ## ##    ## ##     ## ########'
         echo
         # http://patorjk.com/software/taag/#p=display&h=1&v=1&f=Banner3&t=EXTERNAL
+        aws_keys ~/amazon_keys_ttnet.sh
     elif [ "off" == "$1" ]; then
         if [ ! -z "$PRE_EXTERNAL_PS1" ]; then
             export PS1=$PRE_EXTERNAL_PS1
         fi
         alias ttknife='`git rev-parse --show-toplevel`/run `git rev-parse --show-toplevel`/ttknife'
         alias ttknife
+        aws_keys ~/amazon_keys.sh
     else
         echo $usage
     fi
@@ -282,32 +299,20 @@ alias em=em_
 function mkchefec2()
 {
     if [ -z "$1" ]; then
-        echo 'Usage: you must pass the node name, mkchefec2 node_name [rhel|centos] [size]'
+        echo 'Usage: you must pass the node name, mkchefec2 node_name [size]'
         return
     fi
 
     pushd `git rev-parse --show-toplevel`
 
     if [ -z "$2" ]; then
-        echo 'Usage: you must pass the operating system, mkchefec2 node_name [rhel|centos] [size]'
-        return
-    fi
-
-    if [ -z "$3" ]; then
         ebs_size="--ebs-size 20"
     else
         ebs_size="--ebs-size $3"
     fi
 
-    if [ "rhel" == "$2" ]; then
-        target_os="ami-7d0c6314" # rhel 6.4, us east
-        user="ec2-user"
-    elif [ "centos" == "$2" ]; then
-        target_os="ami-eb6b0182" # centos 6 with updates, us east
-        user="root"
-    else
-        target_os="unknown"
-    fi
+    target_os="ami-eb6b0182" # centos 6 with updates, us east
+    user="root"
 
     echo ./run python deploy/chef/scripts/ec2_server.py --size m1.medium --ami $target_os --manager "Tom Weiss" --user $user --environment int-dev-live --recipe base $ebs_size -a $1
     ./run python deploy/chef/scripts/ec2_server.py --size m1.medium --ami $target_os --manager "Tom Weiss" --user $user --environment int-dev-live --recipe base $ebs_size -a $1
@@ -390,6 +395,20 @@ function knf()
     /usr/bin/knife "$@"
     popd >> /dev/null
 }
+
+function rename_terminal_title()
+{
+    if [ -z "$1" ]; then
+        echo Usage: You must pass the new title.
+        return
+    fi
+
+    local title="terminal - $1"
+    echo -en "\033]0;$title\007"
+    export CURRENT_TERMINAL_TITLE=$title
+}
+alias rw=rename_terminal_title()
+
 
 # Uncomment to debug command to see when this file is sourced.
 # if [ ! -f /var/log/profiles ]
