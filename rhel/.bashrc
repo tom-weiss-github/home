@@ -407,7 +407,7 @@ function rename_terminal_title()
     echo -en "\033]0;$title\007"
     export CURRENT_TERMINAL_TITLE=$title
 }
-alias rw=rename_terminal_title()
+alias rw=rename_terminal_title
 
 
 # Uncomment to debug command to see when this file is sourced.
