@@ -308,7 +308,7 @@ function mkchefec2()
     if [ -z "$2" ]; then
         ebs_size="--ebs-size 20"
     else
-        ebs_size="--ebs-size $3"
+        ebs_size="--ebs-size $2"
     fi
 
     target_os="ami-eb6b0182" # centos 6 with updates, us east

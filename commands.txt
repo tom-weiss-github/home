@@ -103,9 +103,10 @@ Steps to set up X11 forwarding from RHEL to Windows.
   - Connection -> Data -> Auto-login username 'debesys'
     (or whatever username you want to log in with)
   - Connection -> Seconds between keep alive 120
+  - If no existing public/private key pairs exist, create a new
+    pair on the linux machine with the command:
+    ssh-keygen -t rsa -C "Tom.Weiss@TradingTechnologies.com -f ~/.ssh/windows_to_linux
   - Copy private key from linux machine into c:\Users\USER\.ssh\tmp_key
-    (the keys can be created on a linux machine with ssh-keygen via
-     ssh-keygen -t rsa -C "Tom.Weiss@TradingTechnologies.com -f ~/.ssh/windows_to_linux)
     Put the public key in ~/.ssh/authorized_keys on linux host.
     Launch puttygen.
     Select Conversions Menu.

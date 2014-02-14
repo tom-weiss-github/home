@@ -36,6 +36,7 @@ parser.add_argument("-t", "--other-time", default=None,
 args = parser.parse_args()
 
 now = datetime.datetime.now()
+utc_now = datetime.datetime.utcnow()
 
 if(None != args.other_date and
    None != args.other_time):
@@ -64,7 +65,7 @@ is_dst_in_effect = False
 new_jersey_offset  = 1
 singapore_offset = 0   # Singapore is +13 hours during CDT and +14 hours in CST.
 japan_offset     = 0   # Japan     is +14 hours during CDT and +15 hours in CST.
-hongkong_offset = 0   # Hong Kong is +13 hours during CDT and +14 hours in CST.
+hongkong_offset = 0    # Hong Kong is +13 hours during CDT and +14 hours in CST.
 if(1 == time.localtime().tm_isdst):
     is_dst_in_effect = True
     singapore_offset = 13
@@ -90,6 +91,7 @@ nj_now = now + nj_delta
 
 
 print_time("Chicago", now, "CDT" if is_dst_in_effect else "CST", "")
+print_time("UTC Now", utc_now, "", "")
 print_time("New Jersey", nj_now, "", "+" + str(new_jersey_offset))
 print_time("Singapore", singapore_now, "", "+" + str(singapore_offset))
 print_time("Hong Kong", hongkong_now, "", "+" + str(hongkong_offset))
