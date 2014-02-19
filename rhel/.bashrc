@@ -422,3 +422,5 @@ alias rw=rename_terminal_title
 # if [ -w /var/log/profiles ]; then
 #     echo .bashrc ran at $(date) >> /var/log/profiles
 # fi
+
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting

@@ -72,4 +72,21 @@ do
     fi
 done
 
+# Gnome Settings.
+gnome_profile=$HOME/.gconf/apps/gnome-terminal/profiles/Default/%gconf.xml
+if [ ! -f $gnome_profile ]; then
+    ln -sv $HOME/githome/gnome-terminal-Default-profile-%gconf.xml $gnome_profile
+    echo Logout for this to take effect. # Reminder to my impatient self.
+else
+    echo Skipping $gnome_profile, already exists.
+fi
+
+gnome_keybindings=$HOME/.gconf/apps/gnome-terminal/keybindings/%gconf.xml
+if [ ! -f $gnome_keybindings ]; then
+    ln -sv $HOME/githome/gnome-terminal-keybindings-%gconf.xml $gnome_keybindings
+    echo Logout for this to take effect. # Reminder to my impatient sel.f
+else
+    echo Skipping $gnome_keybindings, already exists.
+fi
+
 popd
