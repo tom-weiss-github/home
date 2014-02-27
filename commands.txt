@@ -167,6 +167,18 @@ Indicates which package provides a file.
 yum list installed
 Shows which packages are installed.
 
+sudo yum repolist
+Shows which repos are used for installed packages.
+
+yum search package
+Shows more details about packages.
+
+rpm -q --queryformat "%{EPOCH} : %{NAME} - %{VERSION} - %{RELEASE} . %{ARCH}\n" gdb
+Query local machine for information about which gdb is installed.
+
+repoquery -q --queryformat "%{EPOCH} : %{NAME} - %{VERSION} - %{RELEASE} . %{ARCH}\n" gdb
+Query repos in /etc/yum.repos.d/ for packages.
+
 networking
 ----------
 Disable ip messaging from local machine to some ip address (e.g., 10.203.0.43).

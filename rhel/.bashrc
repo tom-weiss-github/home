@@ -18,8 +18,8 @@ if [ -f ~/amazon_keys.sh ]; then
     source ~/amazon_keys.sh
 fi
 
-export PS1="\h\[\033[1;30m\]\$(__git_ps1) \[\033[0;0m\]\w \n>"
-#             \[\033[1;34m\] Start color dark grey.
+export PS1="\h\[\033[0;33m\]\$(__git_ps1) \[\033[0;0m\]\w \n>"
+#             \[\033[1;33m\] Start color brown.
 #                                        \[\033[0;0m\] Stop color.
 #. ~/githome/rhel/.git-prompt-alternate.sh
 #export PS1="\h \[\033[1;30m\]\$(parse_git_branch) \[\033[0;0m\]\w \n>"
@@ -148,8 +148,9 @@ function external()
 
     if [ "on" == "$1" ]; then
         export PRE_EXTERNAL_PS1=$PS1
+        export PRE_EXTERNAL_TERMINAL_TITLE=$CURRENT_TERMINAL_TITLE
         export PS1="\[\033[0;31m\]EXTERNAL DEBESYS\[\033[0;0m\] \h\[\033[1;30m\]\$(__git_ps1) \[\033[0;0m\]\w \n>"
-        echo -en "\033]0;terminal - EXTERNAL DEBESYS\007"
+        rename_terminal_title "EXTERNAL DEBESYS"
         alias ttknife='`git rev-parse --show-toplevel`/run `git rev-parse --show-toplevel`/ttknife -C ~/.chef/knife.external.rb'
         alias ttknife
         echo
@@ -166,6 +167,9 @@ function external()
     elif [ "off" == "$1" ]; then
         if [ ! -z "$PRE_EXTERNAL_PS1" ]; then
             export PS1=$PRE_EXTERNAL_PS1
+        fi
+        if [ ! -z "PRE_EXTERNAL_TERMINAL_TITLE" ]; then
+            rename_terminal_title "$PRE_EXTERNAL_TERMINAL_TITLE"
         fi
         alias ttknife='`git rev-parse --show-toplevel`/run `git rev-parse --show-toplevel`/ttknife'
         alias ttknife
@@ -235,19 +239,19 @@ function cpcfg_()
 {
     cp -v `git rev-parse --show-toplevel`/config/lbm_config_lo.xml /etc/debesys/lbm.conf;
     cp -v `git rev-parse --show-toplevel`/config/lbm_config_lo.xml /etc/debesys/lbm.local.conf;
-    cp -v ~/mnt/d30/etc/debesys/lbm.conf /etc/debesys/lbm.int-dev-live.conf
+    cp -v ~/mnt/d30/etc/debesys/lbm.conf /etc/debesys/lbm.int-dev-cert.conf
 }
 alias cpcfg=cpcfg_
 
-function int-dev-live-lbm_()
+function int-dev-cert-lbm_()
 {
     rm -v /etc/debesys/env_is
     rm -v /etc/debesys/lbm.conf;
-    cp -v /etc/debesys/lbm.int-dev-live.conf /etc/debesys/lbm.conf;
-    echo "int-dev-live" > /etc/debesys/env_is
+    cp -v /etc/debesys/lbm.int-dev-cert.conf /etc/debesys/lbm.conf;
+    echo "int-dev-cert" > /etc/debesys/env_is
     cat /etc/debesys/env_is
 }
-alias int-dev-live-lbm=int-dev-live-lbm_
+alias int-dev-cert-lbm=int-dev-cert-lbm_
 
 function locallbm_()
 {
@@ -314,8 +318,8 @@ function mkchefec2()
     target_os="ami-eb6b0182" # centos 6 with updates, us east
     user="root"
 
-    echo ./run python deploy/chef/scripts/ec2_server.py --size m1.medium --ami $target_os --manager "Tom Weiss" --user $user --environment int-dev-live --recipe base $ebs_size -a $1
-    ./run python deploy/chef/scripts/ec2_server.py --size m1.medium --ami $target_os --manager "Tom Weiss" --user $user --environment int-dev-live --recipe base $ebs_size -a $1
+    echo ./run python deploy/chef/scripts/ec2_server.py --size m1.medium --ami $target_os --manager "Tom Weiss" --user $user --environment int-dev-cert --recipe base $ebs_size -a $1
+    ./run python deploy/chef/scripts/ec2_server.py --size m1.medium --ami $target_os --manager "Tom Weiss" --user $user --environment int-dev-cert --recipe base $ebs_size -a $1
 
     local ip=`knife node show $1 | grep IP | tr -s ' ' | cut -d" " -f 2`
     if [ -z ip ]; then
@@ -403,12 +407,12 @@ function rename_terminal_title()
         return
     fi
 
-    local title="terminal - $1"
+    local title="terminal | $1"
     echo -en "\033]0;$title\007"
-    export CURRENT_TERMINAL_TITLE=$title
+    export CURRENT_TERMINAL_TITLE="$1"
 }
 alias rw=rename_terminal_title
-
+rename_terminal_title ":-)"
 
 # Uncomment to debug command to see when this file is sourced.
 # if [ ! -f /var/log/profiles ]

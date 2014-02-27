@@ -1,7 +1,34 @@
 
 ;; The incrementing can be done with replace-regexp with the following:
 ;; version\(.*\)'\([0-9]+\)\.\([0-9]+\)\.\([0-9]+\)' -> version\1'\2.\3.\,(1+ \#4)'
-(defun plus-chef-cookbook-version ()
+
+(defun plus-chef-major-cookbook-version ()
+  (interactive)
+  (goto-char (point-min))
+  (while (re-search-forward "version\\(.*\\)'\\([0-9]+\\)\\.\\([0-9]+\\)\\.\\([0-9]+\\)'" nil t)
+    (replace-match (concat "version"
+                           (match-string 1) "'" ;; The spaces between version and single quote.
+                           ;; The major version *incremented* and '.'.
+                           (int-to-string (+ 1 (string-to-int(match-string 2)))) "."
+                           (match-string 3) "." ;; The minor version and '.'.
+                           (match-string 4) "'" ;; The patch version and "'".
+                           )))
+)
+
+(defun plus-chef-minor-cookbook-version ()
+  (interactive)
+  (goto-char (point-min))
+  (while (re-search-forward "version\\(.*\\)'\\([0-9]+\\)\\.\\([0-9]+\\)\\.\\([0-9]+\\)'" nil t)
+    (replace-match (concat "version"
+                           (match-string 1) "'" ;; The spaces between version and single quote.
+                           (match-string 2) "." ;; The major version and '.'.
+                           ;; The minor version *incremented* and '.'.
+                           (int-to-string (+ 1 (string-to-int(match-string 3)))) "."
+                           (match-string 4) "'" ;; The patch version and "'".
+                           )))
+)
+
+(defun plus-chef-patch-cookbook-version ()
   (interactive)
   (goto-char (point-min))
   (while (re-search-forward "version\\(.*\\)'\\([0-9]+\\)\\.\\([0-9]+\\)\\.\\([0-9]+\\)'" nil t)
@@ -9,6 +36,7 @@
                            (match-string 1) "'" ;; The spaces between version and single quote.
                            (match-string 2) "." ;; The first version and '.'.
                            (match-string 3) "." ;; The second version and '.'.
+                           ;; The patch version *incremented* and the "'".
                            (int-to-string (+ 1 (string-to-int(match-string 4)))) "'"
                            )))
 )
