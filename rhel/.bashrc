@@ -94,6 +94,7 @@ ff_file+=' -and \! -iname "*.xml" '
 alias ff="find . -type d $ff_dir \( $ff_file \) -print0 | xargs -0 grep -iHn"
 
 alias git-add-mod='git status | grep modified | cut -d " " -f 4 | xargs --max-args=1 git add -v'
+alias allbranches="git for-each-ref --format='%(committerdate) %09 %(authorname) %09 %(refname)' | sort -k5n -k2M -k3n -k4n"
 alias glog='git glog | head -n 15'
 alias galias='git config --list | grep alias'
 alias soc='kill `cat /var/run/cme.pid`'
@@ -198,6 +199,7 @@ function koc_()
 }
 alias koc=koc_
 
+
 function git-sync_()
 {
     usage="git-sync branch"
@@ -233,7 +235,6 @@ function git-sync_()
     echo "popd";
     popd;
 }
-alias git-sync=git-sync_
 
 function cpcfg_()
 {
@@ -251,7 +252,7 @@ function int-dev-cert-lbm_()
     echo "int-dev-cert" > /etc/debesys/env_is
     cat /etc/debesys/env_is
 }
-alias int-dev-cert-lbm=int-dev-cert-lbm_
+alias lbm-int-dev-cert=int-dev-cert-lbm_
 
 function locallbm_()
 {
@@ -262,7 +263,7 @@ function locallbm_()
     echo "local" > /etc/debesys/env_is
     cat /etc/debesys/env_is
 }
-alias local-lbm=locallbm_
+alias lbm-local=locallbm_
 
 function m_()
 {
@@ -373,7 +374,9 @@ function upld()
     fi
 
     pushd `git rev-parse --show-toplevel`
+    rm orders/cme/source/*.fix.* -v
     m_ config=release clean
+    rm -rfv build
     ./run python ./deploy/chef/scripts/upload_debesys.py --tag $1
     popd
 }
@@ -413,6 +416,44 @@ function rename_terminal_title()
 }
 alias rw=rename_terminal_title
 rename_terminal_title ":-)"
+
+csview()
+{
+    local file="$1"
+    sed "s/,/\t/g" "$file" | less -S
+}
+
+# Author.: Ole J
+# Date...: 23.03.2008
+# License: Whatever
+
+# Wraps a completion function
+# make-completion-wrapper <actual completion function> <name of new func.>
+#                         <command name> <list supplied arguments>
+# eg.
+#   alias agi='apt-get install'
+#   make-completion-wrapper _apt_get _apt_get_install apt-get install
+# defines a function called _apt_get_install (that's $2) that will complete
+# the 'agi' alias. (complete -F _apt_get_install agi)
+#
+function make-completion-wrapper () {
+    local function_name="$2"
+    local arg_count=$(($#-3))
+    local comp_function_name="$1"
+    shift 2
+    local function="
+function $function_name {
+    ((COMP_CWORD+=$arg_count))
+    COMP_WORDS=( "$@" \${COMP_WORDS[@]:1} )
+    "$comp_function_name"
+    return 0
+}"
+    eval "$function"
+}
+
+alias gits='git-sync_'
+make-completion-wrapper _git _git_checkout_mine git checkout
+complete -o bashdefault -o default -o nospace -F _git_checkout_mine gits
 
 # Uncomment to debug command to see when this file is sourced.
 # if [ ! -f /var/log/profiles ]
