@@ -1,0 +1,20 @@
+#!/usr/bin/env python
+import re
+import subprocess
+import sys
+
+f = open( sys.argv[1], "r" )
+commit_msg = f.read();
+f.close()
+
+current_branches = subprocess.check_output(["git", "branch", "--no-color"])
+
+jiraid_match = re.search('\* feature/(?P<jid>deb\-[0-9]{1,9})', current_branches, re.I)
+
+if jiraid_match:
+   jira_id = jiraid_match.group('jid')
+   f = open(sys.argv[1], "a")
+   f.write(jira_id)
+   f.close()
+
+sys.exit(0)

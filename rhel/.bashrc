@@ -183,7 +183,7 @@ function external()
 # To view the definition of a function, do 'type <function>'.
 function cf() { emacsclient -n `find . -name $1`; }
 function f() { find . -name $1 -print; }
-function rmbranch()
+function rmbr()
 {
     echo "git push origin --delete $1";
     git push origin --delete $1;
@@ -454,6 +454,10 @@ function $function_name {
 alias gits='git-sync_'
 make-completion-wrapper _git _git_checkout_mine git checkout
 complete -o bashdefault -o default -o nospace -F _git_checkout_mine gits
+complete -o bashdefault -o default -o nospace -F _git_checkout_mine rmbr
+make-completion-wrapper _git _git_mine git
+alias g='git'
+complete -o bashdefault -o default -o nospace -F _git_mine g
 
 # Uncomment to debug command to see when this file is sourced.
 # if [ ! -f /var/log/profiles ]
