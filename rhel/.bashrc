@@ -18,6 +18,19 @@ if [ -f ~/amazon_keys.sh ]; then
     source ~/amazon_keys.sh
 fi
 
+function set_branch()
+{
+    local branch=`__git_ps1`
+    # Parenthesis are added to the beginning and end of the branch, remove them.
+    branch=$(echo -n $branch | sed s/\(//g | sed s/\)//g)
+    # echo $branch
+    export b=$branch
+}
+export PROMPT_COMMAND=set_branch
+# Now I can do "git push origin $b" and $b will always be the current branch.
+# Don't forget to 'unset PROMPT_COMMAND' otherwise the default seems to rename
+# the terminal based on the CWD.
+
 export PS1="\h\[\033[0;33m\]\$(__git_ps1) \[\033[0;0m\]\w \n>"
 #             \[\033[1;33m\] Start color brown.
 #                                        \[\033[0;0m\] Stop color.
@@ -56,7 +69,6 @@ alias ls='ls -aFCh --color=always'
 alias h='history | tail -n 50'
 alias hg='history | grep'
 alias rwbr='~/githome/setxtitle.sh $(__git_ps1)'
-unset PROMPT_COMMAND
 alias vm16='ssh tweiss@10.202.0.16 -i ~/.ssh/id_rsa'
 alias clk='python ~/githome/world_time.py'
 alias gdb='gdb -n'
@@ -95,7 +107,12 @@ alias ff="find . -type d $ff_dir \( $ff_file \) -print0 | xargs -0 grep -iHn"
 
 alias git-add-mod='git status | grep modified | cut -d " " -f 4 | xargs --max-args=1 git add -v'
 alias allbranches="git for-each-ref --format='%(committerdate) %09 %(authorname) %09 %(refname)' | sort -k5n -k2M -k3n -k4n"
-alias glog='git glog | head -n 15'
+#alias b='`git rev-parse --abbrev-ref HEAD`'
+function b()
+{
+    echo `git rev-parse --abbrev-ref HEAD`
+}
+alias glog='git glog -13'
 alias galias='git config --list | grep alias'
 alias soc='kill `cat /var/run/cme.pid`'
 alias oc?='cat /var/run/cme.pid; ps -ef | grep cme | grep -v grep'
@@ -214,6 +231,12 @@ function git-sync_()
         echo "Aborting."
         return
     fi
+    echo "git remote prune origin";
+    git remote prune origin;
+    if [ $? != 0 ]; then
+        echo "Aborting."
+        return
+    fi
     echo "git checkout $1";
     git checkout "$1";
     if [ $? != 0 ]; then
@@ -222,6 +245,12 @@ function git-sync_()
     fi
     echo "git pull";
     git pull;
+    if [ $? != 0 ]; then
+        echo "Aborting."
+        return
+    fi
+    echo "git submodule init";
+    git submodule init;
     if [ $? != 0 ]; then
         echo "Aborting."
         return
@@ -423,6 +452,20 @@ csview()
     sed "s/,/\t/g" "$file" | less -S
 }
 
+function rmchefnode()
+{
+    if [ -z "$1" ]; then
+        echo Usage: You must pass the node name.
+        return
+    fi
+
+    echo "ttknife node delete --yes $1"
+    ttknife node delete --yes "$1"
+
+    echo "ttknife client delete --yes $1"
+    ttknife client delete --yes "$1"
+}
+
 # Author.: Ole J
 # Date...: 23.03.2008
 # License: Whatever
@@ -458,6 +501,9 @@ complete -o bashdefault -o default -o nospace -F _git_checkout_mine rmbr
 make-completion-wrapper _git _git_mine git
 alias g='git'
 complete -o bashdefault -o default -o nospace -F _git_mine g
+
+alias prdp='echo @blesleytt; echo @bcordonn; echo @elmedinam; echo @jkess; echo @joanne-wilson; echo @srubik; echo @TIMSTACY; echo @jfrumkin; echo @jerdmann'
+alias proc='echo @mdw55189; echo @amschwarz; echo @corystricklin; echo @jingheelu; echo @lmancini54'
 
 # Uncomment to debug command to see when this file is sourced.
 # if [ ! -f /var/log/profiles ]

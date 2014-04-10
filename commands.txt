@@ -33,7 +33,7 @@ It uses sh -c to use the directory for 2 commands.
 knife search "recipe:zookeeper AND environment:dev" -a ipaddress | grep ipaddress | tail -1 | tr -s " " | cut -d":" -f 2
 Similar to other cut examples, but this one uses the tr command to trim extra whitespace to assist cut.
 
-ttknife search node "chef_environment:int-dev-cert" -a ipaddress |  grep ipaddress  | tr -s " " | cut -d" " -f 3 | xargs -n 1 -i ping -c 5 \{\}
+ttknife search node "chef_environment:int-dev-cert" -a ipaddress |  grep ipaddress  | tr -s " " | cut -d" " -f 3 | xargs -n 1 -i ping -c 5 -q \{\} | grep -iE "statistics|packet"
 Search for nodes in int-dev-cert that are not running.
 
 echo -n `date +"%Y-%m-%d-%H-%M-%S"`; git log --abbrev-commit --graph --date-order --date=relative --pretty=oneline | head -1 | sed -e 's/^*[ \t]*/_/g' | sed 's/\ /_/g' | sed 's/[^a-zA-Z0-9_]//g'
@@ -119,6 +119,10 @@ Steps to set up X11 forwarding from RHEL to Windows.
     ppk file just created.
    - X11 -> Enable X11 Forwarding.
   - Session -> Host <IP of host>
+  - Potential X11 Performance Improvements outlined here:
+    http://xmodulo.com/2013/07/how-to-speed-up-x11-forwarding-in-ssh.html
+    Under Connection -> SSH -> Check Enable Compression
+    Under Encryption Options -> Choose Arcfour then Blowfish.
   - Save.
 
 View a file's permissions as numbers.

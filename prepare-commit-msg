@@ -1,2 +1,2 @@
 #!/bin/bash
-`git rev-parse --show-toplevel`/run python ~/githome/prepare-commit-msg-python-27
+`git rev-parse --show-toplevel`/run python ~/githome/prepare-commit-msg-python-27 "$@"
