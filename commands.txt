@@ -96,8 +96,8 @@ ip.src == 10.140.18.67 || ip.dst == 10.140.18.67
 Xming
 -----
 Steps to set up X11 forwarding from RHEL to Windows.
-- Install Xming (default installation).
-- Install Xmingfonts (required for emacs).
+- Install Xming from sourceforge.net/project/xming (default installation).
+- Install Xmingfonts sourceforge.net/projects/xming/files (required for emacs).
 - Install putty.
 - Install puttygen.
 - In putty configure the following settings:

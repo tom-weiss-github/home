@@ -21,8 +21,12 @@
         prompt = false
 
 [merge]
-        tool = meld
+        tool = ediff
         conflictstyle = diff3
+#       tool = meld
+
+ [mergetool "ediff"]
+         cmd = ~/githome/ediff.sh $LOCAL $REMOTE $MERGED $BASE
 
 [color]
 	ui = true
