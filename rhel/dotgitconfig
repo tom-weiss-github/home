@@ -21,9 +21,9 @@
         prompt = false
 
 [merge]
-        tool = ediff
+ #      tool = ediff This launches correctly, but crashes xming when I close emacs.
         conflictstyle = diff3
-#       tool = meld
+        tool = meld
 
  [mergetool "ediff"]
          cmd = ~/githome/ediff.sh $LOCAL $REMOTE $MERGED $BASE
