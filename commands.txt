@@ -1,5 +1,5 @@
 lsb_release -i -r
-Print vendor and version information of linux distribution.
+Print vendor and version information of linux distribution.5
 
 find / -type f -size +1000k | xargs -n 1 ls -l --block-size=M
 Find all files over 1000 kbs and then print the size of each of those
