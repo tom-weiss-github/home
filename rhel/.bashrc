@@ -107,11 +107,6 @@ alias ff="find . -type d $ff_dir \( $ff_file \) -print0 | xargs -0 grep -iHn"
 
 alias git-add-mod='git status | grep modified | cut -d " " -f 4 | xargs --max-args=1 git add -v'
 alias allbranches="git for-each-ref --format='%(committerdate) %09 %(authorname) %09 %(refname)' | sort -k5n -k2M -k3n -k4n"
-#alias b='`git rev-parse --abbrev-ref HEAD`'
-function b()
-{
-    echo `git rev-parse --abbrev-ref HEAD`
-}
 alias glog='git glog -13'
 alias galias='git config --list | grep alias'
 alias soc='kill `cat /var/run/cme.pid`'

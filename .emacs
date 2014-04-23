@@ -183,9 +183,9 @@
 ;; below command to set the dimensions and position.
 ;;(set-frame-height (selected-frame) 80)
 ;;(set-frame-width (selected-frame)  100)
-(setq default-frame-alist
-      '((top . 5) (left . 3)
-        (width . 220) (height . 63)))
+;; (setq default-frame-alist
+;;       '((top . 5) (left . 3)
+;;         (width . 220) (height . 63)))
 
 (setq ruby-indent-level 4)
 
