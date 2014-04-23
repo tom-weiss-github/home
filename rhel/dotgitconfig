@@ -21,13 +21,15 @@
         prompt = false
 
 [merge]
-        tool = ediff
-#  This launches correctly, but crashes xming when I close emacs.
+        tool = ediff # or meld if this causes trouble
         conflictstyle = diff3
-#        tool = meld
 
 [mergetool "ediff"]
-         cmd = ~/githome/ediff.sh $LOCAL $REMOTE $MERGED $BASE
+        cmd = ~/githome/ediff.sh $LOCAL $REMOTE $MERGED $BASE
+        trustExitCode = true
 
 [color]
-	ui = true
+        ui = true
+
+[mergetool]
+	keepBackup = false
