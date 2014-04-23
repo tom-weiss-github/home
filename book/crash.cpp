@@ -1,5 +1,5 @@
 #include <iostream>
-// comment 1
+// comment one
 
 struct X
 {

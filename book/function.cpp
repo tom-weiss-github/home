@@ -1,5 +1,6 @@
 #include <iostream>
 #include <functional>
+// comment once
 
 struct Caller
 {
