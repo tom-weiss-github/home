@@ -1,4 +1,5 @@
 #include <iostream>
+// conflict 1
 
 struct X
 {
