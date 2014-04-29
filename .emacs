@@ -178,11 +178,9 @@
 
 ;; Dimensions & Position
 ;; =====================
-;; Set the size of emacs on winnt (this should also be okay for solaris).
-;; These don't seem to work right with GNU Emacs 23.1, so I use the
-;; below command to set the dimensions and position.
-;;(set-frame-height (selected-frame) 80)
-;;(set-frame-width (selected-frame)  100)
+(if window-system
+    (progn (set-frame-height (selected-frame) 80)
+           (set-frame-width (selected-frame)  120)))
 ;; (setq default-frame-alist
 ;;       '((top . 5) (left . 3)
 ;;         (width . 220) (height . 63)))

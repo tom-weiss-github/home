@@ -497,6 +497,7 @@ make-completion-wrapper _git _git_mine git
 alias g='git'
 complete -o bashdefault -o default -o nospace -F _git_mine g
 
+# Investigate xclip.
 alias prdp='echo @blesleytt; echo @bcordonn; echo @elmedinam; echo @jkess; echo @joanne-wilson; echo @srubik; echo @TIMSTACY; echo @jfrumkin; echo @jerdmann'
 alias proc='echo @mdw55189; echo @amschwarz; echo @corystricklin; echo @jingheelu; echo @lmancini54'
 
