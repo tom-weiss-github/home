@@ -21,12 +21,15 @@
         prompt = false
 
 [merge]
-        tool = ediff
+        tool = ediff # or meld if this causes trouble
         conflictstyle = diff3
-#       tool = meld
 
- [mergetool "ediff"]
-         cmd = ~/githome/ediff.sh $LOCAL $REMOTE $MERGED $BASE
+[mergetool "ediff"]
+        cmd = ~/githome/ediff.sh $LOCAL $REMOTE $MERGED $BASE
+        trustExitCode = true
 
 [color]
-	ui = true
+        ui = true
+
+[mergetool]
+	keepBackup = false
