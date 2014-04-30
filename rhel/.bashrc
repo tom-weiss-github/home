@@ -212,6 +212,17 @@ function koc_()
 alias koc=koc_
 
 
+function chef-node-report()
+{
+    local report=~/chef-node-report.txt
+    if [ -f $report ]; then
+	rm -v $report;
+    fi
+    ttknife node list | xargs -n 1 echo | xargs -n 1 knife node show | sed --unbuffered 's/Node Name:/\nNode Name:/g' > $report;
+    ttknife node list | xargs -n 1 knife node show | grep "IP:" --line-buffered >> $report;
+    # ttknife node list | xargs -n 1 knife node show | grep "IP:" --line-buffered | tr -s " " | cut -d" " -f 2 | xargs -n 1 -i ping -c 5 -q \{\} | grep -iE "statistics|packet" >> $report;
+}
+
 function git-sync_()
 {
     usage="git-sync branch"
@@ -498,8 +509,8 @@ alias g='git'
 complete -o bashdefault -o default -o nospace -F _git_mine g
 
 # Investigate xclip.
-alias prdp='echo @blesleytt; echo @bcordonn; echo @elmedinam; echo @jkess; echo @joanne-wilson; echo @srubik; echo @TIMSTACY; echo @jfrumkin; echo @jerdmann'
-alias proc='echo @mdw55189; echo @amschwarz; echo @corystricklin; echo @jingheelu; echo @lmancini54'
+alias prdp='echo "@blesleytt @bcordonn @elmedinam @jkess @joanne-wilson @srubik @TIMSTACY @jfrumkin @jerdmann" | xclip -selection clipboard'
+alias proc='echo "@mdw55189 @amschwarz @corystricklin @jingheelu @lmancini54" | xclip -selection clipboard'
 
 # Uncomment to debug command to see when this file is sourced.
 # if [ ! -f /var/log/profiles ]
