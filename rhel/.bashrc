@@ -218,8 +218,8 @@ function chef-node-report()
     if [ -f $report ]; then
 	rm -v $report;
     fi
-    ttknife node list | xargs -n 1 echo | xargs -n 1 knife node show | sed --unbuffered 's/Node Name:/\nNode Name:/g' > $report;
-    ttknife node list | xargs -n 1 knife node show | grep "IP:" --line-buffered >> $report;
+    ttknife node list | xargs -n 1 knife node show | sed --unbuffered 's/Node Name:/\nNode Name:/g' | tee $report;
+    ttknife node list | xargs -n 1 knife node show | grep "IP:" --line-buffered | tee $report;
     # ttknife node list | xargs -n 1 knife node show | grep "IP:" --line-buffered | tr -s " " | cut -d" " -f 2 | xargs -n 1 -i ping -c 5 -q \{\} | grep -iE "statistics|packet" >> $report;
 }
 

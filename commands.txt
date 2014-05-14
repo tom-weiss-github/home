@@ -42,6 +42,9 @@ Simple sed usage example.  Format the latest git log in a particular format.
 git log --graph --date-order --abbrev-commit --pretty=format:"%h - %an, %ar : %s" > ~/glog.txt
 Print git log to a file.
 
+git clean -fn
+Remove all untracked files (-n for dry run).
+
 grep af1518ac-c801-438e-b70d-4fc59e67a079 `lsoc bb1` | sed 's/.*order_sequence: //g' | sed 's/correlation_cl_ord_id.*//g' | sort | uniq --repeated
 grep -c af1518ac-c801-438e-b70d-4fc59e67a079 `lsoc bb1` | sed 's/.*order_sequence: //g' | sed 's/correlation_cl_ord_id.*//g'
 Command to parse log file for GUID and filter out most of the message.  the first sed removes everything before 'order_sequence: ' and
