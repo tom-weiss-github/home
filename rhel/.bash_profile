@@ -18,8 +18,8 @@ export PATH
 
 if [ ! -f /var/log/profiles ]
 then
-    touch /var/log/profiles
-    chmod a+rw /var/log/profiles
+    sudo touch /var/log/profiles
+    sudo chmod a+rw /var/log/profiles
 fi
-echo .bash_profile ran at $(date) >> /var/log/profiles
+sudo echo .bash_profile ran at $(date) >> /var/log/profiles
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*

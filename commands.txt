@@ -45,6 +45,14 @@ Print git log to a file.
 git clean -fn
 Remove all untracked files (-n for dry run).
 
+Needs more investigation: After merging a branch into develop, the push to origin/develop fails
+because someone else beat me to it.  John suggests the following commands to avoid the bad merge
+that results from a 'git pull':
+git fetch
+git rebase -p origin/develop
+John also suggests that rerere needs to be enabled to remember the conflict resolution in the
+case that the merge had many conflicts that would be painful to resolve again after the rebase.
+
 grep af1518ac-c801-438e-b70d-4fc59e67a079 `lsoc bb1` | sed 's/.*order_sequence: //g' | sed 's/correlation_cl_ord_id.*//g' | sort | uniq --repeated
 grep -c af1518ac-c801-438e-b70d-4fc59e67a079 `lsoc bb1` | sed 's/.*order_sequence: //g' | sed 's/correlation_cl_ord_id.*//g'
 Command to parse log file for GUID and filter out most of the message.  the first sed removes everything before 'order_sequence: ' and

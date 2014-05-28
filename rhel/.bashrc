@@ -37,6 +37,12 @@ export PS1="\h\[\033[0;33m\]\$(__git_ps1) \[\033[0;0m\]\w \n>"
 #. ~/githome/rhel/.git-prompt-alternate.sh
 #export PS1="\h \[\033[1;30m\]\$(parse_git_branch) \[\033[0;0m\]\w \n>"
 
+
+# History across terminal sessions.
+export HISTSIZE=10000
+shopt -s histappend
+PROMPT_COMMAND="history -a;history -c;history -r;$PROMPT_COMMAND"
+
 export EDITOR="emacs -nw"
 # ALTERNATE_EDITOR causes emacs to be opened if emacsclient is invoked and no instance is running.
 export ALTERNATE_EDITOR=emacs
@@ -50,6 +56,8 @@ export LBM_LICENSE_FILENAME=~/29WestLicense.txt
 # export LD_BIND_NOW=yes
 export PATH=$PATH:~/Downloads/meld-1.6.1/bin
 export PATH=$PATH:/opt/scala-2.9.3/bin/
+export INTAD_USER=tweiss
+export VCD_ORG=TTNET_Infrastructure
 
 # To run ringer:
 # cp ringer.conf/srl_config_ringer.xml from some machine in int-dev-sim
@@ -197,6 +205,14 @@ function cf() { emacsclient -n `find . -name $1`; }
 function f() { find . -name $1 -print; }
 function rmbr()
 {
+    for do_not_delete in master origin/master release/current origin/release/current develop origin/develop
+    do
+        if [ $do_not_delete == "$1" ]; then
+            echo "Oops! I think you are accidentally trying to delete one of the important branches, aborting."
+            return
+        fi
+    done
+
     echo "git push origin --delete $1";
     git push origin --delete $1;
     echo "git branch -d $1";
@@ -235,40 +251,45 @@ function git-sync_()
     pushd `git rev-parse --show-toplevel`;
     if [ $? != 0 ]; then
         echo "Aborting."
+        echo "popd"; popd;
         return
     fi
     echo "git remote prune origin";
     git remote prune origin;
     if [ $? != 0 ]; then
         echo "Aborting."
+        echo "popd"; popd;
         return
     fi
     echo "git checkout $1";
     git checkout "$1";
     if [ $? != 0 ]; then
         echo "Aborting."
+        echo "popd"; popd;
         return
     fi
     echo "git pull";
     git pull;
     if [ $? != 0 ]; then
         echo "Aborting."
+        echo "popd"; popd;
         return
     fi
     echo "git submodule init";
     git submodule init;
     if [ $? != 0 ]; then
         echo "Aborting."
+        echo "popd"; popd;
         return
     fi
     echo "git submodule update";
     git submodule update;
     if [ $? != 0 ]; then
         echo "Aborting."
+        echo "popd"; popd;
         return
     fi
-    echo "popd";
-    popd;
+    echo "popd"; popd;
 }
 
 function cpcfg_()
@@ -510,7 +531,7 @@ complete -o bashdefault -o default -o nospace -F _git_mine g
 
 # Investigate xclip.
 alias prdp='echo "@blesleytt @bcordonn @elmedinam @jkess @joanne-wilson @srubik @TIMSTACY @jfrumkin @jerdmann" | xclip -selection clipboard'
-alias proc='echo "@mdw55189 @amschwarz @corystricklin @jingheelu @lmancini54" | xclip -selection clipboard'
+alias proc='echo "@mdw55189 @corystricklin @jingheelu @lmancini54" | xclip -selection clipboard'
 
 # Uncomment to debug command to see when this file is sourced.
 # if [ ! -f /var/log/profiles ]

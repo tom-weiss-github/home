@@ -21,8 +21,10 @@
         prompt = false
 
 [merge]
-        tool = ediff # or meld if this causes trouble
-        conflictstyle = diff3
+        #tool = meld
+        #tool = ediff Can't seem to end merge correctly.
+        #conflictstyle = diff3 Set for ediff
+	tool = emerge
 
 [mergetool "ediff"]
         cmd = ~/githome/ediff.sh $LOCAL $REMOTE $MERGED $BASE
@@ -33,3 +35,6 @@
 
 [mergetool]
 	keepBackup = false
+
+[mergetool "emerge"]
+	path = ~/githome/emerge-for-git

@@ -23,6 +23,7 @@ host_aliases=(
     d33
     d34
     d35
+    d41
     d36
     d54
     d81
@@ -50,6 +51,8 @@ function host2ip()
         host_alias_ip=10.202.0.35
     elif [ "$1" == "d36" ]; then
         host_alias_ip=10.202.0.36
+    elif [ "$1" == "d41" ]; then
+        host_alias_ip=10.202.0.41
     elif [ "$1" == "d54" ]; then
         host_alias_ip=10.202.0.54
     elif [ "$1" == "ma31" ]; then
