@@ -37,4 +37,4 @@
 	keepBackup = false
 
 [mergetool "emerge"]
-	path = ~/githome/emerge-for-git
+	cmd = 'emacs -Q $LOCAL $REMOTE $BASE $MERGED'
