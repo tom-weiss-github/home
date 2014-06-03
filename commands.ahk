@@ -1,6 +1,10 @@
-; Comment
+; To launch automatically when Windows 7 starts:
+; 1) Copy (ctrl-c) this file
+; 2) Open C:\programdata\microsoft\windows\start menu\programs\startup
+; 3) Paste as shortcut
 
-F12::
+; # is the win key
+#j::
 SetTitleMatchMode 2
 IfWinExist, emacs
 {
@@ -8,7 +12,7 @@ IfWinExist, emacs
 }
 return
 
-F11::
+#k::
 SetTitleMatchMode 2
 IfWinExist, terminal
 {
@@ -29,14 +33,16 @@ else
 }
 return
 
-F10::
+; b for browser
+#b::
 IfWinExist, ahk_class Chrome_WidgetWin_1
 {
   WinActivate
 }
 return
 
-F9::
+; p for pidgin
+#p::
 SetTitleMatchMode 2
 IfWinExist, Buddy List
 {
@@ -44,9 +50,3 @@ IfWinExist, Buddy List
 }
 return
 
-F8::
-SetTitleMatchMode 2
-IfWinExist, pidgin
-{
-  WinActivate
-}
