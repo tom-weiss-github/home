@@ -14,9 +14,11 @@ return
 
 #k::
 SetTitleMatchMode 2
-IfWinExist, terminal
+; I set the title of the terminal to be "terminal | (stuff)", but ssh tends
+; to rename when I ssh to other machines.
+if WinExist("terminal") or WinExist("root@")
 {
-  WinActivate
+  WinActivate ; Uses the last found window.
 }
 else
 {
