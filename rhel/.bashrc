@@ -57,7 +57,6 @@ export LBM_LICENSE_FILENAME=~/29WestLicense.txt
 export PATH=$PATH:~/Downloads/meld-1.6.1/bin
 export PATH=$PATH:/opt/scala-2.9.3/bin/
 export INTAD_USER=tweiss
-export VCD_ORG=TTNET_Infrastructure
 
 # To run ringer:
 # cp ringer.conf/srl_config_ringer.xml from some machine in int-dev-sim
