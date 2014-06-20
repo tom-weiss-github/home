@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Execute as . ./trigger-merge-conflict.sh
+
 git branch -D conflict-test-1
 git branch -D conflict-test-2
 git checkout -b conflict-test-1

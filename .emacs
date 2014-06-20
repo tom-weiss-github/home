@@ -238,14 +238,20 @@
 
 (setq inhibit-splash-screen t)
 
+;; FONTS
 ;; The following command is useful to execute (C-x C-e) inside the
 ;; scratch buffer to list all the available fonts.
 ;; (insert (prin1-to-string (x-list-fonts "*")))
-;; Another useful font:
-;; (setq my-os-dependent-font "Monospace-14")
-(setq my-os-dependent-font (if (eq system-type 'windows-nt)
-                               "Source Code Pro"
-                             "-misc-fixed-medium-r-normal--25-*-75-75-c-90-iso8859-1" ))
+;; then do replace '" ' with '"C-qC-j' to get all the fonts on their own line.
+;; Look for an environment variable called TOMS_EMACS_FONT, and if it exists,
+;; then use that as the font.  This should be placed in a /etc/environment to
+;; make machine specific font settings (e.g., export TOMS_EMACS_FONT=Monospace-11).
+;; Fonts I've found useful:
+;; Monospace-11 (or whatever size makes sense)
+;; Source Code Pro
+(if (getenv "TOMS_EMACS_FONT")
+    (setq my-os-dependent-font (getenv "TOMS_EMACS_FONT"))
+  (setq my-os-dependent-font "-misc-fixed-medium-r-normal--25-*-75-75-c-90-iso8859-1"))
 
 (cond (window-system
        (set-face-background 'default "black")
