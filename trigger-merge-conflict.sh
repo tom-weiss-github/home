@@ -17,16 +17,19 @@ function write_contents()
     echo "This line (2) was added, but will be the same." >> $file_name
     echo "This line (3) was added, but will be the same." >> $file_name
     echo "This line will be a conflict due to $conflict_identifier." >> $file_name
+    echo "" >> $file_name
 
     echo "This line (1) was added, but will be the same." >> $file_name
     echo "This line (2) was added, but will be the same." >> $file_name
     echo "This line (3) was added, but will be the same." >> $file_name
     echo "This line will be a conflict due to $conflict_identifier." >> $file_name
+    echo "" >> $file_name
 
     echo "This line (1) was added, but will be the same." >> $file_name
     echo "This line (2) was added, but will be the same." >> $file_name
     echo "This line (3) was added, but will be the same." >> $file_name
     echo "This line will be a conflict due to $conflict_identifier." >> $file_name
+    echo "" >> $file_name
 }
 
 git checkout master
