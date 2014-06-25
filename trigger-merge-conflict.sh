@@ -29,18 +29,25 @@ function write_contents()
     echo "This line will be a conflict due to $conflict_identifier." >> $file_name
 }
 
-git branch -D conflict-test-1
-git branch -D conflict-test-2
-git checkout -b conflict-test-1
-write_contents "./conflict-test-1.txt" "1"
-git add conflict-test.txt
-git commit -m "conflict-test-1"
 git checkout master
-git checkout -b conflict-test-2
-write_contents "./conflict-test-2.txt" "2"
-git add conflict-test.txt
-git commit -m "conflict-test-2"
-git merge conflict-test-1
+git branch -D conflict-test-alpha
+git branch -D conflict-test-beta
+
+git checkout -b conflict-test-alpha
+write_contents "./conflict-test-1.txt" "alpha"
+write_contents "./conflict-test-2.txt" "alpha"
+git add conflict-test-1.txt conflict-test-2.txt
+git commit -m "conflict-test-alpha"
+
+git checkout master
+
+git checkout -b conflict-test-beta
+write_contents "./conflict-test-1.txt" "beta"
+write_contents "./conflict-test-2.txt" "beta"
+git add conflict-test-1.txt conflict-test-2.txt
+git commit -m "conflict-test-beta"
+
+git merge conflict-test-alpha
 # (merge conflict)
 # git reset --merge (to abort the merge)
 # gits master
