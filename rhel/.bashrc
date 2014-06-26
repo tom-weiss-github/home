@@ -140,6 +140,7 @@ alias cli_mt='run `git rev-parse --show-toplevel`/ext/linux/x86-64/release/bin/c
 alias jtrader="/usr/java/jdk1.7.0_03/bin/java -cp JTrader.jar JTrader &"
 alias ttr='`git rev-parse --show-toplevel`/run python `git rev-parse --show-toplevel`/t_trader/tt/ttrader/t_trader.py --stdout'
 alias grp="git rev-parse --short"
+alias myec2='aws ec2 describe-instances --region us-east-1 --filters "Name=tag-value,Values=tweiss"'
 # alias chrome="/opt/google/chrome/google-chrome --enable-plugins &"
 
 function aws_keys()
@@ -386,16 +387,16 @@ function mkchefec2()
     # In order to run the sshfs command with the user root, we need to replace root's
     # authorized_keys with ec2-user's authorized_keys.  The root use does not otherwise
     # allow for mounting the file system with write permission.
-    if [ "rhel" == "$2" ]; then
-        echo ssh -t ec2-user@$ip -i ~/.ssh/aws.pem "sudo cp /root/.ssh/authorized_keys /root/.ssh/authorized_keys_orig"
-        ssh -t ec2-user@$ip -i ~/.ssh/aws.pem "sudo cp /root/.ssh/authorized_keys /root/.ssh/authorized_keys_orig"
-        echo ssh -t ec2-user@$ip -i ~/.ssh/aws.pem "sudo cp /home/ec2-user/.ssh/authorized_keys /root/.ssh/authorized_keys"
-        ssh -t ec2-user@$ip -i ~/.ssh/aws.pem "sudo cp /home/ec2-user/.ssh/authorized_keys /root/.ssh/authorized_keys"
-    fi
+    # if [ "rhel" == "$2" ]; then
+    #     echo ssh -t ec2-user@$ip -i ~/.ssh/aws.pem "sudo cp /root/.ssh/authorized_keys /root/.ssh/authorized_keys_orig"
+    #     ssh -t ec2-user@$ip -i ~/.ssh/aws.pem "sudo cp /root/.ssh/authorized_keys /root/.ssh/authorized_keys_orig"
+    #     echo ssh -t ec2-user@$ip -i ~/.ssh/aws.pem "sudo cp /home/ec2-user/.ssh/authorized_keys /root/.ssh/authorized_keys"
+    #     ssh -t ec2-user@$ip -i ~/.ssh/aws.pem "sudo cp /home/ec2-user/.ssh/authorized_keys /root/.ssh/authorized_keys"
+    # fi
 
-    mkdir -pv ~/mnt/$1
-    echo sshfs root@$ip:/ ~/mnt/$1 -o IdentityFile=~/.ssh/aws.pem
-    sshfs root@$ip:/ ~/mnt/$1 -o IdentityFile=~/.ssh/aws.pem
+    # mkdir -pv ~/mnt/$1
+    # echo sshfs root@$ip:/ ~/mnt/$1 -o IdentityFile=~/.ssh/aws.pem
+    # sshfs root@$ip:/ ~/mnt/$1 -o IdentityFile=~/.ssh/aws.pem
 
     popd
 }
@@ -412,11 +413,11 @@ function rmchefec2()
     echo ./run python deploy/chef/scripts/ec2_server.py -d $1
     ./run python deploy/chef/scripts/ec2_server.py -d $1
 
-    echo sudo umount ~/mnt/$1
-    sudo umount ~/mnt/$1
+    # echo sudo umount ~/mnt/$1
+    # sudo umount ~/mnt/$1
 
-    echo rmdir ~/mnt/$1
-    rmdir ~/mnt/$1
+    # echo rmdir ~/mnt/$1
+    # rmdir ~/mnt/$1
 
     popd
 }
@@ -475,7 +476,7 @@ rename_terminal_title ":-)"
 csview()
 {
     local file="$1"
-    sed "s/,/\t/g" "$file" | less -S
+    cat "$file" | sed -e 's/,,/, ,/g' | column -s, -t | less -#5 -N -S
 }
 
 function rmchefnode()
