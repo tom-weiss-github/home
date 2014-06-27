@@ -7,7 +7,8 @@
 	co = checkout
         br = branch
         dt = difftool
-	glog = log --graph --date-order --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+        mt = mergetool
+        glog = log --graph --date-order --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
         myglog = log --graph --date-order --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --author=\"Tom Weiss\"
 	serve = !git daemon --reuseaddr --verbose --base-path=. --export-all ./.git
 [core]
@@ -22,13 +23,18 @@
 
 [merge]
         #tool = meld
-        #tool = ediff Can't seem to end merge correctly.
-        #conflictstyle = diff3 Set for ediff
-	tool = emerge
+        tool = ediff
+        conflictstyle = diff3
+        # tool = emerge
+        # Can't seem to get emerge to work well, all the
+        # diffs in the file are shown as a single diff
+        # which means I can only choose the entire file
+        # a or b; not a or b of the diffs in the file.
 
 [mergetool "ediff"]
         cmd = ~/githome/ediff.sh $LOCAL $REMOTE $MERGED $BASE
         trustExitCode = true
+        prompt = false
 
 [color]
         ui = true
