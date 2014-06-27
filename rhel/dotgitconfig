@@ -34,7 +34,6 @@
 [mergetool "ediff"]
         cmd = ~/githome/ediff.sh $LOCAL $REMOTE $MERGED $BASE
         trustExitCode = true
-        prompt = false
 
 [color]
         ui = true
