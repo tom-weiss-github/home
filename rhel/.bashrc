@@ -57,6 +57,9 @@ export LBM_LICENSE_FILENAME=~/29WestLicense.txt
 export PATH=$PATH:~/Downloads/meld-1.6.1/bin
 export PATH=$PATH:/opt/scala-2.9.3/bin/
 export INTAD_USER=tweiss
+export VCD_ORG=Dev_General
+export JENKINS_USER=tom.weiss@tradingtechnologies.com
+export JENKINS_TOKEN=0f112872b1c31306771889171e21352f
 
 # To run ringer:
 # cp ringer.conf/srl_config_ringer.xml from some machine in int-dev-sim
@@ -80,6 +83,7 @@ alias vm16='ssh tweiss@10.202.0.16 -i ~/.ssh/id_rsa'
 alias clk='python ~/githome/world_time.py'
 alias gdb='gdb -n'
 alias gt='gnome-terminal &'
+alias vcloud='`git rev-parse --show-toplevel`/run `git rev-parse --show-toplevel`/deploy/chef/scripts/vcloud_server.py'
 
 # Use optimize-find.py to help decide which directories and extensions to filter.
 #alias ff='find . -type d -path "*/build" -prune -o -path "*/.git" -prune -o -path "*/ext" -prune -o -path "*/pycommon" -prune -o \( \! -iname "*.ico" -and \! -iname "TAGS" -and \! -iname "FILES" -and \! -iname "BROWSE" -and \! -iname "*.cs" -and \! -iname "*.png" -and \! -iname "*.jar" -and \! -iname "*.pyc" -and \! -iname "*.o" -and \! -iname "*.d" -and \! -iname "*.a" -and \! -name "*.so" -and \! -iname "*.bin" -and \! -iname "*pdf" -and \! -iname "*.java"  -and \! -iname "*xml" -and \! -iname "*.scala" -and \! -iname "*png" -and \! -iname "*.txt" -and \! -iname "*.html" -and \! -iname "*.php" -and \! -iname "*.css" -and \! -iname "*.js" -and \! -iname "*.cs" -and \! -iname "*.json" -and \! -iname "*.sql" -and \! -iname "*.dat" \) -print0 | xargs -0 grep -iHn'
