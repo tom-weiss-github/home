@@ -17,16 +17,6 @@ declare host_alias_mount
 declare log_name
 
 host_aliases=(
-    d30
-    d31
-    d32
-    d33
-    d34
-    d35
-    d41
-    d36
-    d54
-    d81
     g40
     g41
     ma31
@@ -39,25 +29,7 @@ host_aliases=(
 
 function host2ip()
 {
-    if [ "$1" == "d30" ]; then
-        host_alias_ip=10.202.0.30
-    elif [ "$1" == "d31" ]; then
-        host_alias_ip=10.202.0.31
-    elif [ "$1" == "d32" ]; then
-        host_alias_ip=10.202.0.32
-    elif [ "$1" == "d33" ]; then
-        host_alias_ip=10.202.0.33
-    elif [ "$1" == "d34" ]; then
-        host_alias_ip=10.202.0.34
-    elif [ "$1" == "d35" ]; then
-        host_alias_ip=10.202.0.35
-    elif [ "$1" == "d36" ]; then
-        host_alias_ip=10.202.0.36
-    elif [ "$1" == "d41" ]; then
-        host_alias_ip=10.202.0.41
-    elif [ "$1" == "d54" ]; then
-        host_alias_ip=10.202.0.54
-    elif [ "$1" == "g40" ]; then
+    if [ "$1" == "g40" ]; then
         host_alias_ip=10.192.0.40
     elif [ "$1" == "g41" ]; then
         host_alias_ip=10.192.0.41
@@ -73,8 +45,6 @@ function host2ip()
         host_alias_ip=10.204.0.36
     elif [ "$1" == "ma37" ]; then
         host_alias_ip=10.204.0.37
-    elif [ "$1" == "d81" ]; then
-        host_alias_ip=10.202.0.81
     else
         host_alias_ip=INVALID
     fi
