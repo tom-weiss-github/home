@@ -4,8 +4,8 @@
 		<stringvalue>off</stringvalue>
 	</entry>
 	<entry name="scrollback_unlimited" mtime="1392776821" type="bool" value="true"/>
-	<entry name="default_size_rows" mtime="1392776821" type="int" value="25"/>
-	<entry name="default_size_columns" mtime="1392776821" type="int" value="240"/>
+	<entry name="default_size_rows" mtime="1392776821" type="int" value="30"/>
+	<entry name="default_size_columns" mtime="1392776821" type="int" value="130"/>
 	<entry name="use_custom_default_size" mtime="1392776821" type="bool" value="true"/>
 	<entry name="font" mtime="1392776821" type="string">
 		<stringvalue>Monospace 14</stringvalue>

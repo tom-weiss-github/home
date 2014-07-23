@@ -59,7 +59,8 @@ export PATH=$PATH:/opt/scala-2.9.3/bin/
 export INTAD_USER=tweiss
 export VCD_ORG=Dev_General
 export JENKINS_USER=tom.weiss@tradingtechnologies.com
-export JENKINS_TOKEN=0f112872b1c31306771889171e21352f
+export JENKINS_TOKEN=$(head -n 1 ~/jenkins_token)
+export DEPLOYMENT_SCRIPTS_REPO_ROOT=~/dev-root/scripts
 
 # To run ringer:
 # cp ringer.conf/srl_config_ringer.xml from some machine in int-dev-sim
@@ -84,6 +85,10 @@ alias clk='python ~/githome/world_time.py'
 alias gdb='gdb -n'
 alias gt='gnome-terminal &'
 alias vcloud='`git rev-parse --show-toplevel`/run `git rev-parse --show-toplevel`/deploy/chef/scripts/vcloud_server.py'
+alias smile='rename_terminal_title ":-)"'
+alias prdp='echo "@blesleytt @bcordonn @elmedinam @jkess @joanne-wilson @srubik @TIMSTACY @jfrumkin @jerdmann" | xclip -selection clipboard'
+alias proc='echo "@mdw55189 @corystricklin @jingheelu @lmancini54" | xclip -selection clipboard'
+
 
 # Use optimize-find.py to help decide which directories and extensions to filter.
 #alias ff='find . -type d -path "*/build" -prune -o -path "*/.git" -prune -o -path "*/ext" -prune -o -path "*/pycommon" -prune -o \( \! -iname "*.ico" -and \! -iname "TAGS" -and \! -iname "FILES" -and \! -iname "BROWSE" -and \! -iname "*.cs" -and \! -iname "*.png" -and \! -iname "*.jar" -and \! -iname "*.pyc" -and \! -iname "*.o" -and \! -iname "*.d" -and \! -iname "*.a" -and \! -name "*.so" -and \! -iname "*.bin" -and \! -iname "*pdf" -and \! -iname "*.java"  -and \! -iname "*xml" -and \! -iname "*.scala" -and \! -iname "*png" -and \! -iname "*.txt" -and \! -iname "*.html" -and \! -iname "*.php" -and \! -iname "*.css" -and \! -iname "*.js" -and \! -iname "*.cs" -and \! -iname "*.json" -and \! -iname "*.sql" -and \! -iname "*.dat" \) -print0 | xargs -0 grep -iHn'
@@ -377,11 +382,8 @@ function mkchefec2()
         ebs_size="--ebs-size $2"
     fi
 
-    target_os="ami-eb6b0182" # centos 6 with updates, us east
-    user="root"
-
-    echo ./run python deploy/chef/scripts/ec2_server.py --size m1.medium --ami $target_os --manager "Tom Weiss" --user $user --environment int-dev-cert --recipe base $ebs_size -a $1
-    ./run python deploy/chef/scripts/ec2_server.py --size m1.medium --ami $target_os --manager "Tom Weiss" --user $user --environment int-dev-cert --recipe base $ebs_size -a $1
+    echo ./run python deploy/chef/scripts/ec2_server.py --size m1.medium --ami ami-eb6b0182 --manager "Tom Weiss" --user root --environment int-dev-sparepool --recipe base $ebs_size -a $1
+    ./run python deploy/chef/scripts/ec2_server.py --size m1.medium --ami ami-eb6b0182 --manager "Tom Weiss" --user root --environment int-dev-sparepool --recipe base $ebs_size -a $1
 
     local ip=`knife node show $1 | grep IP | tr -s ' ' | cut -d" " -f 2`
     if [ -z ip ]; then
@@ -534,9 +536,6 @@ make-completion-wrapper _git _git_mine git
 alias g='git'
 complete -o bashdefault -o default -o nospace -F _git_mine g
 
-# Investigate xclip.
-alias prdp='echo "@blesleytt @bcordonn @elmedinam @jkess @joanne-wilson @srubik @TIMSTACY @jfrumkin @jerdmann" | xclip -selection clipboard'
-alias proc='echo "@mdw55189 @corystricklin @jingheelu @lmancini54" | xclip -selection clipboard'
 
 # Uncomment to debug command to see when this file is sourced.
 # if [ ! -f /var/log/profiles ]

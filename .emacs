@@ -378,6 +378,10 @@
 ;; ESC-x insert-kbd-macro      prints the macro, do this in the .emacs file
 ;; ESC-x [macro name]   executes the named keyboard macro
 
+;; HideShow
+;; Useful for hiding blocks of code.
+;; (load-library "hideshow")
+;; commands are hs-
 
 ;; Tail a file:
 ;; auto-revert-tail-mode
