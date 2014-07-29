@@ -1,6 +1,11 @@
 # .bashrc
 # Author: Tom Weiss
 
+# Bash Notes
+# !$ last argument
+# ![string] run last command which contained string
+# echo ![string] print last command which contained string
+
 # Source global definitions
 if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
@@ -43,6 +48,7 @@ export PS1="\h\[\033[0;33m\]\$(__git_ps1) \[\033[0;0m\]\w \n>"
 export HISTSIZE=10000
 shopt -s histappend
 PROMPT_COMMAND="history -a;history -c;history -r;$PROMPT_COMMAND"
+export HISTTIMEFORMAT='%F %T '
 
 export EDITOR="emacs -nw"
 # ALTERNATE_EDITOR causes emacs to be opened if emacsclient is invoked and no instance is running.
@@ -86,9 +92,11 @@ alias clk='python ~/githome/world_time.py'
 alias gdb='gdb -n'
 alias gt='gnome-terminal &'
 alias vcloud='`git rev-parse --show-toplevel`/run `git rev-parse --show-toplevel`/deploy/chef/scripts/vcloud_server.py'
+alias bcv='`git rev-parse --show-toplevel`/run `git rev-parse --show-toplevel`/deploy/chef/scripts/bump_cookbook_version.py'
 alias smile='rename_terminal_title ":-)"'
 alias prdp='echo "@blesleytt @bcordonn @elmedinam @jkess @joanne-wilson @srubik @TIMSTACY @jfrumkin @jerdmann" | xclip -selection clipboard'
 alias proc='echo "@mdw55189 @corystricklin @jingheelu @lmancini54" | xclip -selection clipboard'
+alias git-commit-hook="cp ~/githome/prepare-commit-msg .git/hooks/; chmod a+x .git/hooks/prepare-commit-msg"
 
 
 # Use optimize-find.py to help decide which directories and extensions to filter.

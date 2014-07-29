@@ -21,7 +21,7 @@ jiraid_match = re.search('\* (feature|release|hotfix)/\w*-{0,1}(?P<jid>deb\-[0-9
 if jiraid_match:
    jira_id = jiraid_match.group('jid')
    f = open(sys.argv[1], "a")
-   f.write(jira_id)
+   f.write(jira_id.upper())
    f.close()
 
 sys.exit(0)
