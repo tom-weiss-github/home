@@ -66,7 +66,9 @@ export PATH=$PATH:/opt/scala-2.9.3/bin/
 export INTAD_USER=tweiss
 export VCD_ORG=Dev_General
 export JENKINS_USER=tom.weiss@tradingtechnologies.com
-export JENKINS_TOKEN=$(head -n 1 ~/jenkins_token)
+if [ -f ~/jenkins_token ]; then
+    export JENKINS_TOKEN=$(head -n 1 ~/jenkins_token)
+fi
 export DEPLOYMENT_SCRIPTS_REPO_ROOT=~/dev-root/scripts
 
 # To run ringer:
