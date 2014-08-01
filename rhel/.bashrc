@@ -511,6 +511,17 @@ function rmchefnode()
     ttknife client delete --yes "$1"
 }
 
+function search_chef_environment()
+{
+    if [ -z "$1" ]; then
+        echo Usage: You must pass the Chef environment.
+        return
+    fi
+    echo ttknife search node "chef_environment:$1"
+    `git rev-parse --show-toplevel`/run `git rev-parse --show-toplevel`/ttknife search node "chef_environment:$1" -a name -a environment -a ipaddress -a run_list -a tags
+}
+alias sce=search_chef_environment
+
 # Author.: Ole J
 # Date...: 23.03.2008
 # License: Whatever
