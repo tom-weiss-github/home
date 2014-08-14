@@ -344,9 +344,16 @@ alias lbm-local=locallbm_
 
 function m_()
 {
+    # By default, set the number of cpus to be all of them except
+    # one.
+    local cpus=$(expr `nproc` - 1)
+    if [ "x$MAKE_CPUS_OVERRIDE" != "x" ]; then
+        cpus=$MAKE_CPUS_OVERRIDE
+        echo "(MAKE_CPUS_OVERRIDE causes -j $cpus)"
+    fi
+
     # The $@ variable contains all the arguments.  The parenthesis run in a subshell
     # which keeps the effect of set -x (echoing commands) from being permanent.
-    local cpus=$(expr `nproc` - 1)
     ( set -x; time make -Rr -j $cpus -C `git rev-parse --show-toplevel` "$@" )
     if [ $? == 0 ]; then
         echo COMPILE SUCCESSFUL!
