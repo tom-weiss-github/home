@@ -207,6 +207,7 @@ function external()
         echo
         # http://patorjk.com/software/taag/#p=display&h=1&v=1&f=Banner3&t=EXTERNAL
         aws_keys ~/amazon_keys_ttnet.sh
+        export EXTERNAL_DEBESYS="enabled"
     elif [ "off" == "$1" ]; then
         if [ ! -z "$PRE_EXTERNAL_PS1" ]; then
             export PS1=$PRE_EXTERNAL_PS1
@@ -217,10 +218,60 @@ function external()
         alias ttknife='`git rev-parse --show-toplevel`/run `git rev-parse --show-toplevel`/ttknife'
         alias ttknife
         aws_keys ~/amazon_keys.sh
+        export EXTERNAL_DEBESYS="disabled"
     else
         echo $usage
     fi
 }
+
+# I need to apply the logic here to rmchefnode, search_chef_environment, and any other bash function
+# which invokes ttknife.
+function tns()
+{
+    local hm=~
+    local config="-C $hm/.chef/knife.rb"
+    if [ "$EXTERNAL_DEBESYS" == "enabled" ]; then
+        config=" -C $hm/.chef/knife.external.rb"
+        echo external debesys
+    fi
+    echo "ttknife $config node show $1"
+    ttknife $config node show "$1"
+}
+
+function rmchefnode()
+{
+    if [ -z "$1" ]; then
+        echo Usage: You must pass the node name.
+        return
+    fi
+
+    echo "ttknife node delete --yes $1"
+    ttknife node delete --yes "$1"
+
+    echo "ttknife client delete --yes $1"
+    ttknife client delete --yes "$1"
+}
+
+function search_chef_environment()
+{
+    if [ -z "$1" ]; then
+        echo Usage: You must pass the Chef environment and optionally a recipe.
+        echo "Examples: sce int-dev-cert (all nodes in int-dev-cert)"
+        echo "          sce int-dev-cert cme (all nodes in int-dev-cert with recipe cme)"
+        return
+    fi
+    local search="chef_environment:$1"
+
+    if [ ! -z "$2" ]; then
+        search=$search" AND recipe:$2*"
+    fi
+
+
+    echo ttknife search node $search
+    `git rev-parse --show-toplevel`/run `git rev-parse --show-toplevel`/ttknife search node "$search" -a name -a environment -a ipaddress -a run_list -a tags
+}
+alias sce=search_chef_environment
+
 
 # To view the definition of a function, do 'type <function>'.
 function cf() { emacsclient -n `find . -name $1`; }
@@ -505,30 +556,6 @@ csview()
     cat "$file" | sed -e 's/,,/, ,/g' | column -s, -t | less -#5 -N -S
 }
 
-function rmchefnode()
-{
-    if [ -z "$1" ]; then
-        echo Usage: You must pass the node name.
-        return
-    fi
-
-    echo "ttknife node delete --yes $1"
-    ttknife node delete --yes "$1"
-
-    echo "ttknife client delete --yes $1"
-    ttknife client delete --yes "$1"
-}
-
-function search_chef_environment()
-{
-    if [ -z "$1" ]; then
-        echo Usage: You must pass the Chef environment.
-        return
-    fi
-    echo ttknife search node "chef_environment:$1"
-    `git rev-parse --show-toplevel`/run `git rev-parse --show-toplevel`/ttknife search node "chef_environment:$1" -a name -a environment -a ipaddress -a run_list -a tags
-}
-alias sce=search_chef_environment
 
 # Author.: Ole J
 # Date...: 23.03.2008

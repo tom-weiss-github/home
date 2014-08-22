@@ -82,6 +82,9 @@ knife client delete NODE_NAME
 rpm -q chef
 rpm -e chef-11.4.4-2.el6.x86_64;rm -rf /var/chef/; rm -rf /etc/chef/; rm -rf /opt/chef
 
+vcloud -l user -o Controlled_Deployment | grep gla | cut -f 1 | xargs -n 1 knife node show
+Show all the vms I own in the Controlled_Deployment vcloud organization.
+
 git
 ---
 git log --graph --date-order --abbrev-commit --pretty=format:"%h - %an, %ar : %s" > ~/glog.txt
@@ -89,6 +92,13 @@ Print git log to a file.
 
 git clean -fn
 Remove all untracked files (-n for dry run).
+
+                 (bad)                                    (good)
+git bisect start 5666bedf39bff85dd208be0e905681cafd303fd5 f8928e3
+chmod +x ~/githome/git_bisect_make.sh
+git bisect run ~/githome/git_bisect_make.sh
+(commit should be the one which transitioned from good to bad)
+git bisect reset (when done)
 
 
 tcpdump
