@@ -77,8 +77,6 @@ export DEPLOYMENT_SCRIPTS_REPO_ROOT=~/dev-root/scripts
 export JAVA_HOME=/usr/java/jdk1.7.0_17
 # run /usr/java/jdk1.7.0_17/bin/java -Dversion="0.0.0" -cp ./ringer/target/Ringer.jar Ringer --srl-config /etc/debesys/srl_config_ringer.xml -v -o
 
-. ~/githome/rhel/logs.sh
-
 alias todo='emacs -nw ~/todo.txt'
 alias rooms='cat ~/githome/rooms.txt'
 alias sb='source ~/.bashrc'
@@ -98,7 +96,7 @@ alias bcv="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROO
 alias build="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_build.py"
 alias deploy="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_deploy.py"
 alias smile='rename_terminal_title ":-)"'
-alias prdp='echo "@blesleytt @bcordonn @elmedinam @jkess @joanne-wilson @srubik @TIMSTACY @jfrumkin @jerdmann" | xclip -selection clipboard'
+alias prdp='echo "@bcordonn @elmedinam @jkess @joanne-wilson @srubik @TIMSTACY @jfrumkin @jerdmann" | xclip -selection clipboard'
 alias proc='echo "@mdw55189 @corystricklin @jingheelu @lmancini54" | xclip -selection clipboard'
 alias git-commit-hook="cp ~/githome/prepare-commit-msg .git/hooks/; chmod a+x .git/hooks/prepare-commit-msg"
 
@@ -272,6 +270,31 @@ function search_chef_environment()
     `git rev-parse --show-toplevel`/run `git rev-parse --show-toplevel`/ttknife search node "$search" -a name -a environment -a ipaddress -a run_list -a tags
 }
 alias sce=search_chef_environment
+
+function ssh_to_chef_node()
+{
+    local usage="Usage: ssh_to_chef_node CHEF_ENVIRONMENT RECIPE"
+    if [ -z "$1" ]; then
+        echo $usage
+        return
+    fi
+
+    if [ -z "$2" ]; then
+        echo $usage
+        return
+    fi
+
+    local ip=$($(git rev-parse --show-toplevel)/run $(git rev-parse --show-toplevel)/ttknife search node "chef_environment:$1 AND recipe:$2" -a ipaddress --no-color | grep ipaddress | tr -s " " | cut -d " " -f 3)
+    echo Found $ip, running ssh root@$ip.
+
+    if [ "$(sipcalc $ip | grep ERR)" != "" ]; then
+        echo Sorry, $ip is not a valid IP address, aborting.
+        return
+    fi
+
+    ssh root@$ip
+}
+alias visit=ssh_to_chef_node
 
 
 # To view the definition of a function, do 'type <function>'.
