@@ -1,5 +1,6 @@
 # .bashrc
 # Author: Tom Weiss
+#
 
 # Bash Notes
 # !$ last argument
