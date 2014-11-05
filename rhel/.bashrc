@@ -47,7 +47,8 @@ export PS1="\h\[\033[0;33m\]\$(__git_ps1) \[\033[0;0m\]\w \n>"
 # History across terminal sessions.
 export HISTSIZE=10000
 shopt -s histappend
-PROMPT_COMMAND="history -a;history -c;history -r;$PROMPT_COMMAND"
+# Commenting this out because it seems that my terminal history has the wrong numbers so I can't !
+# number anymore.  PROMPT_COMMAND="history -a;history -c;history -r;$PROMPT_COMMAND"
 export HISTTIMEFORMAT='%F %T '
 
 export EDITOR="emacs -nw"
@@ -55,6 +56,10 @@ export EDITOR="emacs -nw"
 export ALTERNATE_EDITOR=emacs
 # Don't quote environment variables with tilde.
 export LBM_LICENSE_FILENAME=~/29WestLicense.txt
+
+# Exports for ec2_server.py.
+export MANAGER="Tom Weiss"
+export DEPT=""
 
 # Cause the dynamic linker to resolve all symbols at program startup.  Useful to ensure uncalled
 # functions won't fail resolution at runtime.  I had to turn off this because the ringer development
@@ -93,8 +98,6 @@ alias gdb='gdb -n'
 alias gt='gnome-terminal &'
 alias vcloud="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/vcloud_server.py"
 alias bcv="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/bump_cookbook_version.py"
-alias build="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_build.py"
-alias deploy="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_deploy.py"
 alias smile='rename_terminal_title ":-)"'
 alias prdp='echo "@bcordonn @elmedinam @jkess @joanne-wilson @srubik @TIMSTACY @jfrumkin @jerdmann" | xclip -selection clipboard'
 alias proc='echo "@mdw55189 @corystricklin @jingheelu @lmancini54" | xclip -selection clipboard'
@@ -146,6 +149,7 @@ alias pext='pushd `git rev-parse --show-toplevel`/ext'
 alias cdrt='cd `git rev-parse --show-toplevel`'
 alias prt='pushd `git rev-parse --show-toplevel`'
 alias default="cd ~/dev-root/default"
+alias alternate="cd ~/dev-root/alternate"
 alias edcfg='emacs -nw /etc/debesys/cme_oc_config.conf'
 alias run='`git rev-parse --show-toplevel`/run'
 alias ttknife='`git rev-parse --show-toplevel`/run `git rev-parse --show-toplevel`/ttknife'
@@ -223,8 +227,6 @@ function external()
     fi
 }
 
-# I need to apply the logic here to rmchefnode, search_chef_environment, and any other bash function
-# which invokes ttknife.
 function tns()
 {
     local hm=~
@@ -239,20 +241,32 @@ function tns()
 
 function rmchefnode()
 {
+    local hm=~
+    local config="-C $hm/.chef/knife.rb"
+    if [ "$EXTERNAL_DEBESYS" == "enabled" ]; then
+        config=" -C $hm/.chef/knife.external.rb"
+    fi
+
     if [ -z "$1" ]; then
         echo Usage: You must pass the node name.
         return
     fi
 
-    echo "ttknife node delete --yes $1"
-    ttknife node delete --yes "$1"
+    echo "ttknife $config node delete --yes $1"
+    `git rev-parse --show-toplevel`/run `git rev-parse --show-toplevel`/ttknife $config node delete --yes "$1"
 
-    echo "ttknife client delete --yes $1"
-    ttknife client delete --yes "$1"
+    echo "ttknife $config client delete --yes $1"
+    `git rev-parse --show-toplevel`/run `git rev-parse --show-toplevel`/ttknife $config client delete --yes "$1"
 }
 
 function search_chef_environment()
 {
+    local hm=~
+    local config="-C $hm/.chef/knife.rb"
+    if [ "$EXTERNAL_DEBESYS" == "enabled" ]; then
+        config=" -C $hm/.chef/knife.external.rb"
+    fi
+
     if [ -z "$1" ]; then
         echo Usage: You must pass the Chef environment and optionally a recipe.
         echo "Examples: sce int-dev-cert (all nodes in int-dev-cert)"
@@ -265,9 +279,8 @@ function search_chef_environment()
         search=$search" AND recipe:$2*"
     fi
 
-
-    echo ttknife search node $search
-    `git rev-parse --show-toplevel`/run `git rev-parse --show-toplevel`/ttknife search node "$search" -a name -a environment -a ipaddress -a run_list -a tags
+    echo ttknife --config $config search node $search
+    `git rev-parse --show-toplevel`/run `git rev-parse --show-toplevel`/ttknife $config search node "$search" -a name -a environment -a ipaddress -a run_list -a tags
 }
 alias sce=search_chef_environment
 
@@ -296,6 +309,39 @@ function ssh_to_chef_node()
 }
 alias visit=ssh_to_chef_node
 
+function bump_all_oc_cookbook_versions()
+{
+    local reference=""
+    if [ ! -z "$1" ]; then
+        reference="-r $1"
+    fi
+    echo ./run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/bump_cookbook_version.py -c cfe cme eex_derivative eex_derivative_otc eris_govex espeed eurex eurex_otc ice $reference
+    ./run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/bump_cookbook_version.py -c cfe cme eex_derivative eex_derivative_otc eris_govex espeed eurex eurex_otc ice $reference
+}
+alias bcvocs=bump_all_oc_cookbook_versions
+
+function deploy__()
+{
+    local title_start="deploy $@"
+    rename_terminal_title "$title_start"
+    echo $DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_deploy.py "$@"
+    $DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_deploy.py "$@"
+    local title_done="DONE! $@"
+    rename_terminal_title "$title_done"
+}
+alias deploy=deploy__
+
+
+function build__()
+{
+    local title_start="build $@"
+    rename_terminal_title "$title_start"
+    echo $DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_build.py "$@"
+    $DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_build.py "$@"
+    local title_done="DONE! $@"
+    rename_terminal_title "$title_done"
+}
+alias build=build__
 
 # To view the definition of a function, do 'type <function>'.
 function cf() { emacsclient -n `find . -name $1`; }
@@ -476,8 +522,8 @@ function mkchefec2()
         ebs_size="--ebs-size $2"
     fi
 
-    echo ./run python deploy/chef/scripts/ec2_server.py --size m1.medium --ami ami-eb6b0182 --manager "Tom Weiss" --user root --environment int-dev-sparepool --recipe base $ebs_size -a $1
-    ./run python deploy/chef/scripts/ec2_server.py --size m1.medium --ami ami-eb6b0182 --manager "Tom Weiss" --user root --environment int-dev-sparepool --recipe base $ebs_size -a $1
+    echo ./run python deploy/chef/scripts/ec2_server.py --size m1.medium --ami ami-eb6b0182 --dept debesys --cost-center "Engineering-490" --project debesys --manager "Tom Weiss" --user root --environment int-dev-sparepool --recipe base $ebs_size -a $1
+    ./run python deploy/chef/scripts/ec2_server.py --size m1.medium --ami ami-eb6b0182 --dept debesys --cost-center "Engineering-490" --project debesys --manager "Tom Weiss" --user root --environment int-dev-sparepool --recipe base $ebs_size -a $1
 
     local ip=`knife node show $1 | grep IP | tr -s ' ' | cut -d" " -f 2`
     if [ -z ip ]; then
@@ -567,7 +613,7 @@ function rename_terminal_title()
         return
     fi
 
-    local title="terminal | $1"
+    local title="term | $1"
     echo -en "\033]0;$title\007"
     export CURRENT_TERMINAL_TITLE="$1"
 }
@@ -617,6 +663,14 @@ make-completion-wrapper _git _git_mine git
 alias g='git'
 complete -o bashdefault -o default -o nospace -F _git_mine g
 
+function proc_restart()
+{
+    echo knife ssh "chef_environment:$1" "/etc/debesys/services/action.sh $2" --config /home/tweiss/.chef/knife.external.rb --ssh-user root --ssh-password Tt12345678 --attribute ipaddress
+    knife ssh "chef_environment:$1" "/etc/debesys/services/action.sh $2" --config /home/tweiss/.chef/knife.external.rb --ssh-user root --ssh-password Tt12345678 --attribute ipaddress
+
+    echo knife ssh "chef_environment:$1" "/etc/debesys/services/action.sh $2" --config /home/tweiss/.chef/knife.external.rb --ssh-user root -i ~/.ssh/ttnet_us_east_1.pem --attribute ipaddress
+    knife ssh "chef_environment:$1" "/etc/debesys/services/action.sh $2" --config /home/tweiss/.chef/knife.external.rb --ssh-user root -i ~/.ssh/ttnet_us_east_1.pem --attribute ipaddress
+}
 
 # Uncomment to debug command to see when this file is sourced.
 # if [ ! -f /var/log/profiles ]

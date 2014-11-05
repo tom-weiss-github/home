@@ -463,3 +463,5 @@
 ;; (proceed with query-replace-regexp syntax)
 ;; (C-x s !) to save all buffers modified.
 
+;; Reload current buffer (if modified on disk):
+;; C-x C-v
