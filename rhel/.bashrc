@@ -76,6 +76,7 @@ if [ -f ~/jenkins_token ]; then
     export JENKINS_TOKEN=$(head -n 1 ~/jenkins_token)
 fi
 export DEPLOYMENT_SCRIPTS_REPO_ROOT=~/dev-root/scripts
+# export BUMP_COOKBOOK_VERSION_ALTERNATE_REPO=~/dev-root/cookbooks
 
 # To run ringer:
 # cp ringer.conf/srl_config_ringer.xml from some machine in int-dev-sim
@@ -605,6 +606,15 @@ function knf()
     fi
     /usr/bin/knife "$@"
     popd >> /dev/null
+}
+
+function rename_terminal_title_no_prefix()
+{
+    if [ -z "$1" ]; then
+        echo Usage: You must pass the new title.
+        return
+    fi
+    echo -en "\033]0;$1\007"
 }
 
 function rename_terminal_title()
