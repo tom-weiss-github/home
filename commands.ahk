@@ -3,6 +3,9 @@
 ; 2) Open C:\programdata\microsoft\windows\start menu\programs\startup
 ; 3) Paste as shortcut
 
+; To help locate information about a window, use the Windows Spy.
+; (right click the AutoHotKey icon in the tray and select Windows Spy)
+
 ; # is the win key
 #j::
 SetTitleMatchMode 2
@@ -43,10 +46,10 @@ IfWinExist, ahk_class Chrome_WidgetWin_1
 }
 return
 
-; p for pidgin
-#p::
+; h for hangouts
+#h::
 SetTitleMatchMode 2
-IfWinExist, Buddy List
+IfWinExist, Hangouts
 {
   WinActivate
 }
