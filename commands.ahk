@@ -38,18 +38,20 @@ else
 }
 return
 
-; b for browser
-#b::
-IfWinExist, ahk_class Chrome_WidgetWin_1
+; h for hangouts
+#h::
+SetTitleMatchMode 2
+IfWinExist, Hangouts
 {
   WinActivate
 }
 return
 
-; h for hangouts
-#h::
-SetTitleMatchMode 2
-IfWinExist, Hangouts
+; b for browser, the chrome hangout extension is also matches
+; ahk_class Chrome_WidgetWin_1 so I use the ExcludeTitle argument
+; to not match
+#b::
+IfWinExist, ahk_class Chrome_WidgetWin_1,,Hangouts,
 {
   WinActivate
 }
