@@ -71,7 +71,6 @@ SYMBOL should be one of 'grep-command', 'grep-template',
                                       "-and \! -iname \"*.html\" "
                                       "-and \! -iname \"*.ico\" "
                                       "-and \! -iname \"*.jar\" "
-                                      "-and \! -iname \"*.json\"  "
                                       "-and \! -iname \"*.o\" "
                                       "-and \! -iname \"*.pdf\" "
                                       "-and \! -iname \"*.php\" "

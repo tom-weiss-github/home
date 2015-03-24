@@ -16,7 +16,7 @@ current_branches = subprocess.check_output(["git", "branch", "--no-color"])
 # release/text-DEB-1234
 # hotfix/DEB-1234
 # hotfix/text-DEB-1234
-jiraid_match = re.search('\* (feature|release|hotfix)/\w*-{0,1}(?P<jid>deb\-[0-9]{1,9})', current_branches, re.I)
+jiraid_match = re.search('\* (feature|release|uat|hotfix)/\w*-{0,1}(?P<jid>deb\-[0-9]{1,9})', current_branches, re.I)
 
 if jiraid_match:
    jira_id = jiraid_match.group('jid')

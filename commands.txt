@@ -19,6 +19,9 @@ lsof
 Print open files (which may not be shown in find or ls if the file
 has been deleted, but a file descriptor is still open).
 
+dd of=/path/to/file if=/dev/null bs=1GB count=10
+Create a 10GB file with all zeros.
+
 ls | xargs -n 1 -i echo \{\}, | xargs -n 4
 This command is to illustrate some features of xargs.  The \{\} combined
 with -i allow the output from the piped command to be inserted in the
@@ -85,6 +88,13 @@ rpm -e chef-11.4.4-2.el6.x86_64;rm -rf /var/chef/; rm -rf /etc/chef/; rm -rf /op
 vcloud -l user -o Controlled_Deployment | grep gla | cut -f 1 | xargs -n 1 knife node show
 Show all the vms I own in the Controlled_Deployment vcloud organization.
 
+date time timezone
+------------------
+set the date and time
+date -s "2 OCT 2006 18:00:00"
+
+
+
 git
 ---
 git log --graph --date-order --abbrev-commit --pretty=format:"%h - %an, %ar : %s" > ~/glog.txt
@@ -103,7 +113,17 @@ git bisect reset (when done)
 git reset --hard HASH
 Make HEAD move to HASH.
 
+To create a local origin:
+git clone git@github.com:tradingtechnologies/debesys.git --mirror fake_remote
+You can't do much with this repo except clone from it.
 
+git clone file:///home/tweiss/dev-root/fake_remote/ 1_local_remote
+(then git submodule init/update; note that the submodules still point back
+ to original origin)
+
+git clone file:///home/tweiss/dev-root/fake_remote/ 2_local_remote
+Why two clones?  That way you can push from one, then pull from the other
+to verify your changes are getting pushed as expected.
 
 tcpdump
 -------

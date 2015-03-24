@@ -70,6 +70,7 @@ export DEPT=""
 export PATH=$PATH:~/Downloads/meld-1.6.1/bin
 export PATH=$PATH:/opt/scala-2.9.3/bin/
 export INTAD_USER=tweiss
+export BCV_ENABLE_LDAP=1
 export VCD_ORG=Dev_General
 export JENKINS_USER=tom.weiss@tradingtechnologies.com
 if [ -f ~/jenkins_token ]; then
@@ -77,7 +78,7 @@ if [ -f ~/jenkins_token ]; then
 fi
 export DEPLOYMENT_SCRIPTS_REPO_ROOT=~/dev-root/scripts
 # export BUMP_COOKBOOK_VERSION_ALTERNATE_REPO=~/dev-root/cookbooks
-
+export REQUEST_BUILD_SUPPRESS_TIPS=1
 # To run ringer:
 # cp ringer.conf/srl_config_ringer.xml from some machine in int-dev-sim
 # cp deploy/chef/cookbooks/srlabs/files/default/smds.lic /etc/debesys/
@@ -100,6 +101,7 @@ alias gdb='gdb -n'
 alias gt='gnome-terminal &'
 alias vcloud="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/vcloud_server.py"
 alias bcv="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/bump_cookbook_version.py"
+alias mergetest="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/check_repo.py"
 alias smile='rename_terminal_title ":-)"'
 alias prdp='echo "@bcordonn @elmedinam @jkess @joanne-wilson @srubik @TIMSTACY @jfrumkin @jerdmann" | xclip -selection clipboard'
 alias proc='echo "@mdw55189 @corystricklin @jingheelu @lmancini54" | xclip -selection clipboard'
@@ -126,7 +128,6 @@ ff_file+=' -and \! -iname "*.html" '
 ff_file+=' -and \! -iname "*.ico" '
 ff_file+=' -and \! -iname "*.jar" '
 ff_file+=' -and \! -iname "*.js" '
-ff_file+=' -and \! -iname "*.json" '
 ff_file+=' -and \! -iname "*.o" '
 ff_file+=' -and \! -iname "*.pdf" '
 ff_file+=' -and \! -iname "*.php" '
@@ -299,28 +300,33 @@ function ssh_to_chef_node()
         return
     fi
 
-    local ip=$($(git rev-parse --show-toplevel)/run $(git rev-parse --show-toplevel)/ttknife search node "chef_environment:$1 AND recipe:$2" -a ipaddress --no-color | grep ipaddress | tr -s " " | cut -d " " -f 3)
-    echo Found $ip, running ssh root@$ip.
-
-    if [ "$(sipcalc $ip | grep ERR)" != "" ]; then
-        echo Sorry, $ip is not a valid IP address, aborting.
-        return
+    local knife_config=~/.chef/knife.rb
+    if [[ $1 == ext-* ]]; then
+        knife_config=~/.chef/knife.external.rb
     fi
 
-    ssh root@$ip
+    found=$(knife search node "chef_environment:$1 AND recipe:$2*" --config $knife_config -a ipaddress -a run_list --no-color)
+    echo "$found"
+    local ips=$($(git rev-parse --show-toplevel)/run $(git rev-parse --show-toplevel)/ttknife --config $knife_config search node "chef_environment:$1 AND recipe:$2*" -a ipaddress --no-color | grep ipaddress | tr -s " " | cut -d " " -f 3)
+
+    echo ""
+    echo Found: $ips
+
+    PS3="Which $2: "
+    select selection in $ips
+    do
+        # Commented out for now, but good way to verify ip address format.
+        # if [ "$(sipcalc $ip | grep ERR)" != "" ]; then
+        #     echo Sorry, $ip is not a valid IP address, aborting.
+        #     return
+        # fi
+
+        echo ssh root@$selection
+        ssh root@$selection
+        break
+    done
 }
 alias visit=ssh_to_chef_node
-
-function bump_all_oc_cookbook_versions()
-{
-    local reference=""
-    if [ ! -z "$1" ]; then
-        reference="-r $1"
-    fi
-    echo ./run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/bump_cookbook_version.py -c cfe cme eex_derivative eex_derivative_otc eris_govex espeed eurex eurex_otc ice $reference
-    ./run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/bump_cookbook_version.py -c cfe cme eex_derivative eex_derivative_otc eris_govex espeed eurex eurex_otc ice $reference
-}
-alias bcvocs=bump_all_oc_cookbook_versions
 
 function deploy__()
 {
@@ -350,7 +356,7 @@ function cf() { emacsclient -n `find . -name $1`; }
 function f() { find . -name $1 -print; }
 function rmbr()
 {
-    for do_not_delete in master origin/master release/current origin/release/current develop origin/develop
+    for do_not_delete in master origin/master uat/current origin/uat/current release/current origin/release/current develop origin/develop
     do
         if [ $do_not_delete == "$1" ]; then
             echo "Oops! I think you are accidentally trying to delete one of the important branches, aborting."
