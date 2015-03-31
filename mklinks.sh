@@ -86,6 +86,16 @@ else
     echo Skipping $HOME/.gitignore_global, already exists.
 fi
 
+if [ ! -f $HOME/.ssh/config ]; then
+    ln -sv $HOME/githome/dotsshconfig $HOME/.ssh/config
+elif [ "on" == $mklinks_force_delete ]; then
+    echo Deleting $HOME/.ssh/config and re-creating since --force was enabled.
+    rm -v $HOME/.ssh/config
+    ln -sv $HOME/githome/dotsshconfig $HOME/.ssh/config
+else
+    echo Skipping $HOME/.ssh/config, already exists.
+fi
+
 
 # Files in $HOME/.emacs.d whose link name is identical.
 mkdir -pv $HOME/.emacs.d
