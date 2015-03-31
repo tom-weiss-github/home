@@ -51,7 +51,7 @@ done
 
 
 # Files in $HOME/ from githome.
-for f in .emacs
+for f in .emacs .tmux.conf
 do
     if [ ! -f $HOME/$f ]; then
         ln -sv $HOME/githome/$f $HOME/$f
