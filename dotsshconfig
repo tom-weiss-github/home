@@ -1,0 +1,4 @@
+Host 10.*
+     StrictHostKeyChecking no
+     UserKnownHostsFile=/dev/null
+     LogLevel=quiet
