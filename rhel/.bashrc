@@ -106,6 +106,9 @@ alias smile='rename_terminal_title ":-)"'
 alias prdp='echo "@bcordonn @elmedinam @jkess @joanne-wilson @srubik @TIMSTACY @jfrumkin @jerdmann" | xclip -selection clipboard'
 alias proc='echo "@mdw55189 @corystricklin @jingheelu @lmancini54" | xclip -selection clipboard'
 alias git-commit-hook="cp ~/githome/prepare-commit-msg .git/hooks/; chmod a+x .git/hooks/prepare-commit-msg"
+alias killwindow="tmux kill-window"
+alias killpane="tmux kill-pane"
+alias splitupdown="tmux split-window"
 
 
 # Use optimize-find.py to help decide which directories and extensions to filter.
@@ -631,16 +634,22 @@ function rename_terminal_title()
     fi
 
     local title="term | $1"
-    echo -en "\033]0;$title\007"
-    export CURRENT_TERMINAL_TITLE="$1"
 
     if [ $TMUX_PANE ]; then
         tmux rename-window $1
         tmux refresh-client
+        echo -en "\033]0;:-)\007"
+    else
+        echo -en "\033]0;$title\007"
+        export CURRENT_TERMINAL_TITLE="$1"
     fi
 }
 alias rw=rename_terminal_title
-rename_terminal_title ":-)"
+
+# No auto rename on a new tmux.
+if [ ! $TMUX_PANE ]; then
+    rename_terminal_title ":-)"
+fi
 
 csview()
 {
