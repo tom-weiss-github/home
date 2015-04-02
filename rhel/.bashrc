@@ -633,6 +633,11 @@ function rename_terminal_title()
     local title="term | $1"
     echo -en "\033]0;$title\007"
     export CURRENT_TERMINAL_TITLE="$1"
+
+    if [ $TMUX_PANE ]; then
+        tmux rename-window $1
+        tmux refresh-client
+    fi
 }
 alias rw=rename_terminal_title
 rename_terminal_title ":-)"
