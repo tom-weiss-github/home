@@ -634,11 +634,11 @@ function rename_terminal_title()
     fi
 
     local title="term | $1"
+    local tmux_title_no_spaces=$(echo "$1" | sed -e 's/ /_/g')
 
     if [ $TMUX_PANE ]; then
-        tmux rename-window $1
+        tmux rename-window $tmux_title_no_spaces
         tmux refresh-client
-        echo -en "\033]0;:-)\007"
     else
         echo -en "\033]0;$title\007"
         export CURRENT_TERMINAL_TITLE="$1"
