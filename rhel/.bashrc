@@ -85,6 +85,7 @@ export REQUEST_BUILD_SUPPRESS_TIPS=1
 export JAVA_HOME=/usr/java/jdk1.7.0_17
 # run /usr/java/jdk1.7.0_17/bin/java -Dversion="0.0.0" -cp ./ringer/target/Ringer.jar Ringer --srl-config /etc/debesys/srl_config_ringer.xml -v -o
 
+alias off='sudo shutdown -P now'
 alias todo='emacs -nw ~/todo.txt'
 alias rooms='cat ~/githome/rooms.txt'
 alias sb='source ~/.bashrc'
