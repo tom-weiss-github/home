@@ -106,9 +106,11 @@ alias smile='rename_terminal_title ":-)"'
 alias prdp='echo "@bcordonn @elmedinam @jkess @joanne-wilson @srubik @TIMSTACY @jfrumkin @jerdmann" | xclip -selection clipboard'
 alias proc='echo "@mdw55189 @corystricklin @jingheelu @lmancini54" | xclip -selection clipboard'
 alias git-commit-hook="cp ~/githome/prepare-commit-msg .git/hooks/; chmod a+x .git/hooks/prepare-commit-msg"
-alias killwindow="tmux kill-window"
-alias killpane="tmux kill-pane"
-alias splitupdown="tmux split-window"
+alias tkw="tmux kill-window"
+alias tkp="tmux kill-pane"
+alias tsud="tmux split-window"
+alias tnw="tmux new-window"
+alias tks="tmux kill-server"
 
 
 # Use optimize-find.py to help decide which directories and extensions to filter.
