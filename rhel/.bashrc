@@ -224,9 +224,15 @@ function external()
         if [ ! -z "$PRE_EXTERNAL_PS1" ]; then
             export PS1=$PRE_EXTERNAL_PS1
         fi
-        if [ ! -z "PRE_EXTERNAL_TERMINAL_TITLE" ]; then
-            rename_terminal_title "$PRE_EXTERNAL_TERMINAL_TITLE"
+
+        if [ $TMUX_PANE ]; then
+            rename_terminal_title "bash"
+        else
+            if [ ! -z "PRE_EXTERNAL_TERMINAL_TITLE" ]; then
+                rename_terminal_title "$PRE_EXTERNAL_TERMINAL_TITLE"
+            fi
         fi
+
         alias ttknife='`git rev-parse --show-toplevel`/run `git rev-parse --show-toplevel`/ttknife'
         alias ttknife
         aws_keys ~/amazon_keys.sh
@@ -337,23 +343,24 @@ alias visit=ssh_to_chef_node
 function deploy__()
 {
     local title_start="deploy $@"
+    local window=`tmux list-windows | grep "\(active\)" | cut -d" " -f 1 | sed s'/://g'`
     rename_terminal_title "$title_start"
     echo $DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_deploy.py "$@"
     $DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_deploy.py "$@"
     local title_done="DONE! $@"
-    rename_terminal_title "$title_done"
+    rename_terminal_title "$title_done" "$window"
 }
 alias deploy=deploy__
-
 
 function build__()
 {
     local title_start="build $@"
+    local window=`tmux list-windows | grep "\(active\)" | cut -d" " -f 1 | sed s'/://g'`
     rename_terminal_title "$title_start"
     echo $DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_build.py "$@"
     $DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_build.py "$@"
     local title_done="DONE! $@"
-    rename_terminal_title "$title_done"
+    rename_terminal_title "$title_done" "$window"
 }
 alias build=build__
 
@@ -620,6 +627,7 @@ function knf()
     popd >> /dev/null
 }
 
+
 function rename_terminal_title_no_prefix()
 {
     if [ -z "$1" ]; then
@@ -636,11 +644,17 @@ function rename_terminal_title()
         return
     fi
 
+    if [ -z "$2" ]; then
+        local tmux_window=""
+    else
+        local tmux_window="-t $2"
+    fi
+
     local title="term | $1"
     local tmux_title_no_spaces=$(echo "$1" | sed -e 's/ /_/g')
 
     if [ $TMUX_PANE ]; then
-        tmux rename-window $tmux_title_no_spaces
+        tmux rename-window $tmux_window $tmux_title_no_spaces
         tmux refresh-client
     else
         echo -en "\033]0;$title\007"
