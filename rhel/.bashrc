@@ -177,6 +177,15 @@ alias grp="git rev-parse --short"
 alias myec2='aws ec2 describe-instances --region us-east-1 --filters "Name=tag-value,Values=tweiss"'
 # alias chrome="/opt/google/chrome/google-chrome --enable-plugins &"
 
+# When tmux gets disconnected the DISPLAY environment variable often needs to be changed.
+set_display()
+{
+    echo DISPLAY was $DISPLAY.
+    export DISPLAY="localhost:$1.0"
+    echo DISPLAY is $DISPLAY.
+}
+
+
 function aws_keys()
 {
     usage="aws_keys key_file"
