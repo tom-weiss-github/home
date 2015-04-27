@@ -177,9 +177,22 @@ alias grp="git rev-parse --short"
 alias myec2='aws ec2 describe-instances --region us-east-1 --filters "Name=tag-value,Values=tweiss"'
 # alias chrome="/opt/google/chrome/google-chrome --enable-plugins &"
 
-# When tmux gets disconnected the DISPLAY environment variable often needs to be changed.
+
 set_display()
 {
+    # When tmux gets disconnected the DISPLAY environment variable often needs to be changed.
+    pgrep Xorg > /dev/null
+    if [ $? == 0 ]; then
+        echo "X server is running (Xorg)."
+    else
+        echo "X server is not running (Xorg)."
+    fi
+
+    # if xlsclients returns 0 we're good otherwise we need to set $DISPLAY.
+    xlsclients >> /dev/null
+    if [ $? != 0 ]; then
+        echo "DISPLAY is not set correctly ($DISPLAY)."
+    fi
     echo DISPLAY was $DISPLAY.
     export DISPLAY="localhost:$1.0"
     echo DISPLAY is $DISPLAY.
@@ -351,13 +364,25 @@ alias visit=ssh_to_chef_node
 
 function deploy__()
 {
-    local title_start="deploy $@"
-    local window=`tmux list-windows | grep "\(active\)" | cut -d" " -f 1 | sed s'/://g'`
-    rename_terminal_title "$title_start"
+    local found_dash_a=false
+    # Example of bash substring match.
+    if [[ "$@" == *"-a"* ]]; then
+        found_dash_a=true
+    fi
+
+    if [ $found_dash_a == false ]; then
+        local title_start="Deploying..."
+        local window=`tmux list-windows | grep "\(active\)" | cut -d" " -f 1 | sed s'/://g'`
+        rename_terminal_title "$title_start"
+    fi
+
     echo $DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_deploy.py "$@"
     $DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_deploy.py "$@"
-    local title_done="DONE! $@"
-    rename_terminal_title "$title_done" "$window"
+
+    if [ $found_dash_a == false ]; then
+        local title_done="Done deploying!"
+        rename_terminal_title "$title_done" "$window"
+    fi
 }
 alias deploy=deploy__
 
@@ -420,6 +445,17 @@ function git-sync_()
         return
     fi
 
+    local branch="$1"
+    if [ "d" == "$1" ]; then
+        branch="develop"
+    elif [ "r" == "$1" ]; then
+        branch="release/current"
+    elif [ "u" == "$1" ]; then
+        branch="uat/current"
+    elif [ "m" == "$1" ]; then
+        branch="master"
+    fi
+
     echo "pushd `git rev-parse --show-toplevel`";
     pushd `git rev-parse --show-toplevel`;
     if [ $? != 0 ]; then
@@ -434,8 +470,8 @@ function git-sync_()
         echo "popd"; popd;
         return
     fi
-    echo "git checkout $1";
-    git checkout "$1";
+    echo "git checkout $branch";
+    git checkout "$branch";
     if [ $? != 0 ]; then
         echo "Aborting."
         echo "popd"; popd;
