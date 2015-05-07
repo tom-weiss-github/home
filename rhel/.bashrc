@@ -371,7 +371,7 @@ function deploy__()
     fi
 
     if [ $found_dash_a == false ]; then
-        local title_start="Deploying..."
+        local title_start="deploying..."
         local window=`tmux list-windows | grep "\(active\)" | cut -d" " -f 1 | sed s'/://g'`
         rename_terminal_title "$title_start"
     fi
@@ -380,7 +380,7 @@ function deploy__()
     $DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_deploy.py "$@"
 
     if [ $found_dash_a == false ]; then
-        local title_done="Done deploying!"
+        local title_done="done deploying"
         rename_terminal_title "$title_done" "$window"
     fi
 }
@@ -388,12 +388,12 @@ alias deploy=deploy__
 
 function build__()
 {
-    local title_start="build $@"
+    local title_start="building..."
     local window=`tmux list-windows | grep "\(active\)" | cut -d" " -f 1 | sed s'/://g'`
     rename_terminal_title "$title_start"
     echo $DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_build.py "$@"
     $DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_build.py "$@"
-    local title_done="DONE! $@"
+    local title_done="build done"
     rename_terminal_title "$title_done" "$window"
 }
 alias build=build__
@@ -756,14 +756,19 @@ make-completion-wrapper _git _git_mine git
 alias g='git'
 complete -o bashdefault -o default -o nospace -F _git_mine g
 
-function proc_restart()
+function merge()
 {
-    echo knife ssh "chef_environment:$1" "/etc/debesys/services/action.sh $2" --config /home/tweiss/.chef/knife.external.rb --ssh-user root --ssh-password Tt12345678 --attribute ipaddress
-    knife ssh "chef_environment:$1" "/etc/debesys/services/action.sh $2" --config /home/tweiss/.chef/knife.external.rb --ssh-user root --ssh-password Tt12345678 --attribute ipaddress
+    local branches=$(git branch --no-color | awk -F ' +' '{print $2}')
 
-    echo knife ssh "chef_environment:$1" "/etc/debesys/services/action.sh $2" --config /home/tweiss/.chef/knife.external.rb --ssh-user root -i ~/.ssh/ttnet_us_east_1.pem --attribute ipaddress
-    knife ssh "chef_environment:$1" "/etc/debesys/services/action.sh $2" --config /home/tweiss/.chef/knife.external.rb --ssh-user root -i ~/.ssh/ttnet_us_east_1.pem --attribute ipaddress
+    PS3="Which branch do you want to merge: "
+    select selection in $branches
+    do
+        echo git merge --no-ff $selection
+        break
+    done
 }
+
+
 
 # Uncomment to debug command to see when this file is sourced.
 # if [ ! -f /var/log/profiles ]
