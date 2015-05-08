@@ -370,7 +370,12 @@ function deploy__()
         found_dash_a=true
     fi
 
-    if [ $found_dash_a == false ]; then
+    local found_dash_h=false
+    if [[ "$@" == *"-h"* ]]; then
+        found_dash_h=true
+    fi
+
+    if [ $found_dash_h == false -a $found_dash_a == false ]; then
         local title_start="deploying..."
         local window=`tmux list-windows | grep "\(active\)" | cut -d" " -f 1 | sed s'/://g'`
         rename_terminal_title "$title_start"
@@ -379,8 +384,8 @@ function deploy__()
     echo $DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_deploy.py "$@"
     $DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_deploy.py "$@"
 
-    if [ $found_dash_a == false ]; then
-        local title_done="done deploying"
+    if [ $found_dash_h == false -a $found_dash_a == false ]; then
+        local title_done="deploying...done"
         rename_terminal_title "$title_done" "$window"
     fi
 }
@@ -388,13 +393,29 @@ alias deploy=deploy__
 
 function build__()
 {
-    local title_start="building..."
-    local window=`tmux list-windows | grep "\(active\)" | cut -d" " -f 1 | sed s'/://g'`
-    rename_terminal_title "$title_start"
+    local found_dash_h=false
+    if [[ "$@" == *"-h"* ]]; then
+        found_dash_h=true
+    fi
+
+    local found_dash_a=false
+    if [[ "$@" == *"-a"* ]]; then
+        found_dash_a=true
+    fi
+
+    if [ $found_dash_h == false -a $found_dash_a == false ]; then
+        local title_start="building..."
+        local window=`tmux list-windows | grep "\(active\)" | cut -d" " -f 1 | sed s'/://g'`
+        rename_terminal_title "$title_start"
+    fi
+
     echo $DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_build.py "$@"
     $DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_build.py "$@"
-    local title_done="build done"
-    rename_terminal_title "$title_done" "$window"
+
+    if [ $found_dash_h == false -a $found_dash_a == false ]; then
+        local title_done="building...done"
+        rename_terminal_title "$title_done" "$window"
+    fi
 }
 alias build=build__
 
@@ -758,14 +779,26 @@ complete -o bashdefault -o default -o nospace -F _git_mine g
 
 function merge()
 {
-    local branches=$(git branch --no-color | awk -F ' +' '{print $2}')
+    local branches=$(git branch --no-color | awk -F ' +' '{print $2}' | grep -v master | grep -v uat/current | grep -v release/current | grep -v develop)
+    if [ "" == "$branches" ]; then
+        echo 'There are no candidate branches to merge. The only branches found were the git flow branches.'
+        echo Found: $(git branch | awk -F ' +' '{print $2}')
+        return
+    fi
 
     PS3="Which branch do you want to merge: "
     select selection in $branches
     do
         echo git merge --no-ff $selection
+        git merge --no-ff $selection
         break
     done
+
+    if [ $? != 0 ]; then
+        echo "The merge failed."
+    else
+        echo "The merge was successful."
+    fi
 }
 
 
