@@ -799,6 +799,13 @@ function merge()
     else
         echo "The merge was successful."
     fi
+
+    # Instead of injecting the function merge into the history, inject the resulting git command
+    # with the branch into the history.  The reason this is better is that when performing the git
+    # flow merging, I can up-arrow to perform the merge on the other git flow branches.  Without
+    # this, the command merge is in the history and it prompts me, but I know the one I want to
+    # merge cause I just chose it.
+    history -s "git merge --no-ff $selection"
 }
 
 
