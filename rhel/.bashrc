@@ -391,6 +391,35 @@ function deploy__()
 }
 alias deploy=deploy__
 
+function bootstrap__()
+{
+    local found_dash_a=false
+    # Example of bash substring match.
+    if [[ "$@" == *"-a"* ]]; then
+        found_dash_a=true
+    fi
+
+    local found_dash_h=false
+    if [[ "$@" == *"-h"* ]]; then
+        found_dash_h=true
+    fi
+
+    if [ $found_dash_h == false -a $found_dash_a == false ]; then
+        local title_start="bootstrapping..."
+        local window=`tmux list-windows | grep "\(active\)" | cut -d" " -f 1 | sed s'/://g'`
+        rename_terminal_title "$title_start"
+    fi
+
+    echo $DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_bootstrap.py "$@"
+    $DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_bootstrap.py "$@"
+
+    if [ $found_dash_h == false -a $found_dash_a == false ]; then
+        local title_done="bootstrapping...done"
+        rename_terminal_title "$title_done" "$window"
+    fi
+}
+alias bootstrap=bootstrap__
+
 function build__()
 {
     local found_dash_h=false
