@@ -2,3 +2,15 @@ Host 10.*
      StrictHostKeyChecking no
      UserKnownHostsFile=/dev/null
      LogLevel=quiet
+
+Host 10.192.*, 10.193.*
+     IdentityFile ~/.ssh/id_rsa
+     User tweiss
+
+Host 10.210.*
+     IdentityFile ~/.ssh/TTNET-US-EAST-1.pem
+     User root
+
+Host 10.203.*
+     IdentityFile ~/.ssh/PILAB-US-EAST-1.pem
+     User root
