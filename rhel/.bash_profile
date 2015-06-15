@@ -21,5 +21,11 @@ then
     sudo touch /var/log/profiles
     sudo chmod a+rw /var/log/profiles
 fi
+
+if [ -z "$SSH_AUTH_SOCK" ]; then
+    eval `ssh-agent -s`
+    ssh-add
+fi
+
 sudo echo .bash_profile ran at $(date) >> /var/log/profiles
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*

@@ -423,7 +423,7 @@
 ;;
 ;; do M C-s  MessageType: JC-qC-jMessage.*C-qC-jMarketID: 197140
 ;; The 'C-qC-j' part is the newline.
-;; M-x replace-regexp --> regular expression search-replace.
+;; M-x replace-regexp --> regular expression search-replace (query-replace-regexp to choose which ones)
 ;; example of regular expression search-replace:
 ;; M-x replace-regexp TEXT[ ]* <enter> ' = ' (that's space equals space)
 
