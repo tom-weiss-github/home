@@ -12,5 +12,9 @@ Host 10.210.*
      User root
 
 Host 10.203.*
-     IdentityFile ~/.ssh/PILAB-US-EAST-1.pem
+     IdentityFile ~/.ssh/id_rsa
+     User tweiss
+
+Host 10.213.*
+     IdentityFile ~/.ssh/TTNET-EU-WEST-1.pem
      User root

@@ -5,6 +5,13 @@ find / -type f -size +1000k | xargs -n 1 ls -l --block-size=M
 Find all files over 1000 kbs and then print the size of each of those
 files in mbs.
 
+sudo find / -maxdepth 1 -type d | xargs sudo du -hs
+sudo find /var -maxdepth 1 -type d | xargs sudo du -hs
+sudo find /var/lib -maxdepth 1 -type d | xargs sudo du -hs
+This command is useful to explore if some directory or file is the major contributor to partition
+exhaustion.  Starting from '/', examine which folders are using the most space and traverse to the
+culprit.
+
 sudo lsof -a +L1 /
 Show all the files in '/' with a link count less than 1, that is, deleted files.
 
@@ -25,6 +32,9 @@ has been deleted, but a file descriptor is still open).
 dd of=/path/to/file if=/dev/null bs=1GB count=10
 Create a 10GB file with all zeros.
 
+for node in gla0srv123 gla0srv35 gla0srv37 gla0srv124; do knife node show $node -a name -a tags -a chef_environment -a run_list; done
+One line for loop to execute the same command multiple times.
+
 ls | xargs -n 1 -i echo \{\}, | xargs -n 4
 This command is to illustrate some features of xargs.  The \{\} combined
 with -i allow the output from the piped command to be inserted in the
@@ -42,8 +52,14 @@ Similar to other cut examples, but this one uses the tr command to trim extra wh
 ttknife search node "chef_environment:int-dev-cert" -a ipaddress |  grep ipaddress  | tr -s " " | cut -d" " -f 3 | xargs -n 1 -i ping -c 5 -q \{\} | grep -iE "statistics|packet"
 Search for nodes in int-dev-cert that are not running.
 
+ttknife search node "chef_environment:int-dev-sparepool" -a name | grep name | grep ip- | grep -v 10-203-0-74 | tr -s " " | cut -d" " -f 3 | xargs -n 1 -i knife client delete \{\} --yes
 ttknife search node "chef_environment:int-dev-sparepool" -a name | grep name | grep ip- | grep -v 10-203-0-74 | tr -s " " | cut -d" " -f 3 | xargs -n 1 -i knife node delete \{\} --yes
+
 Delete a collection of nodes in the sparepool.
+
+g glog | grep -E "(17cbad3|release-15.6.1)"
+Example of grep through git log with regular expression.
+
 
 rm ~/clients.txt; rm ~/nodes.txt; ttknife client list > ~/clients.txt; ttknife node list > ~/nodes.txt; diff ~/nodes.txt ~/clients.txt | grep "> " | cut -d" " -f 2 | grep ip- | xargs -n 1 -i knife client delete \{\} --yes
 Delete a collection of clients for which the node has been deleted and start with ip-.
