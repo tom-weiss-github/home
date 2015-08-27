@@ -41,6 +41,34 @@
                            )))
 )
 
+(load-file "~/.emacs.d/find-best-root.el")
+
+(defun ooc ()
+  (interactive)
+  (message buffer-file-name)
+  ;; Look for '*/deploy/chef/cookbooks/<something>/*' in the path and message whether I found it and
+  ;; if so what is something.
+  (if (string-match ".*deploy/chef/cookbooks/.*" buffer-file-name)
+      (progn (message "this is a cookbook")
+             (setq cookbook (replace-regexp-in-string
+                             "/.*" ""
+                             (replace-regexp-in-string ".*/deploy/chef/cookbooks/" "" buffer-file-name)))
+             (message (concat "The cookbook is '" cookbook "'."))
+             (setq cookbook_metadata_fname (concat (find-best-root "makefile")
+                                                   "deploy/chef/cookbooks/"
+                                                   cookbook
+                                                   "/metadata.rb"))
+             (message (concat "The cookbook metadata file is "
+                              cookbook_metadata_fname))
+             (find-file cookbook_metadata_fname)
+             (goto-char (point-min))
+             (while (re-search-forward "version\\(.*\\)'\\([0-9]+\\)\\.\\([0-9]+\\)\\.\\([0-9]+\\)'" nil t)
+               (replace-match (concat "version          '0.88.88'")))
+             (write-file buffer-file-name)
+             )
+    (message "Oops, this file is not part of a cookbook."))
+)
+
 ;; - Change some cookbook <CB>.
 ;; - Open its metadata.rb file (no change yet).
 ;; - Find all cookbooks that depend on <CB>.
