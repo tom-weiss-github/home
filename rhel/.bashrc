@@ -48,6 +48,9 @@ export PS1="\h\[\033[0;33m\]\$(__git_ps1) \[\033[0;0m\]\w \n>"
 # History across terminal sessions.
 export HISTSIZE=10000
 shopt -s histappend
+# history -a => append current session's history to history file (happens at session exit)
+# history -c => clear the current session's history
+# history -r => reload the history from the history file into the current session
 # Commenting this out because it seems that my terminal history has the wrong numbers so I can't !
 # number anymore.  PROMPT_COMMAND="history -a;history -c;history -r;$PROMPT_COMMAND"
 export HISTTIMEFORMAT='%F %T '
