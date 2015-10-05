@@ -181,7 +181,6 @@ alias grp="git rev-parse --short"
 alias myec2='aws ec2 describe-instances --region us-east-1 --filters "Name=tag-value,Values=tweiss"'
 # alias chrome="/opt/google/chrome/google-chrome --enable-plugins &"
 
-
 set_display()
 {
     # When tmux gets disconnected the DISPLAY environment variable often needs to be changed.
@@ -202,6 +201,98 @@ set_display()
     echo DISPLAY is $DISPLAY.
 }
 
+function setchefconfig()
+{
+    if [ -z "$1" ]; then
+        echo Invalid usage of setchefconfig, you must pass a hostname.
+        return
+    fi
+
+    # Default to the internal organization.
+    chef_config=~/.chef/knife.rb
+
+    # Note to self: double brakets [[ ]] cause == to do wildcard matching and the behavior or == is
+    # different with single brackets [ ].
+    if [[ $1 == ar* || $1 == ch* || $1 == ny* || $1 = fr* ]]; then
+        chef_config=~/.chef/knife.external.rb
+    elif [[ $1 == *"ip-10-210-0"* || $1 == *"ip-10-210-2"* || $1 == *"ip-10-210-4"* ]]; then
+        chef_config=~/.chef/knife.external.rb
+    elif [[ $1 == *"ip-10-213-0"* || $1 == *"ip-10-213-2"* || $1 == *"ip-10-213-4"* ]]; then
+        chef_config=~/.chef/knife.external.rb
+    elif [[ $1 == *"ip-10-215-0"* || $1 == *"ip-10-215-2"* || $1 == *"ip-10-215-4"* ]]; then
+        chef_config=~/.chef/knife.external.rb
+    fi
+}
+
+function addtag2hosts()
+{
+    local usage='Usage: addtag2hosts "new tag value" host1 host2 ... hostN'
+    if [ -z "$1" ]; then
+        echo $usage
+        return
+    fi
+
+    if [ -z "$2" ]; then
+        echo $usage
+        return
+    fi
+
+    setchefconfig $2
+
+    local query=""
+    local first=0
+    for var in "$@"
+    do
+        if [ $first == 0 ]; then
+            first=1
+            continue
+        fi
+        query+="name:$var OR "
+    done
+    query=$(echo -n $query | head -c -3)
+
+    echo knife exec ~/dev-root/scripts/snacks/add_tag.rb \"$query\" add \"$1\" --config $chef_config
+}
+
+function addtag2query()
+{
+    local usage='Usage: addtag2query "new tag value" "data_center_name:aurora" [int|ext]'
+    if [ -z "$1" ]; then
+        echo $usage
+        return
+    fi
+
+    if [ -z "$2" ]; then
+        echo $usage
+        return
+    fi
+
+    local chef_config=~/.chef/knife.rb
+    if [ 'ext' == "$3" ]; then
+        chef_config=~/.chef/knife.external.rb
+    fi
+
+    echo knife exec ~/dev-root/scripts/snacks/add_tag.rb \"$2\" add \"$1\" --config $chef_config
+}
+
+function eaddtag2query()
+{
+    addtag2query "$1" "$2" ext
+}
+
+function kne()
+{
+    setchefconfig "$1"
+    echo knife node edit "$1" --config $chef_config
+    knife node edit "$1" --config $chef_config
+}
+
+function kns()
+{
+    setchefconfig "$1"
+    echo knife node show "$1" --config $chef_config
+    knife node show "$1" --config $chef_config
+}
 
 function aws_keys()
 {
