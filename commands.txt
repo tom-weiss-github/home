@@ -14,10 +14,14 @@ culprit.
 
 sudo lsof -a +L1 /
 Show all the files in '/' with a link count less than 1, that is, deleted files.
+If not there, sudo yum -y install lsof.
 
 find . -mtime +10 | xargs -n 1 --no-run-if-empty rm -v
 Remove files older than 10 days.  The -n 1 ensure that if there are large numbers of files the
 rm command won't be too long, instead a new command will be created for each file.
+
+fallocate -l 11M /var/log/HsmProxy.log
+Create a 11 megabtype file.
 
 df -h
 Print disk usage.
@@ -138,8 +142,11 @@ git bisect run ~/githome/git_bisect_make.sh
 (commit should be the one which transitioned from good to bad)
 git bisect reset (when done)
 
-git reset --hard HASH
-Make HEAD move to HASH.
+git reset --hard HASH~
+Make HEAD move to HASH previous hash.
+
+git tag -d $(git tag); git fetch
+Delete all the tags and re-grab them from origin.
 
 To create a local origin:
 git clone git@github.com:tradingtechnologies/debesys.git --mirror fake_remote
@@ -152,6 +159,10 @@ git clone file:///home/tweiss/dev-root/fake_remote/ 1_local_remote; cd 1_local_r
 git clone file:///home/tweiss/dev-root/fake_remote/ 2_local_remote; cd 2_local_remote; git submodule update --init
 Why two clones?  That way you can push from one, then pull from the other
 to verify your changes are getting pushed as expected.
+
+git diff branch1:dir/file branch2:dir/file
+Compare file across branches.
+
 
 tcpdump
 -------

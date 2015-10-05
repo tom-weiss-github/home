@@ -948,3 +948,5 @@ function merge()
 # fi
 
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+
+echo DISPLAY is $DISPLAY.
