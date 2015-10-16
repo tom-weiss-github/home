@@ -82,6 +82,7 @@ fi
 export DEPLOYMENT_SCRIPTS_REPO_ROOT=~/dev-root/scripts
 # export BUMP_COOKBOOK_VERSION_ALTERNATE_REPO=~/dev-root/cookbooks
 export REQUEST_BUILD_SUPPRESS_TIPS=1
+export BUMP_COOKBOOK_VERSION_AUTO_EXECUTE=1
 # To run ringer:
 # cp ringer.conf/srl_config_ringer.xml from some machine in int-dev-sim
 # cp deploy/chef/cookbooks/srlabs/files/default/smds.lic /etc/debesys/
@@ -107,6 +108,7 @@ alias vcloud="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_
 alias bcv="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/bump_cookbook_version.py"
 alias ec2="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/ec2_instance.py -v --route53 "
 alias mergetest="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/check_repo.py"
+alias fta="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/feature_test_assistant.py"
 alias smile='rename_terminal_title ":-)"'
 alias prdp='echo "@bcordonn @elmedinam @jkess @joanne-wilson @srubik @TIMSTACY @jfrumkin @jerdmann" | xclip -selection clipboard'
 alias proc='echo "@mdw55189 @corystricklin @jingheelu @lmancini54" | xclip -selection clipboard'
@@ -251,7 +253,8 @@ function addtag2hosts()
     done
     query=$(echo -n $query | head -c -3)
 
-    echo knife exec ~/dev-root/scripts/snacks/add_tag.rb \"$query\" add \"$1\" --config $chef_config
+    echo knife exec ~/dev-root/scripts/deploy/chef/scripts/snacks/add_tag.rb "$query" add "$1" --config $chef_config
+    knife exec ~/dev-root/scripts/deploy/chef/scripts//snacks/add_tag.rb "$query" add "$1" --config $chef_config
 }
 
 function addtag2query()
@@ -272,7 +275,8 @@ function addtag2query()
         chef_config=~/.chef/knife.external.rb
     fi
 
-    echo knife exec ~/dev-root/scripts/snacks/add_tag.rb \"$2\" add \"$1\" --config $chef_config
+    echo knife exec ~/dev-root/scripts/deploy/chef/scripts/snacks/add_tag.rb "$2" add "$1" --config $chef_config
+    knife exec ~/dev-root/scripts/deploy/chef/scripts/snacks/add_tag.rb "$2" add "$1" --config $chef_config
 }
 
 function eaddtag2query()
