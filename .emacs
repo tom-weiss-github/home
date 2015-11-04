@@ -15,7 +15,7 @@
 (if (eq system-type 'gnu/linux)
     (global-set-key (quote[f1]) (quote custom-electric-buffer-list))
   (global-set-key (quote[f1]) (quote electric-buffer-list))
-)
+  )
 
 (if (eq system-type 'gnu/linux)
     (load-file "~/.emacs.d/custom-gdb-functions.el")
@@ -356,11 +356,14 @@
     (set-mark (point))
     (forward-sexp)
     (setq the-string-or-symbol (buffer-substring (region-beginning) (region-end)))
-    (message (concat "'" the-string-or-symbol "'" " is ready for yanking"))
+    (message (concat "'" the-string-or-symbol "'" " yanked"))
     (kill-ring-save (region-beginning) (region-end))
     ;; Use M-y (C-y in >24) to paste into the search.
     ))
-(global-set-key (kbd "C-m") (quote yank-under-cursor))
+;; Why C-j?  Although useful, I don't personally use it much.  My first choices were C-m, but it
+;; seems that in the terminal that is the same as RET (so it's none or both); similar with C-i and
+;; TAB.
+(global-set-key (kbd "C-j") (quote yank-under-cursor))
 
 ;; JUMP TO MATCHING PAREN: When standing _on_ paren, press '%' (shift-5)
 ;;(global-set-key "%" 'match-paren)
