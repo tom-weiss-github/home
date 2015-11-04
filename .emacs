@@ -344,6 +344,24 @@
 
 (put 'scroll-left 'disabled nil)
 
+(defun yank-under-cursor ()
+  "Yank under cursor."
+  (interactive)
+  (progn
+    ;; Doing forward-char because if I'm at the first character, then backward-sexp will jump to the
+    ;; previous.  If the symbol is a single character this won't work, but that's an edge case I'm
+    ;; willing to accept.
+    (forward-char)
+    (backward-sexp)
+    (set-mark (point))
+    (forward-sexp)
+    (setq the-string-or-symbol (buffer-substring (region-beginning) (region-end)))
+    (message (concat "'" the-string-or-symbol "'" " is ready for yanking"))
+    (kill-ring-save (region-beginning) (region-end))
+    ;; Use M-y (C-y in >24) to paste into the search.
+    ))
+(global-set-key (kbd "C-m") (quote yank-under-cursor))
+
 ;; JUMP TO MATCHING PAREN: When standing _on_ paren, press '%' (shift-5)
 ;;(global-set-key "%" 'match-paren)
 ;;(defun match-paren (arg)
@@ -467,3 +485,8 @@
 
 ;; Reload current buffer (if modified on disk):
 ;; C-x C-v
+
+;; To see all the key bindings:
+;; C-x describe-bindings
+;; To run a key binding and view the function to which it's mapped do:
+;; C-x describe-key
