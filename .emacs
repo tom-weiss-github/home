@@ -176,7 +176,7 @@
 (global-set-key (quote[f5]) (quote set-my-tag-file-and-search))
 
 ;; Load my custom find and open.
-(load-file "~/.emacs.d/find-and-open-file.el")
+;; (load-file "~/.emacs.d/find-and-open-file.el")
 
 ;; Dimensions & Position
 ;; =====================
@@ -248,6 +248,7 @@
 ;; Look for an environment variable called TOMS_EMACS_FONT, and if it exists,
 ;; then use that as the font.  This should be placed in a /etc/environment to
 ;; make machine specific font settings (e.g., export TOMS_EMACS_FONT=Monospace-11).
+;; On linux fc-list will print the list of available fonts.
 ;; Fonts I've found useful:
 ;; Monospace-11 (or whatever size makes sense)
 ;; Source Code Pro
@@ -263,8 +264,12 @@
        (set-face-font       'default      my-os-dependent-font)
        (set-cursor-color "red")
        (set-mouse-color "green")
-       (set-face-background (quote modeline) "thistle4")
-       (set-face-foreground (quote modeline) "black")
+
+       ;; These two lines worked in emacs 23, but showed errors in emacs 24.3, I don't recall what
+       ;; they do.
+       ;;(set-face-background (quote modeline) "thistle4")
+       ;;(set-face-foreground (quote modeline) "black")
+
        ;;(set-face-background (quote region) "green4")
        (setq hilit-mode-enable-list '(not text-mode)
              hilit-background-mode   'dark
@@ -360,10 +365,9 @@
     (kill-ring-save (region-beginning) (region-end))
     ;; Use M-y (C-y in >24) to paste into the search.
     ))
-;; Why C-j?  Although useful, I don't personally use it much.  My first choices were C-m, but it
-;; seems that in the terminal that is the same as RET (so it's none or both); similar with C-i and
-;; TAB.
-(global-set-key (kbd "C-j") (quote yank-under-cursor))
+;; Why C-,?  My first choices were C-m, but it seems that in the terminal that is the same as RET
+;; (so it's none or both); similar with C-i and TAB.
+(global-set-key (kbd "C-,") (quote yank-under-cursor))
 
 ;; JUMP TO MATCHING PAREN: When standing _on_ paren, press '%' (shift-5)
 ;;(global-set-key "%" 'match-paren)
@@ -493,3 +497,18 @@
 ;; C-x describe-bindings
 ;; To run a key binding and view the function to which it's mapped do:
 ;; C-x describe-key
+
+;; Building emacs on CentOS 6.x (minimal).
+;; sudo yum install -y ncurses-devel
+;; sudo yum install -y giflib-devel libjpeg-devel libtiff-devel
+;; sudo yum install -y libXpm-devel
+;; sudo yum install -y libpng-devel
+;; mkdir  ~/emacs24
+;; cd ~/emacs24/
+;; wget http://ftp.gnu.org/pub/gnu/emacs/emacs-24.3.tar.gz
+;; tar xzvf emacs-24.3.tar.gz
+;; cd emacs-24.3
+;; ./configure --prefix=$HOME --with-x-toolkit=no
+;; make
+;; make install
+;; ~/bin/emacs-24.3

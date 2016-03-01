@@ -83,6 +83,7 @@ export DEPLOYMENT_SCRIPTS_REPO_ROOT=~/dev-root/scripts
 # export BUMP_COOKBOOK_VERSION_ALTERNATE_REPO=~/dev-root/cookbooks
 export REQUEST_BUILD_SUPPRESS_TIPS=1
 export BUMP_COOKBOOK_VERSION_AUTO_EXECUTE=1
+export FEATURE_TEST_EMAIL=tom.weiss@tradingtechnologies.com
 # To run ringer:
 # cp ringer.conf/srl_config_ringer.xml from some machine in int-dev-sim
 # cp deploy/chef/cookbooks/srlabs/files/default/smds.lic /etc/debesys/
@@ -104,7 +105,9 @@ alias vm16='ssh tweiss@10.202.0.16 -i ~/.ssh/id_rsa'
 alias clk='python ~/githome/world_time.py'
 alias gdb='gdb -n'
 alias gt='gnome-terminal &'
+alias swarm="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/swarm.py --verbose "
 alias vcloud="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/vcloud_server.py"
+alias nutanix="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/nutanix_server.py -o "
 alias bcv="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/bump_cookbook_version.py"
 alias ec2="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/ec2_instance.py -v --route53 "
 alias mergetest="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/check_repo.py"
@@ -118,6 +121,8 @@ alias tkp="tmux kill-pane"
 alias tsud="tmux split-window"
 alias tnw="tmux new-window"
 alias tks="tmux kill-server"
+alias fakechef="cp -v ~/.chef/knife.training.rb.orig ~/.chef/knife.rb; cp -v ~/.chef/knife.training.rb.orig ~/.chef/knife.external.rb"
+alias realchef="cp -v ~/.chef/knife.rb.orig ~/.chef/knife.rb; cp -v ~/.chef/knife.external.rb.orig ~/.chef/knife.external.rb"
 
 
 # Use optimize-find.py to help decide which directories and extensions to filter.
@@ -217,6 +222,8 @@ function setchefconfig()
     # different with single brackets [ ].
     if [[ $1 == ar* || $1 == ch* || $1 == ny* || $1 = fr* ]]; then
         chef_config=~/.chef/knife.external.rb
+    elif [[ $1 == sy* || $1 == sg* ]]; then
+        chef_config=~/.chef/knife.external.rb
     elif [[ $1 == *"ip-10-210-0"* || $1 == *"ip-10-210-2"* || $1 == *"ip-10-210-4"* ]]; then
         chef_config=~/.chef/knife.external.rb
     elif [[ $1 == *"ip-10-213-0"* || $1 == *"ip-10-213-2"* || $1 == *"ip-10-213-4"* ]]; then
@@ -226,7 +233,7 @@ function setchefconfig()
     fi
 }
 
-function addtag2hosts()
+function addtag2hosts__()
 {
     local usage='Usage: addtag2hosts "new tag value" host1 host2 ... hostN'
     if [ -z "$1" ]; then
@@ -256,6 +263,7 @@ function addtag2hosts()
     echo knife exec ~/dev-root/scripts/deploy/chef/scripts/snacks/add_tag.rb "$query" add "$1" --config $chef_config
     knife exec ~/dev-root/scripts/deploy/chef/scripts//snacks/add_tag.rb "$query" add "$1" --config $chef_config
 }
+alias addtag2hosts=addtag2hosts__
 
 function addtag2query()
 {
@@ -954,3 +962,10 @@ function merge()
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 
 echo DISPLAY is $DISPLAY.
+echo sudo netstat -tulpn | grep "127.0.0.0:60"
+sudo netstat -tulpn | grep "127.0.0.0:60"
+echo ps -ef | grep sshd | grep tweiss@
+ps -ef | grep sshd | grep tweiss@
+echo "Run killmyssh to kill all current sessions."
+alias killmyssh='ps -ef | grep sshd | grep tweiss@ | tr -s " " | cut -d" " -f 2 | xargs kill'
+# If I do 'pkill -u tweiss' that will kill all my sessions and get sshd back on display 10.
