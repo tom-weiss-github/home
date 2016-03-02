@@ -15,6 +15,14 @@
 ;; many lines. If the largest window is not this tall, it is split only if it is the sole window and
 ;; pop-up-windows is non-nil. Setting a value of nil will ensure that the split will be horizontal.
 
+;;(message (number-to-string emacs-major-version))
+;;(message (number-to-string emacs-minor-version))
+
+;; If 23.4 or newer, then use display-pixel-width, else use screen-width.
+;; (if (and (>= emacs-major-version 24) (>= emacs-minor-version 3))
+;;     (screen-width)
+;;   (display-pixel-width))
+
 
 (defun custom-electric-buffer-list ()
   (interactive)

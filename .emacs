@@ -265,10 +265,18 @@
        (set-cursor-color "red")
        (set-mouse-color "green")
 
-       ;; These two lines worked in emacs 23, but showed errors in emacs 24.3, I don't recall what
-       ;; they do.
-       ;;(set-face-background (quote modeline) "thistle4")
-       ;;(set-face-foreground (quote modeline) "black")
+       ;; These two lines worked in emacs 23, but showed errors in emacs 24.3.  The modeline is at
+       ;; the bottom of every window and shows information about the window.  In emacs 24.3
+       ;; 'modeline' needs to be replaced with 'mode-line'.
+       (if (and (>= emacs-major-version 24) (>= emacs-minor-version 3))
+           (progn
+             (set-face-background (quote mode-line) "thistle4")
+             (set-face-foreground (quote mode-line) "black")
+             )
+         (progn
+           (set-face-background (quote modeline) "thistle4")
+           (set-face-foreground (quote modeline) "black")
+           ))
 
        ;;(set-face-background (quote region) "green4")
        (setq hilit-mode-enable-list '(not text-mode)
