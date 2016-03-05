@@ -28,7 +28,7 @@
   (interactive)
   "Make sure the electric buffer list's window is wide enough."
   ;; Determine if the current window is taking up the entire width.
-  (if (eq (window-width) (screen-width))
+  (if (eq (window-width) (frame-width))
       (progn
         (message "Current window is full width, force electric buffer list window to be full width.")
         (let ((temp-split-width-threshold split-width-threshold ))
@@ -45,10 +45,10 @@
           )
         )
     (progn
-      (message (concat "Current window is " (int-to-string (window-width)) " of " (int-to-string (screen-width)) ", let's widen."))
+      (message (concat "Current window is " (int-to-string (window-width)) " of " (int-to-string (frame-width)) ", let's widen."))
       ;; The amount to widen is 3/4 of the screen width minis the window with.  That is,
       ;; use 3/4 of the other widow for the extra space for the electric buffer list.
-      (setq amount-to-widen (truncate (* .75 (- (screen-width) (window-width)))))
+      (setq amount-to-widen (truncate (* .75 (- (frame-width) (window-width)))))
       (enlarge-window-horizontally amount-to-widen)
 
       ;; Setting inhibit-quit to a non-nil value ensure that if the user does C-q during
@@ -99,9 +99,13 @@
 
 ;; Displays available height.
 ;; (screen-height)
+;; (frame-height) works on emacs 23.1 and 24.3 and appears to give the same value as screen-height,
+;; but screen-height is not available on emacs 24.3.
 
 ;; Displays available width.
 ;; (screen-width) - This was not available on all Windows emacs.
+;; (frame-width) - Gives the same value as screen-width, but screen-width is not available on emacs
+;; 24.3.
 ;; (display-pixel-width) - This is available on Windows, but gives a very different
 ;;                         value for emacs in the console than its own window.
 ;; (display-pixel-height)

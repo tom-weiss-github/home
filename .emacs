@@ -511,12 +511,13 @@
 ;; sudo yum install -y giflib-devel libjpeg-devel libtiff-devel
 ;; sudo yum install -y libXpm-devel
 ;; sudo yum install -y libpng-devel
+;; sudo yum install -y gtk+-devel gtk2-devel
 ;; mkdir  ~/emacs24
 ;; cd ~/emacs24/
 ;; wget http://ftp.gnu.org/pub/gnu/emacs/emacs-24.3.tar.gz
 ;; tar xzvf emacs-24.3.tar.gz
 ;; cd emacs-24.3
-;; ./configure --prefix=$HOME --with-x-toolkit=no
+;; ./configure --prefix=$HOME
 ;; make
 ;; make install
 ;; ~/bin/emacs-24.3
