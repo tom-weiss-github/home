@@ -55,9 +55,9 @@ shopt -s histappend
 # number anymore.  PROMPT_COMMAND="history -a;history -c;history -r;$PROMPT_COMMAND"
 export HISTTIMEFORMAT='%F %T '
 
-export EDITOR="emacs -nw"
+export EDITOR="~/bin/emacs-24.3 -nw"
 # ALTERNATE_EDITOR causes emacs to be opened if emacsclient is invoked and no instance is running.
-export ALTERNATE_EDITOR=emacs
+export ALTERNATE_EDITOR=~/bin/emacs-24.3
 # Don't quote environment variables with tilde.
 export LBM_LICENSE_FILENAME=~/29WestLicense.txt
 
@@ -94,9 +94,9 @@ alias off='sudo shutdown -P now'
 alias todo='emacs -nw ~/todo.txt'
 alias rooms='cat ~/githome/rooms.txt'
 alias sb='source ~/.bashrc'
-alias edbrc='emacs -nw ~/githome/rhel/.bashrc'
-alias ee='emacs -nw'
-alias c='emacsclient -n'
+alias edbrc='~/bin/emacs-24.3 -nw ~/githome/rhel/.bashrc'
+alias ee='~/bin/emacs-24.3 -nw'
+alias c='~/bin/emacsclient -n'
 alias ls='ls -aFCh --color=always'
 alias h='history | tail -n 50'
 alias hg='history | grep'
@@ -556,7 +556,7 @@ function build__()
 alias build=build__
 
 # To view the definition of a function, do 'type <function>'.
-function cf() { emacsclient -n `find . -name $1`; }
+function cf() { ~/bin/emacsclient -n `find . -name $1`; }
 function f() { find . -name $1 -print; }
 function rmbr()
 {
@@ -721,11 +721,11 @@ function em_()
     isemacs=`emacs?`
     if [[ -z $isemacs ]]; then
         echo emacs is not running, starting emacs $@;
-        emacs "$@" &
+        ~/bin/emacs-24.3 "$@" &
     else
         echo emacs is running, sending $@
         echo $isemacs;
-        emacsclient -n "$@"
+        ~/bin/emacsclient -n "$@"
     fi
 }
 alias em=em_
