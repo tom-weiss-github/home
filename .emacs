@@ -256,41 +256,79 @@
     (setq my-os-dependent-font (getenv "TOMS_EMACS_FONT"))
   (setq my-os-dependent-font "-misc-fixed-medium-r-normal--25-*-75-75-c-90-iso8859-1"))
 
-(cond (window-system
-       (set-face-background 'default "black")
-       (set-face-foreground 'default  "skyblue")
+;;(cond (window-system
+       ;;(set-face-background 'default "black")
+       ;;(set-face-foreground 'default  "skyblue")
        ;;(set-face-background 'zmacs-region "green") ; When selecting w/ mouse
        ;;(set-face-foreground 'emacs-region "black")
-       (set-face-font       'default      my-os-dependent-font)
-       (set-cursor-color "red")
-       (set-mouse-color "green")
+       ;;(set-face-font       'default      my-os-dependent-font)
+       ;;(set-cursor-color "red") ;; Works for emacs 23.1.
+       ;;(set-mouse-color "green")
 
        ;; These two lines worked in emacs 23, but showed errors in emacs 24.3.  The modeline is at
        ;; the bottom of every window and shows information about the window.  In emacs 24.3
        ;; 'modeline' needs to be replaced with 'mode-line'.
-       (if (and (>= emacs-major-version 24) (>= emacs-minor-version 3))
-           (progn
-             (set-face-background (quote mode-line) "thistle4")
-             (set-face-foreground (quote mode-line) "black")
-             )
-         (progn
-           (set-face-background (quote modeline) "thistle4")
-           (set-face-foreground (quote modeline) "black")
-           ))
+       ;; (if (and (>= emacs-major-version 24) (>= emacs-minor-version 3))
+       ;;     (progn
+       ;;       (set-face-background (quote mode-line) "thistle4")
+       ;;       (set-face-foreground (quote mode-line) "black")
+       ;;       )
+       ;;   (progn
+       ;;     (set-face-background (quote modeline) "thistle4")
+       ;;     (set-face-foreground (quote modeline) "black")
+       ;;     ))
 
        ;;(set-face-background (quote region) "green4")
-       (setq hilit-mode-enable-list '(not text-mode)
-             hilit-background-mode   'dark
-             hilit-inhibit-hooks     nil
-             hilit-inhibit-rebinding nil)
-       ))
+       ;; (setq hilit-mode-enable-list '(not text-mode)
+       ;;       hilit-background-mode   'dark
+       ;;       hilit-inhibit-hooks     nil
+       ;;       hilit-inhibit-rebinding nil)
+;;       ))
 
 ;; Regarding cursor color.  When I moved to 24.1, set-cursor-color in this context
 ;; was no longer effective.  In order to get the cursor to be red, I did describe-function
 ;; on set-cursor-color, and then 'customize this face', which allowed me to set red ad
 ;; the background.  I found the below example and this seems to work.
-(custom-set-faces
- '(cursor ((t (:background "red" :width extra-expanded)))))
+
+
+;; Use list-colors-display to see the available colors, they differ in the console and X.
+(if (window-system)
+    (progn
+      (message "Window system is X.")
+      (set-face-background 'cursor "red")
+      (set-face-background 'default "black")
+      (set-face-foreground 'default  "skyblue")
+      (set-face-font 'default my-os-dependent-font)
+      (if (and (>= emacs-major-version 24) (>= emacs-minor-version 3))
+          (progn
+            (set-face-background (quote mode-line) "thistle4")
+            (set-face-foreground (quote mode-line) "black")
+            )
+        (progn
+          (set-face-background (quote modeline) "thistle4")
+          (set-face-foreground (quote modeline) "black")
+          ))
+       (setq hilit-mode-enable-list '(not text-mode)
+             hilit-background-mode   'dark
+             hilit-inhibit-hooks     nil
+             hilit-inhibit-rebinding nil)
+       )
+
+      ;;(set-cursor-color "red")
+      ;;'(cursor ((t (:background "red" :width extra-expanded))))
+      ;;(set-cursor-color "red")
+  (progn
+    (message "No window system, console mode.")
+    (set-face-foreground 'font-lock-comment-face "red")
+    (set-face-foreground 'font-lock-string-face "green")
+    ;; (custom-set-faces
+    ;;  (set-face-foreground 'font-lock-comment-face "red"))
+))
+
+;; (custom-set-faces
+;;  '(cursor ((t (:background "red" :width extra-expanded))))
+;;  (set-face-foreground 'font-lock-comment-face "red")
+;;  )
 
 ;; inl file should be c++ code
 (setq auto-mode-alist (cons '("\\.inl$" . c++-mode) auto-mode-alist))

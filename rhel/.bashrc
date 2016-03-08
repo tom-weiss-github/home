@@ -55,9 +55,16 @@ shopt -s histappend
 # number anymore.  PROMPT_COMMAND="history -a;history -c;history -r;$PROMPT_COMMAND"
 export HISTTIMEFORMAT='%F %T '
 
-export EDITOR="~/bin/emacs-24.3 -nw"
+export myemacs=~/bin/emacs-24.3
+export myemacsclient=~/bin/emacsclient
+# export myemacs=emacs
+# export myemacsclient=emacsclient
+
+
+
+export EDITOR="$myemacs -nw"
 # ALTERNATE_EDITOR causes emacs to be opened if emacsclient is invoked and no instance is running.
-export ALTERNATE_EDITOR=~/bin/emacs-24.3
+export ALTERNATE_EDITOR=$myemacs
 # Don't quote environment variables with tilde.
 export LBM_LICENSE_FILENAME=~/29WestLicense.txt
 
@@ -94,9 +101,9 @@ alias off='sudo shutdown -P now'
 alias todo='emacs -nw ~/todo.txt'
 alias rooms='cat ~/githome/rooms.txt'
 alias sb='source ~/.bashrc'
-alias edbrc='~/bin/emacs-24.3 -nw ~/githome/rhel/.bashrc'
-alias ee='~/bin/emacs-24.3 -nw'
-alias c='~/bin/emacsclient -n'
+alias edbrc="$myemacs -nw ~/githome/rhel/.bashrc"
+alias ee="$myemacs -nw"
+alias c="$myemacsclient -n"
 alias ls='ls -aFCh --color=always'
 alias h='history | tail -n 50'
 alias hg='history | grep'
@@ -170,7 +177,7 @@ alias cdrt='cd `git rev-parse --show-toplevel`'
 alias prt='pushd `git rev-parse --show-toplevel`'
 alias default="cd ~/dev-root/default"
 alias alternate="cd ~/dev-root/alternate"
-alias edcfg='emacs -nw /etc/debesys/cme_oc_config.conf'
+alias edcfg="$myemacs -nw /etc/debesys/cme_oc_config.conf"
 alias run='`git rev-parse --show-toplevel`/run'
 alias ttknife='`git rev-parse --show-toplevel`/run `git rev-parse --show-toplevel`/ttknife'
 alias envvers='knife environment list | xargs -n 1 -i knife environment show \{\} -a cookbook_versions'
@@ -556,7 +563,7 @@ function build__()
 alias build=build__
 
 # To view the definition of a function, do 'type <function>'.
-function cf() { ~/bin/emacsclient -n `find . -name $1`; }
+function cf() { $myemacsclient -n `find . -name $1`; }
 function f() { find . -name $1 -print; }
 function rmbr()
 {
@@ -721,11 +728,11 @@ function em_()
     isemacs=`emacs?`
     if [[ -z $isemacs ]]; then
         echo emacs is not running, starting emacs $@;
-        ~/bin/emacs-24.3 "$@" &
+        $myemacs "$@" &
     else
         echo emacs is running, sending $@
         echo $isemacs;
-        ~/bin/emacsclient -n "$@"
+        $myemacsclient -n "$@"
     fi
 }
 alias em=em_
