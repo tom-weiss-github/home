@@ -128,8 +128,8 @@ alias tkp="tmux kill-pane"
 alias tsud="tmux split-window"
 alias tnw="tmux new-window"
 alias tks="tmux kill-server"
-alias fakechef="cp -v ~/.chef/knife.training.rb.orig ~/.chef/knife.rb; cp -v ~/.chef/knife.training.rb.orig ~/.chef/knife.external.rb"
-alias realchef="cp -v ~/.chef/knife.rb.orig ~/.chef/knife.rb; cp -v ~/.chef/knife.external.rb.orig ~/.chef/knife.external.rb"
+alias fakechef="cp -v ~/.chef/knife.training.rb.orig ~/.chef/knife.rb && cp -v ~/.chef/knife.training.rb.orig ~/.chef/knife.external.rb && export BUMP_COOKBOOK_VERSION_NO_NOTES=1 && echo BUMP_COOKBOOK_VERSION_NO_NOTES has been set."
+alias realchef="cp -v ~/.chef/knife.rb.orig ~/.chef/knife.rb && cp -v ~/.chef/knife.external.rb.orig ~/.chef/knife.external.rb && unset BUMP_COOKBOOK_VERSION_NO_NOTES && echo BUMP_COOKBOOK_VERSION_NO_NOTES has been unset."
 
 
 # Use optimize-find.py to help decide which directories and extensions to filter.
