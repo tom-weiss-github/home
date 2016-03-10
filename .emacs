@@ -79,6 +79,8 @@
 (setq-default indent-tabs-mode nil)
 ;; use tabs for indenting
 ;;(setq-default indent-tabs-mode t)
+(setq js-indent-level 2)
+(setq ruby-indent-level 4)
 
 (add-hook 'before-save-hook
           'delete-trailing-whitespace)
@@ -186,8 +188,6 @@
 ;; (setq default-frame-alist
 ;;       '((top . 5) (left . 3)
 ;;         (width . 220) (height . 63)))
-
-(setq ruby-indent-level 4)
 
 ;; C++ Stuff
 ;; =========
