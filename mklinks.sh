@@ -99,7 +99,7 @@ fi
 
 # Files in $HOME/.emacs.d whose link name is identical.
 mkdir -pv $HOME/.emacs.d
-for f in custom-compile.el custom-electric-buffer-list.el custom-file-cache.el custom-find-grep.el custom-gdb-functions.el custom-tags.el cygwin-mount.el find-and-open-file.el find-best-root.el mks-commands.el windows-path.el chef-helpers.el
+for f in custom-compile.el custom-electric-buffer-list.el custom-file-cache.el custom-find-grep.el custom-gdb-functions.el custom-tags.el cygwin-mount.el find-and-open-file.el find-best-root.el mks-commands.el windows-path.el chef-helpers.el web-mode.el
 do
     if [ ! -f $HOME/.emacs.d/$f ]; then
         ln -sv $HOME/githome/$f $HOME/.emacs.d/$f

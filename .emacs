@@ -22,6 +22,8 @@
 )
 
 (load-file "~/.emacs.d/chef-helpers.el")
+(load-file "~/.emacs.d/web-mode.el")
+(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
 
 ;; Load Scala on linux.
 (if (eq system-type 'gnu/linux)
