@@ -74,6 +74,10 @@ Show the client objects that exist, but have no node object.
 echo -n `date +"%Y-%m-%d-%H-%M-%S"`; git log --abbrev-commit --graph --date-order --date=relative --pretty=oneline | head -1 | sed -e 's/^*[ \t]*/_/g' | sed 's/\ /_/g' | sed 's/[^a-zA-Z0-9_]//g'
 Simple sed usage example.  Format the latest git log in a particular format.
 
+find deploy/chef/cookbooks/pds_* -name contact_info.rb -exec sed -i 's/email"] = ""/email"] = "tt-prices-team@tradingtechnologies.com"/g' {} \;
+find deploy/chef/cookbooks/pds_* -name contact_info.rb -exec sed -i 's/pagerduty"] = ""/pagerduty"] = "Prices"/g' {} \;
+Find and replace text in files.
+
 Needs more investigation: After merging a branch into develop, the push to origin/develop fails
 because someone else beat me to it.  John suggests the following commands to avoid the bad merge
 that results from a 'git pull':
