@@ -18,3 +18,8 @@ Host 10.203.*
 Host 10.213.*
      IdentityFile ~/.ssh/TTNET-EU-WEST-1.pem
      User root
+
+Host github.com
+     StrictHostKeyChecking no
+     UserKnownHostsFile=/dev/null
+     LogLevel=quiet

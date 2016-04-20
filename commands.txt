@@ -74,8 +74,11 @@ Show the client objects that exist, but have no node object.
 echo -n `date +"%Y-%m-%d-%H-%M-%S"`; git log --abbrev-commit --graph --date-order --date=relative --pretty=oneline | head -1 | sed -e 's/^*[ \t]*/_/g' | sed 's/\ /_/g' | sed 's/[^a-zA-Z0-9_]//g'
 Simple sed usage example.  Format the latest git log in a particular format.
 
-find deploy/chef/cookbooks/pds_* -name contact_info.rb -exec sed -i 's/email"] = ""/email"] = "tt-prices-team@tradingtechnologies.com"/g' {} \;
+find deploy/chef/cookbooks/pds_* -name contact_info.rb -exec sed -i 's/email"] = ""/email"] = "email@tradingtechnologies.com"/g' {} \;
 find deploy/chef/cookbooks/pds_* -name contact_info.rb -exec sed -i 's/pagerduty"] = ""/pagerduty"] = "Prices"/g' {} \;
+
+for COOKBOOK in algoserver_exec algoserver_debug orderd orderd_remote pricefs priceproxy ttsdk ; do find deploy/chef/cookbooks/$COOKBOOK -name contact_info.rb -exec sed -i 's/email"] = ""/email"] = "email@tradingtechnologies.com"/g' {} \; && find deploy/chef/cookbooks/$COOKBOOK -name contact_info.rb -exec sed -i 's/pagerduty"] = ""/pagerduty"] = "Algo Server"/g' {} \; ; done
+
 Find and replace text in files.
 
 Needs more investigation: After merging a branch into develop, the push to origin/develop fails

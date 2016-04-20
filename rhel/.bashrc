@@ -80,6 +80,7 @@ export DEPT=""
 export PATH=$PATH:~/Downloads/meld-1.6.1/bin
 export PATH=$PATH:/opt/scala-2.9.3/bin/
 export INTAD_USER=tweiss
+export INTAD_SSH_KEY=~/.ssh/id_rsa
 export BCV_ENABLE_LDAP=1
 export VCD_ORG=Dev_General
 export JENKINS_USER=tom.weiss@tradingtechnologies.com
@@ -294,6 +295,70 @@ function addtag2query()
     knife exec ~/dev-root/scripts/deploy/chef/scripts/snacks/add_tag.rb "$2" add "$1" --config $chef_config
 }
 
+function addrun2hosts__()
+{
+    local usage='Usage: addrun2hosts run_list_item host1 host2 ... hostN'
+    if [ -z "$1" ]; then
+        echo $usage
+        return
+    fi
+
+    if [ -z "$2" ]; then
+        echo $usage
+        return
+    fi
+
+    setchefconfig $2
+
+    local query=""
+    local first=0
+    for var in "$@"
+    do
+        if [ $first == 0 ]; then
+            first=1
+            continue
+        fi
+        query+="name:$var OR "
+    done
+    query=$(echo -n $query | head -c -3)
+
+    echo knife exec ~/dev-root/scripts/deploy/chef/scripts/snacks/add_runlist.rb "$query" add "$1" --config $chef_config
+    knife exec ~/dev-root/scripts/deploy/chef/scripts//snacks/add_runlist.rb "$query" add "$1" --config $chef_config
+}
+alias addrun2hosts=addrun2hosts__
+
+function chgenv__()
+{
+    local usage='Usage: addenv2hosts environment host1 host2 ... hostN'
+    if [ -z "$1" ]; then
+        echo $usage
+        return
+    fi
+
+    if [ -z "$2" ]; then
+        echo $usage
+        return
+    fi
+
+    setchefconfig $2
+
+    local query=""
+    local first=0
+    for var in "$@"
+    do
+        if [ $first == 0 ]; then
+            first=1
+            continue
+        fi
+        query+="name:$var OR "
+    done
+    query=$(echo -n $query | head -c -3)
+
+    echo knife exec ~/dev-root/scripts/deploy/chef/scripts/snacks/change_environment.rb "$query" "$1" --config $chef_config
+    knife exec ~/dev-root/scripts/deploy/chef/scripts//snacks/change_environment.rb "$query" "$1" --config $chef_config
+}
+alias addenv2hosts=chgenv__
+
 function eaddtag2query()
 {
     addtag2query "$1" "$2" ext
@@ -309,9 +374,25 @@ function kne()
 function kns()
 {
     setchefconfig "$1"
-    echo knife node show "$1" --config $chef_config
-    knife node show "$1" --config $chef_config
+    if [ '-l' == "$2" ]; then
+        echo "knife node show "$1" --config $chef_config -f j -l > /tmp/$1.json"
+        knife node show "$1" --config $chef_config -f j -l > /tmp/$1.json
+        $myemacs -nw /tmp/$1.json
+    else
+        echo knife node show "$1" --config $chef_config
+        knife node show "$1" --config $chef_config
+    fi
 }
+
+function extknife() { knife "$@" -c ~/.chef/knife.external.rb; }
+alias eknife='extknife'
+
+function spares__()
+{
+    echo knife search node "chef_environment:ext-prod-sparepool AND name:$1*" -a tags --config ~/.chef/knife.external.rb
+    knife search node "chef_environment:ext-prod-sparepool AND name:$1*" -a tags --config ~/.chef/knife.external.rb
+}
+alias spares=spares__
 
 function aws_keys()
 {
