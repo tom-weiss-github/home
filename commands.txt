@@ -159,16 +159,19 @@ To create a local origin:
 git clone git@github.com:tradingtechnologies/debesys.git --mirror fake_remote
 You can't do much with this repo except clone from it.
 
-git clone file:///home/tweiss/dev-root/fake_remote/ 1_local_remote; cd 1_local_remote; git submodule update --init
+git clone file:///home/tweiss/dev-root/fake_remote/ 1_local_remote && cd 1_local_remote && git submodule update --init
 (then git submodule init/update; note that the submodules still point back
  to original origin)
 
-git clone file:///home/tweiss/dev-root/fake_remote/ 2_local_remote; cd 2_local_remote; git submodule update --init
+git clone file:///home/tweiss/dev-root/fake_remote/ 2_local_remote && cd 2_local_remote && git submodule update --init
 Why two clones?  That way you can push from one, then pull from the other
 to verify your changes are getting pushed as expected.
 
 git diff branch1:dir/file branch2:dir/file
 Compare file across branches.
+
+git --no-pager log --grep="bump cookbook versions" --pretty=format:'%ae' | grep -E "trade.tt|tradingtechnologies.com" | sort | uniq | tr '\n' ';'
+Find commiters.
 
 
 tcpdump

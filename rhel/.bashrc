@@ -131,6 +131,7 @@ alias tnw="tmux new-window"
 alias tks="tmux kill-server"
 alias fakechef="cp -v ~/.chef/knife.training.rb.orig ~/.chef/knife.rb && cp -v ~/.chef/knife.training.rb.orig ~/.chef/knife.external.rb && export BUMP_COOKBOOK_VERSION_NO_NOTES=1 && echo BUMP_COOKBOOK_VERSION_NO_NOTES has been set."
 alias realchef="cp -v ~/.chef/knife.rb.orig ~/.chef/knife.rb && cp -v ~/.chef/knife.external.rb.orig ~/.chef/knife.external.rb && unset BUMP_COOKBOOK_VERSION_NO_NOTES && echo BUMP_COOKBOOK_VERSION_NO_NOTES has been unset."
+alias awsauth="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/aws_authenticator.py --account deb --role read --env"
 
 
 # Use optimize-find.py to help decide which directories and extensions to filter.
@@ -273,6 +274,29 @@ function addtag2hosts__()
 }
 alias addtag2hosts=addtag2hosts__
 
+function addksme2hosts__()
+{
+    local usage='Usage: addksme2hosts host1 host2 ... hostN'
+    if [ -z "$1" ]; then
+        echo $usage
+        return
+    fi
+
+    setchefconfig $1
+
+    local query=""
+    local first=0
+    for var in "$@"
+    do
+        query+="name:$var OR "
+    done
+    query=$(echo -n $query | head -c -3)
+
+    echo knife exec ~/dev-root/scripts/deploy/chef/scripts/snacks/add_tag.rb "$query" add kickstartme nousertag --config $chef_config
+    knife exec ~/dev-root/scripts/deploy/chef/scripts//snacks/add_tag.rb "$query" add kickstartme nousertag --config $chef_config
+}
+alias addksme2hosts=addksme2hosts__
+
 function addtag2query()
 {
     local usage='Usage: addtag2query "new tag value" "data_center_name:aurora" [int|ext]'
@@ -389,10 +413,37 @@ alias eknife='extknife'
 
 function spares__()
 {
+    usage='spares [host_prefix] (e.g., ar0srv)'
+    if [ -z "$1" ]; then
+        echo $usage
+        return
+    fi
     echo knife search node "chef_environment:ext-prod-sparepool AND name:$1*" -a tags --config ~/.chef/knife.external.rb
     knife search node "chef_environment:ext-prod-sparepool AND name:$1*" -a tags --config ~/.chef/knife.external.rb
 }
 alias spares=spares__
+
+function find_spare()
+{
+    usage='find_spare [chef_environment] [data_center_prefix] [cookbook]'
+    if [ -z "$1" ]; then
+        echo $usage
+        return
+    fi
+
+    if [ -z "$2" ]; then
+        echo $usage
+        return
+    fi
+
+    if [ -z "$3" ]; then
+        echo $usage
+        return
+    fi
+
+    echo knife exec ~/dev-root/scripts/deploy/chef/scripts/snacks/find_spare.rb "$1" "$2" "$3" --config ~/.chef/knife.external.rb
+    knife exec ~/dev-root/scripts/deploy/chef/scripts/snacks/find_spare.rb "$1" "$2" "$3" --config ~/.chef/knife.external.rb
+}
 
 function aws_keys()
 {
@@ -729,15 +780,8 @@ function git-sync_()
         echo "popd"; popd;
         return
     fi
-    echo "git submodule init";
-    git submodule init;
-    if [ $? != 0 ]; then
-        echo "Aborting."
-        echo "popd"; popd;
-        return
-    fi
-    echo "git submodule update";
-    git submodule update;
+    echo "git submodule update --init --recursive";
+    git submodule update --init --recursive;
     if [ $? != 0 ]; then
         echo "Aborting."
         echo "popd"; popd;
@@ -954,9 +998,9 @@ function rename_terminal_title()
 alias rw=rename_terminal_title
 
 # No auto rename on a new tmux.
-if [ ! $TMUX_PANE ]; then
-    rename_terminal_title ":-)"
-fi
+# if [ ! $TMUX_PANE ]; then
+#     rename_terminal_title ":-)"
+# fi
 
 csview()
 {
@@ -1049,11 +1093,11 @@ function merge()
 
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 
-echo DISPLAY is $DISPLAY.
-echo sudo netstat -tulpn | grep "127.0.0.0:60"
-sudo netstat -tulpn | grep "127.0.0.0:60"
-echo ps -ef | grep sshd | grep tweiss@
-ps -ef | grep sshd | grep tweiss@
-echo "Run killmyssh to kill all current sessions."
+#echo DISPLAY is $DISPLAY.
+#echo sudo netstat -tulpn | grep "127.0.0.0:60"
+#sudo netstat -tulpn | grep "127.0.0.0:60"
+#echo ps -ef | grep sshd | grep tweiss@
+# ps -ef | grep sshd | grep tweiss@
+#echo "Run killmyssh to kill all current sessions."
 alias killmyssh='ps -ef | grep sshd | grep tweiss@ | tr -s " " | cut -d" " -f 2 | xargs kill'
 # If I do 'pkill -u tweiss' that will kill all my sessions and get sshd back on display 10.

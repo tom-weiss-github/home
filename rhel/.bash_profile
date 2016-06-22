@@ -27,5 +27,12 @@ if [ -z "$SSH_AUTH_SOCK" ]; then
     ssh-add
 fi
 
+echo DISPLAY is $DISPLAY.
+echo sudo netstat -tulpn | grep "127.0.0.0:60"
+sudo netstat -tulpn | grep "127.0.0.0:60"
+echo ps -ef | grep sshd | grep tweiss@
+ps -ef | grep sshd | grep tweiss@
+echo "Run killmyssh to kill all current sessions."
+
 sudo echo .bash_profile ran at $(date) >> /var/log/profiles
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
