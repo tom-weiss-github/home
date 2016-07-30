@@ -92,6 +92,8 @@ export DEPLOYMENT_SCRIPTS_REPO_ROOT=~/dev-root/scripts
 export REQUEST_BUILD_SUPPRESS_TIPS=1
 export BUMP_COOKBOOK_VERSION_AUTO_EXECUTE=1
 export FEATURE_TEST_EMAIL=tom.weiss@tradingtechnologies.com
+export FEATURE_TEST_COMPANY="Deployment Team"
+export FEATIRE_TEST_USER=tweiss
 # To run ringer:
 # cp ringer.conf/srl_config_ringer.xml from some machine in int-dev-sim
 # cp deploy/chef/cookbooks/srlabs/files/default/smds.lic /etc/debesys/
@@ -383,6 +385,53 @@ function chgenv__()
 }
 alias addenv2hosts=chgenv__
 
+
+function addattr__()
+{
+    local usage='Usage: addattr2hosts attribute value host1 host2 ... hostN'
+    if [ -z "$1" ]; then
+        echo $usage
+        return
+    fi
+
+    if [ -z "$2" ]; then
+        echo $usage
+        return
+    fi
+
+    if [ -z "$3" ]; then
+        echo $usage
+        return
+    fi
+
+    setchefconfig $3
+
+    local query=""
+    local first=0
+    local second=0
+    for var in "$@"
+    do
+        if [ $first == 0 ]; then
+            first=1
+            continue
+        fi
+
+        if [ $second == 0 ]; then
+            second=1
+            continue
+        fi
+
+        query+="name:$var OR "
+    done
+    query=$(echo -n $query | head -c -3)
+
+    echo knife exec ~/dev-root/scripts/deploy/chef/scripts/snacks/add_attribute.rb "$query" add "$1" "$2" --config $chef_config
+    knife exec ~/dev-root/scripts/deploy/chef/scripts//snacks/add_attribute.rb "$query" add "$1" "$2" --config $chef_config
+}
+alias addattr2hosts=addattr__
+
+
+
 function eaddtag2query()
 {
     addtag2query "$1" "$2" ext
@@ -444,6 +493,7 @@ function find_spare()
     echo knife exec ~/dev-root/scripts/deploy/chef/scripts/snacks/find_spare.rb "$1" "$2" "$3" --config ~/.chef/knife.external.rb
     knife exec ~/dev-root/scripts/deploy/chef/scripts/snacks/find_spare.rb "$1" "$2" "$3" --config ~/.chef/knife.external.rb
 }
+alias fspare=find_spare
 
 function aws_keys()
 {
@@ -1007,6 +1057,54 @@ csview()
     local file="$1"
     cat "$file" | sed -e 's/,,/, ,/g' | column -s, -t | less -#5 -N -S
 }
+
+function gitclean()
+{
+    git tag | xargs -n 1 git tag -d
+    echo git fetch
+    git fetch
+    echo git gc
+    git gc
+}
+
+function gitcleanall()
+{
+    for repo in `/bin/ls ~/dev-root`;
+    do
+        pushd ~/dev-root/$repo
+        echo "Cleaning repo $repo."
+        gitclean
+        popd
+    done
+}
+
+#
+# Virtual Box Notes
+#
+# System -> Motherboard -> 4GB RAM (depends on your needs)
+# System -> Processor -> 4 CPUs (depends on your needs)
+# Network -> Adapter 1 -> NAT
+# Network -> Adapter 1 -> Port Forwarding (port 22 on host to port 22 on guest)
+# Network -> Adapter 1 -> Cable Connected (check box)
+# Storage -> Controller: IDE -> Click on disk to load the iso Centos isos are available here.  These
+# instructions support the minimal iso, but are also appropriate to the live dvd iso.
+# Power On
+# Devices -> Shared Clipboard -> Bidirectional
+# Start the networking: ifup eth0
+#
+# edit /etc/sysconfig/network-scripts/ifcfg-eth0
+#
+# DEVICE=eth0
+# TYPE=Ethernet
+# BOOTPROTO=dhcp
+# ONBOOT=yes
+# NM_CONTROLLED=no
+# PEERDNS=no
+#
+# edit  /etc/inittab and change
+# id:3:initdefault:
+# to
+# id:5:initdefault:
 
 
 # Author.: Ole J
