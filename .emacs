@@ -177,7 +177,6 @@
 
 ;; Load my custom TAGS commands.
 (load-file "~/.emacs.d/custom-tags.el")
-(global-set-key (quote[f5]) (quote set-my-tag-file-and-search))
 
 ;; Load my custom find and open.
 ;; (load-file "~/.emacs.d/find-and-open-file.el")
@@ -417,6 +416,21 @@
 ;; (so it's none or both); similar with C-i and TAB.
 (global-set-key (kbd "C-,") (quote yank-under-cursor))
 
+;; Packages
+;; list-packages
+;; yari
+;; pydoc-info
+(when (>= emacs-major-version 24)
+  (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+                           ("melpa" . "https://melpa.org/packages/"))))
+
+;; yari
+(global-set-key (quote[f5]) (quote yari))
+
+;; pydoc-info
+;; C-h S (to search)
+
+
 ;; JUMP TO MATCHING PAREN: When standing _on_ paren, press '%' (shift-5)
 ;;(global-set-key "%" 'match-paren)
 ;;(defun match-paren (arg)
@@ -547,17 +561,13 @@
 ;; C-x describe-key
 
 ;; Building emacs on CentOS 6.x (minimal).
-;; sudo yum install -y ncurses-devel
-;; sudo yum install -y giflib-devel libjpeg-devel libtiff-devel
-;; sudo yum install -y libXpm-devel
-;; sudo yum install -y libpng-devel
-;; sudo yum install -y gtk+-devel gtk2-devel
+;; sudo yum install -y ncurses-devel giflib-devel libjpeg-devel libtiff-devel libXpm-devel libpng-devel gtk+-devel gtk2-devel wget
 ;; mkdir  ~/emacs24
 ;; cd ~/emacs24/
 ;; wget http://ftp.gnu.org/pub/gnu/emacs/emacs-24.3.tar.gz
 ;; tar xzvf emacs-24.3.tar.gz
 ;; cd emacs-24.3
-;; ./configure --prefix=$HOME
+;; ./configure --prefix=$HOME (--without-gsettings for CentOS 6.5+)
 ;; make
 ;; make install
 ;; ~/bin/emacs-24.3
