@@ -1,6 +1,9 @@
 lsb_release -i -r
 Print vendor and version information of linux distribution.
 
+iostat -xk 5
+Checks the i/o utilization.
+
 find / -type f -size +1000k | xargs -n 1 ls -l --block-size=M
 Find all files over 1000 kbs and then print the size of each of those
 files in mbs.
@@ -132,6 +135,11 @@ date time timezone
 set the date and time
 date -s "2 OCT 2006 18:00:00"
 
+
+jenkins
+-------
+curl -u tweiss:<token> https://jenkins.tradingtechnologies.com/job/backend-deployment/9571/consoleText > /tmp/file.log
+Get a jenkins log and write to a local file.
 
 
 git

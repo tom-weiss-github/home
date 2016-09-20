@@ -83,7 +83,8 @@ export INTAD_USER=tweiss
 export INTAD_SSH_KEY=~/.ssh/id_rsa
 export BCV_ENABLE_LDAP=1
 export VCD_ORG=Dev_General
-export JENKINS_USER=tom.weiss@tradingtechnologies.com
+export JENKINS_USER=tweiss
+export TT_EMAIL=tom.weiss@tradingtechnologies.com
 if [ -f ~/jenkins_token ]; then
     export JENKINS_TOKEN=$(head -n 1 ~/jenkins_token)
 fi
@@ -93,12 +94,13 @@ export REQUEST_BUILD_SUPPRESS_TIPS=1
 export BUMP_COOKBOOK_VERSION_AUTO_EXECUTE=1
 export FEATURE_TEST_EMAIL=tom.weiss@tradingtechnologies.com
 export FEATURE_TEST_COMPANY="Deployment Team"
-export FEATIRE_TEST_USER=tweiss
+export FEATURE_TEST_USER=tweiss
 # To run ringer:
 # cp ringer.conf/srl_config_ringer.xml from some machine in int-dev-sim
 # cp deploy/chef/cookbooks/srlabs/files/default/smds.lic /etc/debesys/
 export JAVA_HOME=/usr/java/jdk1.7.0_17
 # run /usr/java/jdk1.7.0_17/bin/java -Dversion="0.0.0" -cp ./ringer/target/Ringer.jar Ringer --srl-config /etc/debesys/srl_config_ringer.xml -v -o
+export MY_ONE_OFF_VERSION=0.88.88
 
 alias off='sudo shutdown -P now'
 alias todo='emacs -nw ~/todo.txt'
@@ -117,23 +119,33 @@ alias gdb='gdb -n'
 alias gt='gnome-terminal &'
 alias swarm="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/swarm.py --verbose "
 alias vcloud="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/vcloud_server.py"
-alias nutanix="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/nutanix_server.py -o "
+alias nutanix="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/nutanix_server.py -ov "
 alias bcv="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/bump_cookbook_version.py"
 alias ec2="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/ec2_instance.py -v --route53 "
 alias mergetest="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/check_repo.py"
 alias fta="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/feature_test_assistant.py"
+alias cof="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/deploy_one_off.py"
 alias smile='rename_terminal_title ":-)"'
 alias prdp='echo "@bcordonn @elmedinam @jkess @joanne-wilson @srubik @TIMSTACY @jfrumkin @jerdmann" | xclip -selection clipboard'
 alias proc='echo "@mdw55189 @corystricklin @jingheelu @lmancini54" | xclip -selection clipboard'
+alias prpr='echo "@amschwarz @tt-tabion @rahul-TT @ajoshi2 @avinashdutta" | xclip -selection clipboard'
 alias git-commit-hook="cp ~/githome/prepare-commit-msg .git/hooks/; chmod a+x .git/hooks/prepare-commit-msg"
+alias tdeploy='history -s "./run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/knife_ssh.py --knife-config ~/.chef/knife.external.rb --audit-runlist --concurrency 50 -a -e environments -q query -c cookbooks -r CHG123456 --test-run"; echo Test run command inserted into history, use up arrow to edit.'
+# alias edeploy='\^--test-run\^--send-summary-email\^'
 alias tkw="tmux kill-window"
 alias tkp="tmux kill-pane"
 alias tsud="tmux split-window"
 alias tnw="tmux new-window"
 alias tks="tmux kill-server"
+alias tcp="tmux show-buffer -b 0 | xclip -i"
 alias fakechef="cp -v ~/.chef/knife.training.rb.orig ~/.chef/knife.rb && cp -v ~/.chef/knife.training.rb.orig ~/.chef/knife.external.rb && export BUMP_COOKBOOK_VERSION_NO_NOTES=1 && echo BUMP_COOKBOOK_VERSION_NO_NOTES has been set."
 alias realchef="cp -v ~/.chef/knife.rb.orig ~/.chef/knife.rb && cp -v ~/.chef/knife.external.rb.orig ~/.chef/knife.external.rb && unset BUMP_COOKBOOK_VERSION_NO_NOTES && echo BUMP_COOKBOOK_VERSION_NO_NOTES has been unset."
 alias awsauth="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/aws_authenticator.py --account deb --role read --env"
+alias upenv='pushd deploy/chef/environments; for env_file in int-dev*.rb; do knife environment from file $env_file --config ~/.chef/knife.rb; done; popd'
+alias brd='git tt br d'
+alias brr='git tt br r'
+alias bru='git tt br u'
+alias brm='git tt br m'
 
 
 # Use optimize-find.py to help decide which directories and extensions to filter.
