@@ -54,6 +54,7 @@
       (insert (concat "file " best-path "build/x86-64/debug/bin/" dbug-target "\n"))
       (insert "set follow-fork-mode child\n")
       (insert (concat "cd " best-path "build/x86-64/debug/bin"))
+      (insert "add-auto-load-safe-path /home/tweiss\n")
       (write-file gdb-init-file)
       )
 
@@ -94,4 +95,3 @@
       )
     )
 )
-

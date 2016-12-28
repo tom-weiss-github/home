@@ -45,3 +45,9 @@
 
 [mergetool "emerge"]
 	cmd = 'emacs -Q $LOCAL $REMOTE $BASE $MERGED'
+
+[git-tt]
+        delete-branch = true
+        validate-jira-number = true
+        include-jira-summary = true
+        jira-summary-length = 40

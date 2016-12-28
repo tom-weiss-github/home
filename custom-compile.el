@@ -335,6 +335,7 @@ buffer, some user settings, and the source tree that the file lives in."
 
   (if (file-exists-p d-marker-abs-path)
       (progn
+        ;;(setq d-compile-command "make def_search_path=\"price_server fixit \" -rR -j ")
         (setq d-compile-command "make -rR -j ")
         (setq d-compile-command (concat d-compile-command d-compile-cpus " -C "))
         (setq d-compile-command (concat d-compile-command d-dev-root))
@@ -344,7 +345,3 @@ buffer, some user settings, and the source tree that the file lives in."
     (message "I don't know how to compile this file.")
     )
 )
-
-
-
-

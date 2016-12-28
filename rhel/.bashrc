@@ -92,6 +92,7 @@ export DEPLOYMENT_SCRIPTS_REPO_ROOT=~/dev-root/scripts
 # export BUMP_COOKBOOK_VERSION_ALTERNATE_REPO=~/dev-root/cookbooks
 export REQUEST_BUILD_SUPPRESS_TIPS=1
 export BUMP_COOKBOOK_VERSION_AUTO_EXECUTE=1
+export BUMP_COOKBOOK_VERSION_ALLOW_MULTIBUMP=1
 export FEATURE_TEST_EMAIL=tom.weiss@tradingtechnologies.com
 export FEATURE_TEST_COMPANY="Deployment Team"
 export FEATURE_TEST_USER=tweiss
@@ -101,6 +102,7 @@ export FEATURE_TEST_USER=tweiss
 export JAVA_HOME=/usr/java/jdk1.7.0_17
 # run /usr/java/jdk1.7.0_17/bin/java -Dversion="0.0.0" -cp ./ringer/target/Ringer.jar Ringer --srl-config /etc/debesys/srl_config_ringer.xml -v -o
 export MY_ONE_OFF_VERSION=0.88.88
+
 
 alias off='sudo shutdown -P now'
 alias todo='emacs -nw ~/todo.txt'
@@ -119,9 +121,12 @@ alias gdb='gdb -n'
 alias gt='gnome-terminal &'
 alias swarm="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/swarm.py --verbose "
 alias vcloud="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/vcloud_server.py"
+export TEMP_VM_CHEF_ENV=int-dev-cert
+export TEMP_VM_CHEF_TAG='basegofast'
+alias tempvm="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/temp_vm.py -v --log-dir /var/log/debesys "
 alias nutanix="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/nutanix_server.py -ov "
 alias bcv="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/bump_cookbook_version.py"
-alias ec2="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/ec2_instance.py -v --route53 "
+alias ec2="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/ec2_instance.py -vo --route53 "
 alias mergetest="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/check_repo.py"
 alias fta="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/feature_test_assistant.py"
 alias cof="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/deploy_one_off.py"
@@ -146,7 +151,8 @@ alias brd='git tt br d'
 alias brr='git tt br r'
 alias bru='git tt br u'
 alias brm='git tt br m'
-
+alias gtt='sudo pip install --upgrade git+ssh://git@github.com/tradingtechnologies/git_tools.git@master'
+alias aec='source /opt/virtualenv/exchange_compliance/bin/activate && source orders/cf/audit/pythonpath.sh'
 
 # Use optimize-find.py to help decide which directories and extensions to filter.
 #alias ff='find . -type d -path "*/build" -prune -o -path "*/.git" -prune -o -path "*/ext" -prune -o -path "*/pycommon" -prune -o \( \! -iname "*.ico" -and \! -iname "TAGS" -and \! -iname "FILES" -and \! -iname "BROWSE" -and \! -iname "*.cs" -and \! -iname "*.png" -and \! -iname "*.jar" -and \! -iname "*.pyc" -and \! -iname "*.o" -and \! -iname "*.d" -and \! -iname "*.a" -and \! -name "*.so" -and \! -iname "*.bin" -and \! -iname "*pdf" -and \! -iname "*.java"  -and \! -iname "*xml" -and \! -iname "*.scala" -and \! -iname "*png" -and \! -iname "*.txt" -and \! -iname "*.html" -and \! -iname "*.php" -and \! -iname "*.css" -and \! -iname "*.js" -and \! -iname "*.cs" -and \! -iname "*.json" -and \! -iname "*.sql" -and \! -iname "*.dat" \) -print0 | xargs -0 grep -iHn'
@@ -177,7 +183,7 @@ ff_file+=' -and \! -iname "*.so" '
 ff_file+=' -and \! -iname "*.sql" '
 ff_file+=' -and \! -iname "*.txt" '
 ff_file+=' -and \! -iname "*.xml" '
-alias ff="find . -type d $ff_dir \( $ff_file \) -print0 | xargs -0 grep -iHn"
+alias ff="find . -type d $ff_dir \( $ff_file \) -print0 | xargs -0 grep -iHns"
 
 alias git-add-mod='git status | grep modified | cut -d " " -f 4 | xargs --max-args=1 git add -v'
 alias allbranches="git for-each-ref --format='%(committerdate) %09 %(authorname) %09 %(refname)' | sort -k5n -k2M -k3n -k4n"
@@ -185,7 +191,9 @@ alias glog='git glog -13'
 alias galias='git config --list | grep alias'
 alias soc='kill `cat /var/run/cme.pid`'
 alias oc?='cat /var/run/cme.pid; ps -ef | grep cme | grep -v grep'
-alias emacs?='ps -ef | grep emacs | grep -v "grep emacs" | grep -v "emacs -nw"'
+# Why 'grep -v ' -nw '?  I want to find if Emacs is running in non-terminal mode, I don't care about
+# terminal mode instances.
+alias emacs?='ps -ef | grep emacs | grep -v "grep emacs" | grep -v " -nw "'
 alias rmvol='rm /var/lib/order-connector/*'
 alias pbin='pushd `git rev-parse --show-toplevel`/build/x86-64/debug/bin'
 alias pext='pushd `git rev-parse --show-toplevel`/ext'
@@ -210,6 +218,7 @@ alias ttr='`git rev-parse --show-toplevel`/run python `git rev-parse --show-topl
 alias grp="git rev-parse --short"
 alias myec2='aws ec2 describe-instances --region us-east-1 --filters "Name=tag-value,Values=tweiss"'
 # alias chrome="/opt/google/chrome/google-chrome --enable-plugins &"
+alias chgenv='./run python deploy/chef/scripts/change_environment.py '
 
 set_display()
 {
@@ -229,6 +238,11 @@ set_display()
     echo DISPLAY was $DISPLAY.
     export DISPLAY="localhost:$1.0"
     echo DISPLAY is $DISPLAY.
+}
+
+function eknifessh ()
+{
+    eknife ssh "$1" "$2" --ssh-user $INTAD_USER --identity-file $INTAD_SSH_KEY -a ipaddress
 }
 
 function setchefconfig()
@@ -365,54 +379,21 @@ function addrun2hosts__()
 }
 alias addrun2hosts=addrun2hosts__
 
-function chgenv__()
-{
-    local usage='Usage: addenv2hosts environment host1 host2 ... hostN'
-    if [ -z "$1" ]; then
-        echo $usage
-        return
-    fi
-
-    if [ -z "$2" ]; then
-        echo $usage
-        return
-    fi
-
-    setchefconfig $2
-
-    local query=""
-    local first=0
-    for var in "$@"
-    do
-        if [ $first == 0 ]; then
-            first=1
-            continue
-        fi
-        query+="name:$var OR "
-    done
-    query=$(echo -n $query | head -c -3)
-
-    echo knife exec ~/dev-root/scripts/deploy/chef/scripts/snacks/change_environment.rb "$query" "$1" --config $chef_config
-    knife exec ~/dev-root/scripts/deploy/chef/scripts//snacks/change_environment.rb "$query" "$1" --config $chef_config
-}
-alias addenv2hosts=chgenv__
-
-
 function addattr__()
 {
-    local usage='Usage: addattr2hosts attribute value host1 host2 ... hostN'
+    local usage="Usage: addattr2hosts attribute value host1 host2 ... hostN\n\nExample:\naddattr2hosts zookeeper_ensemble_name service_discovery gla3vm115 gla3vm128 gla3vm135"
     if [ -z "$1" ]; then
-        echo $usage
+        echo -e $usage
         return
     fi
 
     if [ -z "$2" ]; then
-        echo $usage
+        echo -e $usage
         return
     fi
 
     if [ -z "$3" ]; then
-        echo $usage
+        echo -e $usage
         return
     fi
 
@@ -618,14 +599,14 @@ function search_chef_environment()
         echo "          sce int-dev-cert cme (all nodes in int-dev-cert with recipe cme)"
         return
     fi
-    local search="chef_environment:$1"
+    local search="functional_environment:$1"
 
     if [ ! -z "$2" ]; then
         search=$search" AND recipe:$2*"
     fi
 
     echo ttknife --config $config search node $search
-    `git rev-parse --show-toplevel`/run `git rev-parse --show-toplevel`/ttknife $config search node "$search" -a name -a environment -a ipaddress -a run_list -a tags
+    `git rev-parse --show-toplevel`/run `git rev-parse --show-toplevel`/ttknife $config search node "$search" -a name -a chef_environment -a ipaddress -a run_list -a tags
 }
 alias sce=search_chef_environment
 
@@ -898,9 +879,16 @@ function m_()
         echo COMPILE SUCCESSFUL!
     else
         echo COMPILE FAILED!
+        return 1
     fi
 }
 alias m=m_
+
+function mice_()
+{
+    m_ 'all_price'
+}
+alias mice=mice_
 
 function cleanvm_()
 {
@@ -912,6 +900,7 @@ alias cleanvm=cleanvm_
 
 function em_()
 {
+
     isemacs=`emacs?`
     if [[ -z $isemacs ]]; then
         echo emacs is not running, starting emacs $@;

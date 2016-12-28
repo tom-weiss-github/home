@@ -130,6 +130,12 @@ rpm -e chef-11.4.4-2.el6.x86_64;rm -rf /var/chef/; rm -rf /etc/chef/; rm -rf /op
 vcloud -l user -o Controlled_Deployment | grep gla | cut -f 1 | xargs -n 1 knife node show
 Show all the vms I own in the Controlled_Deployment vcloud organization.
 
+coredumps
+---------
+kernel.core_pattern = /tmp/core
+kernel.core_uses_pid = 1
+Creates core files like /tmp/core.pid, separate from abrt.
+
 date time timezone
 ------------------
 set the date and time

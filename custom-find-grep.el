@@ -82,7 +82,7 @@ SYMBOL should be one of 'grep-command', 'grep-template',
                                       "-and \! -iname \"*.class\" "
                                       "-and \! -iname \"*.xml\" "
                                       "\")\" "
-                                      "-print0 | xargs -0 grep -nHi -e "))
+                                      "-print0 | xargs -0 grep -nHis -e "))
            ))
 
 (setq custom-find-grep-path-suffix "")
@@ -126,4 +126,3 @@ Regular Expression Examples:
 ;; when running through emacs.  My solution is to disable the backup files, since I've
 ;; never used them.
 ;; -name \"*~\" -o
-
