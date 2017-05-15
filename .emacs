@@ -552,6 +552,10 @@
 ;; (proceed with query-replace-regexp syntax)
 ;; (C-x s !) to save all buffers modified.
 
+;; Replace regular expression across buffers:
+;; M-x ibuffer RET t Q
+;; M-x save-some-buffers !
+
 ;; Reload current buffer (if modified on disk):
 ;; C-x C-v
 

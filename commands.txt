@@ -98,6 +98,9 @@ Command to parse log file for GUID and filter out most of the message.  the firs
 the second sed removes everything after.  The resuls are then sorted and passed to uniq to check for repeated fields.  To verify no skipped
 values, the second command gives the total number.
 
+cat /dir/file | sed -n -e '/2017-04-11/,$p' | xclip -i
+Send the contents of file to the clipboard once the string 2017-04-11 is encountered.
+
 for i in {1..10}; do command; done
 Run a command in a loop on the command line.
 
@@ -173,11 +176,11 @@ To create a local origin:
 git clone git@github.com:tradingtechnologies/debesys.git --mirror fake_remote
 You can't do much with this repo except clone from it.
 
-git clone file:///home/tweiss/dev-root/fake_remote/ 1_local_remote && cd 1_local_remote && git submodule update --init
+git clone file:///home/tweiss/dev-root/fake_remote/ 1_local_remote && cd 1_local_remote && git submodule update --init --recursive
 (then git submodule init/update; note that the submodules still point back
  to original origin)
 
-git clone file:///home/tweiss/dev-root/fake_remote/ 2_local_remote && cd 2_local_remote && git submodule update --init
+git clone file:///home/tweiss/dev-root/fake_remote/ 2_local_remote && cd 2_local_remote && git submodule update --init --recursive
 Why two clones?  That way you can push from one, then pull from the other
 to verify your changes are getting pushed as expected.
 
@@ -198,6 +201,9 @@ Show all messages from destination and port.
 
 tcpdump -i 1 host 10.140.18.67 and port 16058
 Show all message to and from ip and port.
+
+sudo tcpdump -vvv -s 0 -i 6 -n port 53
+Show all DNS lookups on the current machine.
 
 Wireshark Filters
 -----------------
@@ -335,3 +341,42 @@ Contains configuration which maps ethN names to MAC addresses.
 ifup/ifdown
 Bring an inteface up or down.  Check in /etc/sysconfig/network-scripts/ifcfg-X
 for a list of all the interfaces.
+
+
+VirtualBox
+----------
+VirtualBox Setup
+
+System -> Motherboard -> 4GB RAM (depends on your needs)
+System -> Processor -> 4 CPUs (depends on your needs)
+Network -> Adapter 1 -> NAT
+Network -> Adapter 1 -> Port Forwarding (port 22 on host to port 22 on guest)
+Network -> Adapter 1 -> Cable Connected (check box)
+Storage -> Controller: IDE -> Click on disk to load the iso Centos isos are available here.  These instructions support the minimal iso, but are also appropriate to the live dvd iso.
+Power On
+Devices -> Shared Clipboard -> Bidirectional
+Start the networking: ifup eth0
+
+
+sudo yum -y install emacs
+edit /etc/sysconfig/network-scripts/ifcfg-eth0 and make the contents:
+
+DEVICE=eth0
+TYPE=Ethernet
+BOOTPROTO=dhcp
+ONBOOT=yes
+NM_CONTROLLED=no
+
+After saving the file, restart the network with the command:
+service network restart
+
+yum -y groupinstall "Desktop" "Desktop Platform" "X Window System" "Fonts"
+edit  /etc/inittab and change
+id:3:initdefault:
+to
+id:5:initdefault:
+
+create file /etc/sudoers.d/YOUR_USERNAME with contents:
+YOUR_USERNAME  ALL=(ALL)     NOPASSWD: ALL
+
+export PS1="\h \w ROOT \n>"Set root's prompt in .bashrc:

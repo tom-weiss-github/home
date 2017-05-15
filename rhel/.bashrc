@@ -46,7 +46,7 @@ export PS1="\h\[\033[0;33m\]\$(__git_ps1) \[\033[0;0m\]\w \n>"
 
 
 # History across terminal sessions.
-export HISTSIZE=10000
+export HISTSIZE=20000
 shopt -s histappend
 # history -a => append current session's history to history file (happens at session exit)
 # history -c => clear the current session's history
@@ -54,6 +54,7 @@ shopt -s histappend
 # Commenting this out because it seems that my terminal history has the wrong numbers so I can't !
 # number anymore.  PROMPT_COMMAND="history -a;history -c;history -r;$PROMPT_COMMAND"
 export HISTTIMEFORMAT='%F %T '
+alias often='cat $HISTFILE | grep -v "#1" | sort | uniq -c'
 
 export myemacs=~/bin/emacs-24.3
 export myemacsclient=~/bin/emacsclient
@@ -130,12 +131,15 @@ alias ec2="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROO
 alias mergetest="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/check_repo.py"
 alias fta="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/feature_test_assistant.py"
 alias cof="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/deploy_one_off.py"
+alias decom="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_prod_decom.py"
+alias vlan="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_vlan.py"
 alias smile='rename_terminal_title ":-)"'
 alias prdp='echo "@bcordonn @elmedinam @jkess @joanne-wilson @srubik @TIMSTACY @jfrumkin @jerdmann" | xclip -selection clipboard'
 alias proc='echo "@mdw55189 @corystricklin @jingheelu @lmancini54" | xclip -selection clipboard'
 alias prpr='echo "@amschwarz @tt-tabion @rahul-TT @ajoshi2 @avinashdutta" | xclip -selection clipboard'
 alias git-commit-hook="cp ~/githome/prepare-commit-msg .git/hooks/; chmod a+x .git/hooks/prepare-commit-msg"
 alias tdeploy='history -s "./run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/knife_ssh.py --knife-config ~/.chef/knife.external.rb --audit-runlist --concurrency 50 -a -e environments -q query -c cookbooks -r CHG123456 --test-run"; echo Test run command inserted into history, use up arrow to edit.'
+alias hotfixer='$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/hotfixer.py --upload'
 # alias edeploy='\^--test-run\^--send-summary-email\^'
 alias tkw="tmux kill-window"
 alias tkp="tmux kill-pane"
@@ -187,7 +191,7 @@ alias ff="find . -type d $ff_dir \( $ff_file \) -print0 | xargs -0 grep -iHns"
 
 alias git-add-mod='git status | grep modified | cut -d " " -f 4 | xargs --max-args=1 git add -v'
 alias allbranches="git for-each-ref --format='%(committerdate) %09 %(authorname) %09 %(refname)' | sort -k5n -k2M -k3n -k4n"
-alias glog='git glog -13'
+alias glog='git --no-pager glog -13'
 alias galias='git config --list | grep alias'
 alias soc='kill `cat /var/run/cme.pid`'
 alias oc?='cat /var/run/cme.pid; ps -ef | grep cme | grep -v grep'
@@ -218,7 +222,7 @@ alias ttr='`git rev-parse --show-toplevel`/run python `git rev-parse --show-topl
 alias grp="git rev-parse --short"
 alias myec2='aws ec2 describe-instances --region us-east-1 --filters "Name=tag-value,Values=tweiss"'
 # alias chrome="/opt/google/chrome/google-chrome --enable-plugins &"
-alias chgenv='./run python deploy/chef/scripts/change_environment.py '
+alias chgenv='./run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/change_environment.py '
 
 set_display()
 {
@@ -259,7 +263,7 @@ function setchefconfig()
     # different with single brackets [ ].
     if [[ $1 == ar* || $1 == ch* || $1 == ny* || $1 = fr* ]]; then
         chef_config=~/.chef/knife.external.rb
-    elif [[ $1 == sy* || $1 == sg* ]]; then
+    elif [[ $1 == sy* || $1 == sg* || $1 == ln* ]]; then
         chef_config=~/.chef/knife.external.rb
     elif [[ $1 == *"ip-10-210-0"* || $1 == *"ip-10-210-2"* || $1 == *"ip-10-210-4"* ]]; then
         chef_config=~/.chef/knife.external.rb
@@ -381,7 +385,7 @@ alias addrun2hosts=addrun2hosts__
 
 function addattr__()
 {
-    local usage="Usage: addattr2hosts attribute value host1 host2 ... hostN\n\nExample:\naddattr2hosts zookeeper_ensemble_name service_discovery gla3vm115 gla3vm128 gla3vm135"
+    local usage="Usage: addattr2hosts attribute value host1 host2 ... hostN\n\nExample:\naddattr2hosts zookeeper_ensemble_name service_discovery gla3vm115 gla3vm128 gla3vm135\naddattr2hosts stealthwatch.logmaxretain 100 gla1vm187"
     if [ -z "$1" ]; then
         echo -e $usage
         return
@@ -424,6 +428,39 @@ function addattr__()
 alias addattr2hosts=addattr__
 
 
+function rmattr__()
+{
+    local usage="Usage: rmattrhosts attribute host1 host2 ... hostN\n\nExample:\nrmattrhosts zookeeper_ensemble_name gla3vm115 gla3vm128 gla3vm135"
+    if [ -z "$1" ]; then
+        echo -e $usage
+        return
+    fi
+
+    if [ -z "$2" ]; then
+        echo -e $usage
+        return
+    fi
+
+    setchefconfig $2
+
+    local query=""
+    local first=0
+    for var in "$@"
+    do
+        if [ $first == 0 ]; then
+            first=1
+            continue
+        fi
+
+        query+="name:$var OR "
+    done
+    query=$(echo -n $query | head -c -3)
+
+    echo knife exec ~/dev-root/scripts/deploy/chef/scripts/snacks/add_attribute.rb "$query" remove "$1" --config $chef_config
+    knife exec ~/dev-root/scripts/deploy/chef/scripts//snacks/add_attribute.rb "$query" remove "$1" --config $chef_config
+}
+alias rmattrhosts=rmattr__
+
 
 function eaddtag2query()
 {
@@ -445,8 +482,8 @@ function kns()
         knife node show "$1" --config $chef_config -f j -l > /tmp/$1.json
         $myemacs -nw /tmp/$1.json
     else
-        echo knife node show "$1" --config $chef_config
-        knife node show "$1" --config $chef_config
+        echo knife node show "$1" --config $chef_config -a chef_environment -a run_list -a tags -a ipaddress
+        knife node show "$1" --config $chef_config  -a chef_environment -a run_list -a tags -a ipaddress | sed 's/recipe\[//g' | sed 's/\]//g'
     fi
 }
 
@@ -487,6 +524,28 @@ function find_spare()
     knife exec ~/dev-root/scripts/deploy/chef/scripts/snacks/find_spare.rb "$1" "$2" "$3" --config ~/.chef/knife.external.rb
 }
 alias fspare=find_spare
+
+
+function nodesize()
+{
+    local usage="Usage: nodesize [i|e] QUERY"
+    if [ "$1" == 'i' ]; then
+        chef_config=~/.chef/knife.rb
+    elif [ "$1" == 'e' ]; then
+        chef_config=~/.chef/knife.external.rb
+    else
+        echo -e $usage
+        return
+    fi
+
+    if [ -z "$2" ]; then
+        echo -e $usage
+        return
+    fi
+
+    echo knife search node "$2" --config $chef_config -a cpu.total -a memory.total -a chef_environment -a run_list
+    knife search node "$2" --config $chef_config -a cpu.total -a memory.total -a chef_environment -a run_list
+}
 
 function aws_keys()
 {

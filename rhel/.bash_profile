@@ -27,12 +27,23 @@ if [ -z "$SSH_AUTH_SOCK" ]; then
     ssh-add
 fi
 
-echo DISPLAY is $DISPLAY.
-echo sudo netstat -tulpn | grep "127.0.0.0:60"
-sudo netstat -tulpn | grep "127.0.0.0:60"
-echo ps -ef | grep sshd | grep tweiss@
-ps -ef | grep sshd | grep tweiss@
-echo "Run killmyssh to kill all current sessions."
+if [ -z "$TMUX" ]; then
+    # The TMUX environment variable is not set, we're not inside tmux.
+    echo DISPLAY is $DISPLAY.
+    echo sudo netstat -tulpn | grep "127.0.0.0:60"
+    sudo netstat -tulpn | grep "127.0.0.0:60"
+    echo ps -ef | grep sshd | grep tweiss@
+    ps -ef | grep sshd | grep tweiss@
+    echo "Run killmyssh to kill all current sessions."
+fi
+
+# On git 1.7.1 merges did not open the editor, but when I switched to 1.9.1 they do.
+export GIT_MERGE_AUTOEDIT=no
+
+# sudo yum -y install centos-release-scl
+# sudo yum -y install git19
+# scl enable git19 bash
+source /opt/rh/git19/enable
 
 sudo echo .bash_profile ran at $(date) >> /var/log/profiles
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*

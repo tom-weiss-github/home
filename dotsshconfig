@@ -2,22 +2,9 @@ Host 10.*
      StrictHostKeyChecking no
      UserKnownHostsFile=/dev/null
      LogLevel=quiet
-
-Host 10.192.*, 10.193.*
      IdentityFile ~/.ssh/id_rsa
      User tweiss
-
-Host 10.210.*
-     IdentityFile ~/.ssh/id_rsa
-     User tweiss
-
-Host 10.203.*
-     IdentityFile ~/.ssh/id_rsa
-     User tweiss
-
-Host 10.213.*
-     IdentityFile ~/.ssh/TTNET-EU-WEST-1.pem
-     User root
+     ConnectTimeout 20
 
 Host github.com
      StrictHostKeyChecking no
