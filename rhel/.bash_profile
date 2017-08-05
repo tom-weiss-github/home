@@ -16,11 +16,12 @@ PATH=$PATH:$HOME/bin
 
 export PATH
 
-if [ ! -f /var/log/profiles ]
-then
-    sudo touch /var/log/profiles
-    sudo chmod a+rw /var/log/profiles
-fi
+# Commented this out since Ubuntu laptop has sudo prompt and I don't really need this all the time.
+# if [ ! -f /var/log/profiles ]
+# then
+#     sudo touch /var/log/profiles
+#     sudo chmod a+rw /var/log/profiles
+# fi
 
 if [ -z "$SSH_AUTH_SOCK" ]; then
     eval `ssh-agent -s`
@@ -43,7 +44,10 @@ export GIT_MERGE_AUTOEDIT=no
 # sudo yum -y install centos-release-scl
 # sudo yum -y install git19
 # scl enable git19 bash
-source /opt/rh/git19/enable
+if [ -f /opt/rh/git19/enable ]; then
+    source /opt/rh/git19/enable
+fi
 
-sudo echo .bash_profile ran at $(date) >> /var/log/profiles
+# Commented this out since Ubuntu laptop has sudo prompt.
+# sudo echo .bash_profile ran at $(date) >> /var/log/profiles
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*

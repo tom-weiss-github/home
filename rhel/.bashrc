@@ -56,8 +56,13 @@ shopt -s histappend
 export HISTTIMEFORMAT='%F %T '
 alias often='cat $HISTFILE | grep -v "#1" | sort | uniq -c'
 
-export myemacs=~/bin/emacs-24.3
-export myemacsclient=~/bin/emacsclient
+if [ -f ~/bin/emacs-24.3 ]; then
+    export myemacs=~/bin/emacs-24.3
+    export myemacsclient=~/bin/emacsclient
+else
+    export myemacs=/usr/bin/emacs
+    export myemacsclient=/usr/bin/emacsclient
+fi
 # export myemacs=emacs
 # export myemacsclient=emacsclient
 
@@ -106,6 +111,11 @@ export MY_ONE_OFF_VERSION=0.88.88
 
 
 alias off='sudo shutdown -P now'
+alias hibernate='sudo systemctl hibernate'
+alias lock='gnome-screensaver-command -l'
+alias wifiscan='nmcli device wifi rescan'
+alias wifils='nmcli device wifi list'
+alias wks='ssh -X 10.195.2.49'
 alias todo='emacs -nw ~/todo.txt'
 alias rooms='cat ~/githome/rooms.txt'
 alias sb='source ~/.bashrc'
@@ -216,6 +226,8 @@ alias envs='echo PATH $PATH; echo LD_LIBRARY_PATH $LD_LIBRARY_PATH; echo C_INCLU
 
 alias repo="python ~/githome/get-repo.py"
 alias mdbd='sudo mount -o user=intad/tweiss -t cifs //chifs01.int.tt.local/Share/Dead_By_Dawn /mnt/dbd/'
+alias kolmar='sudo mount.cifs -o user=weiss //192.168.1.117/Users /mnt/kolmar'
+alias gld2vm49='sudo mount.cifs -o user=tweiss,uid=1000,gid=1000 //10.192.2.49/shared /home/tweiss/gld2vm49'
 alias cli_mt='run `git rev-parse --show-toplevel`/ext/linux/x86-64/release/bin/cli_mt 10.203.0.43:2181'
 alias jtrader="/usr/java/jdk1.7.0_03/bin/java -cp JTrader.jar JTrader &"
 alias ttr='`git rev-parse --show-toplevel`/run python `git rev-parse --show-toplevel`/t_trader/tt/ttrader/t_trader.py --stdout'
@@ -1259,3 +1271,7 @@ PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 #echo "Run killmyssh to kill all current sessions."
 alias killmyssh='ps -ef | grep sshd | grep tweiss@ | tr -s " " | cut -d" " -f 2 | xargs kill'
 # If I do 'pkill -u tweiss' that will kill all my sessions and get sshd back on display 10.
+
+# wmctrol -lp will list windows and their process ids
+# Find chrome's window name.
+# wmctrl -lp | tr -s " " | cut -d " " -f 3
