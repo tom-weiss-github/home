@@ -300,7 +300,7 @@
       (set-face-background 'default "black")
       (set-face-foreground 'default  "skyblue")
       (set-face-font 'default my-os-dependent-font)
-      (if (and (>= emacs-major-version 24) (>= emacs-minor-version 3))
+      (if (or (>= emacs-major-version 25) (and (>= emacs-major-version 24) (>= emacs-minor-version 3)))
           (progn
             (set-face-background (quote mode-line) "thistle4")
             (set-face-foreground (quote mode-line) "black")
