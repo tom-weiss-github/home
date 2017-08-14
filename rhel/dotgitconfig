@@ -11,6 +11,7 @@
         glog = log --graph --date-order --pretty=format:'%Cred%h%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset %n %C(yellow)%d%Creset' --abbrev-commit --date=relative
         gloga = log --graph --date-order --pretty=format:'%Cred%h%Creset %s %Cgreen(%cd) %C(bold blue)<%an>%Creset %n %C(yellow)%d%Creset' --abbrev-commit
         myglog = log --graph --date-order --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --author=\"Tom Weiss\"
+        mygloga = log --graph --date-order --pretty=format:'%Cred%h%Creset %s %Cgreen(%cd) %C(bold blue)<%an>%Creset %n %C(yellow)%d%Creset' --abbrev-commit --author=\"Tom Weiss\"
 	serve = !git daemon --reuseaddr --verbose --base-path=. --export-all ./.git
 [core]
 	editor = emacs -nw

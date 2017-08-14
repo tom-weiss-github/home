@@ -32,6 +32,10 @@ Print disk usage.
 du -hs <directory>
 Print disk usage of some directory, recursive.
 
+ps -eo pcpu,pid,user,args | sort -k 1 -r | head -5
+Print top 5 cpu consumers.  Running this command through knife ssh can yield results for lots of
+processes.  Any that have a value greater than 100 typically
+
 lsof
 Print open files (which may not be shown in find or ls if the file
 has been deleted, but a file descriptor is still open).
@@ -81,6 +85,9 @@ find deploy/chef/cookbooks/pds_* -name contact_info.rb -exec sed -i 's/email"] =
 find deploy/chef/cookbooks/pds_* -name contact_info.rb -exec sed -i 's/pagerduty"] = ""/pagerduty"] = "Prices"/g' {} \;
 
 for COOKBOOK in algoserver_exec algoserver_debug orderd orderd_remote pricefs priceproxy ttsdk ; do find deploy/chef/cookbooks/$COOKBOOK -name contact_info.rb -exec sed -i 's/email"] = ""/email"] = "email@tradingtechnologies.com"/g' {} \; && find deploy/chef/cookbooks/$COOKBOOK -name contact_info.rb -exec sed -i 's/pagerduty"] = ""/pagerduty"] = "Algo Server"/g' {} \; ; done
+
+sed -i 's/replaceme/withme/g' file
+Replace all occurences of 'replaceme' with 'withme' in 'file'.
 
 Find and replace text in files.
 

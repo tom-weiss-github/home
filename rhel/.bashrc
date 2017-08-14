@@ -79,6 +79,7 @@ export DEPT=""
 # unset LD_BIND_NOW
 # export LD_BIND_NOW=yes
 export PATH=$PATH:~/Downloads/meld-1.6.1/bin
+export PATH=$PATH:/opt/redis/redis-2.8.17/src
 export PATH=$PATH:/opt/scala-2.9.3/bin/
 export INTAD_USER=tweiss
 export INTAD_SSH_KEY=~/.ssh/id_rsa
@@ -103,6 +104,7 @@ export FEATURE_TEST_USER=tweiss
 export JAVA_HOME=/usr/java/jdk1.7.0_17
 # run /usr/java/jdk1.7.0_17/bin/java -Dversion="0.0.0" -cp ./ringer/target/Ringer.jar Ringer --srl-config /etc/debesys/srl_config_ringer.xml -v -o
 export MY_ONE_OFF_VERSION=0.88.88
+export ENABLE_POST_TO_SERVICENOW=1
 
 
 alias off='sudo shutdown -P now'
@@ -120,6 +122,7 @@ alias vm16='ssh tweiss@10.202.0.16 -i ~/.ssh/id_rsa'
 alias clk='python ~/githome/world_time.py'
 alias gdb='gdb -n'
 alias gt='gnome-terminal &'
+alias push='echo git push origin $b; git push origin $b'
 alias swarm="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/swarm.py --verbose "
 alias vcloud="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/vcloud_server.py"
 export TEMP_VM_CHEF_ENV=int-dev-cert
@@ -139,7 +142,7 @@ alias proc='echo "@mdw55189 @corystricklin @jingheelu @lmancini54" | xclip -sele
 alias prpr='echo "@amschwarz @tt-tabion @rahul-TT @ajoshi2 @avinashdutta" | xclip -selection clipboard'
 alias git-commit-hook="cp ~/githome/prepare-commit-msg .git/hooks/; chmod a+x .git/hooks/prepare-commit-msg"
 alias tdeploy='history -s "./run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/knife_ssh.py --knife-config ~/.chef/knife.external.rb --audit-runlist --concurrency 50 -a -e environments -q query -c cookbooks -r CHG123456 --test-run"; echo Test run command inserted into history, use up arrow to edit.'
-alias hotfixer='$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/hotfixer.py --upload'
+alias hotfixer='$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/hotfixer.py --prod --uat'
 # alias edeploy='\^--test-run\^--send-summary-email\^'
 alias tkw="tmux kill-window"
 alias tkp="tmux kill-pane"
@@ -150,6 +153,7 @@ alias tcp="tmux show-buffer -b 0 | xclip -i"
 alias fakechef="cp -v ~/.chef/knife.training.rb.orig ~/.chef/knife.rb && cp -v ~/.chef/knife.training.rb.orig ~/.chef/knife.external.rb && export BUMP_COOKBOOK_VERSION_NO_NOTES=1 && echo BUMP_COOKBOOK_VERSION_NO_NOTES has been set."
 alias realchef="cp -v ~/.chef/knife.rb.orig ~/.chef/knife.rb && cp -v ~/.chef/knife.external.rb.orig ~/.chef/knife.external.rb && unset BUMP_COOKBOOK_VERSION_NO_NOTES && echo BUMP_COOKBOOK_VERSION_NO_NOTES has been unset."
 alias awsauth="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/aws_authenticator.py --account deb --role read --env"
+alias awsauthexcomp="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/aws_authenticator.py --account prod --role exchange-compliance --env"
 alias upenv='pushd deploy/chef/environments; for env_file in int-dev*.rb; do knife environment from file $env_file --config ~/.chef/knife.rb; done; popd'
 alias brd='git tt br d'
 alias brr='git tt br r'
@@ -157,6 +161,7 @@ alias bru='git tt br u'
 alias brm='git tt br m'
 alias gtt='sudo pip install --upgrade git+ssh://git@github.com/tradingtechnologies/git_tools.git@master'
 alias aec='source /opt/virtualenv/exchange_compliance/bin/activate && source orders/cf/audit/pythonpath.sh'
+alias cdr='cat `ls -d1t ~/deployment_receipts/* | head -n 1` | xclip -i'
 
 # Use optimize-find.py to help decide which directories and extensions to filter.
 #alias ff='find . -type d -path "*/build" -prune -o -path "*/.git" -prune -o -path "*/ext" -prune -o -path "*/pycommon" -prune -o \( \! -iname "*.ico" -and \! -iname "TAGS" -and \! -iname "FILES" -and \! -iname "BROWSE" -and \! -iname "*.cs" -and \! -iname "*.png" -and \! -iname "*.jar" -and \! -iname "*.pyc" -and \! -iname "*.o" -and \! -iname "*.d" -and \! -iname "*.a" -and \! -name "*.so" -and \! -iname "*.bin" -and \! -iname "*pdf" -and \! -iname "*.java"  -and \! -iname "*xml" -and \! -iname "*.scala" -and \! -iname "*png" -and \! -iname "*.txt" -and \! -iname "*.html" -and \! -iname "*.php" -and \! -iname "*.css" -and \! -iname "*.js" -and \! -iname "*.cs" -and \! -iname "*.json" -and \! -iname "*.sql" -and \! -iname "*.dat" \) -print0 | xargs -0 grep -iHn'
@@ -263,7 +268,7 @@ function setchefconfig()
     # different with single brackets [ ].
     if [[ $1 == ar* || $1 == ch* || $1 == ny* || $1 = fr* ]]; then
         chef_config=~/.chef/knife.external.rb
-    elif [[ $1 == sy* || $1 == sg* || $1 == ln* ]]; then
+    elif [[ $1 == sy* || $1 == sg* || $1 == ln* || $1 == hk* ]]; then
         chef_config=~/.chef/knife.external.rb
     elif [[ $1 == *"ip-10-210-0"* || $1 == *"ip-10-210-2"* || $1 == *"ip-10-210-4"* ]]; then
         chef_config=~/.chef/knife.external.rb
@@ -385,7 +390,7 @@ alias addrun2hosts=addrun2hosts__
 
 function addattr__()
 {
-    local usage="Usage: addattr2hosts attribute value host1 host2 ... hostN\n\nExample:\naddattr2hosts zookeeper_ensemble_name service_discovery gla3vm115 gla3vm128 gla3vm135\naddattr2hosts stealthwatch.logmaxretain 100 gla1vm187"
+    local usage="Usage: addattr2hosts attribute value host1 host2 ... hostN\n\nExample:\naddattr2hosts zookeeper_ensemble_name service_discovery gla3vm115 gla3vm128 gla3vm135\naddattr2hosts stealthwatch.logmaxretain 100 gla1vm187\naddattr2hosts algojob.overrides.use_price_unifier _1_ ar0srv100"
     if [ -z "$1" ]; then
         echo -e $usage
         return
@@ -843,16 +848,18 @@ function git-sync_()
         return
     fi
 
-    local branch="$1"
-    if [ "d" == "$1" ]; then
-        branch="develop"
-    elif [ "r" == "$1" ]; then
-        branch="release/current"
-    elif [ "u" == "$1" ]; then
-        branch="uat/current"
-    elif [ "m" == "$1" ]; then
-        branch="master"
-    fi
+    git tt co $1
+
+    # local branch="$1"
+    # if [ "d" == "$1" ]; then
+    #     branch="develop"
+    # elif [ "r" == "$1" ]; then
+    #     branch="release/current"
+    # elif [ "u" == "$1" ]; then
+    #     branch="uat/current"
+    # elif [ "m" == "$1" ]; then
+    #     branch="master"
+    # fi
 
     echo "pushd `git rev-parse --show-toplevel`";
     pushd `git rev-parse --show-toplevel`;
@@ -861,34 +868,34 @@ function git-sync_()
         echo "popd"; popd;
         return
     fi
-    echo "git remote prune origin";
-    git remote prune origin;
-    if [ $? != 0 ]; then
-        echo "Aborting."
-        echo "popd"; popd;
-        return
-    fi
-    echo "git checkout $branch";
-    git checkout "$branch";
-    if [ $? != 0 ]; then
-        echo "Aborting."
-        echo "popd"; popd;
-        return
-    fi
-    echo "git pull";
-    git pull;
-    if [ $? != 0 ]; then
-        echo "Aborting."
-        echo "popd"; popd;
-        return
-    fi
-    echo "git submodule update --init --recursive";
-    git submodule update --init --recursive;
-    if [ $? != 0 ]; then
-        echo "Aborting."
-        echo "popd"; popd;
-        return
-    fi
+    # echo "git remote prune origin";
+    # git remote prune origin;
+    # if [ $? != 0 ]; then
+    #     echo "Aborting."
+    #     echo "popd"; popd;
+    #     return
+    # fi
+    # echo "git checkout $branch";
+    # git checkout "$branch";
+    # if [ $? != 0 ]; then
+    #     echo "Aborting."
+    #     echo "popd"; popd;
+    #     return
+    # fi
+    # echo "git pull";
+    # git pull;
+    # if [ $? != 0 ]; then
+    #     echo "Aborting."
+    #     echo "popd"; popd;
+    #     return
+    # fi
+    # echo "git submodule update --init --recursive";
+    # git submodule update --init --recursive;
+    # if [ $? != 0 ]; then
+    #     echo "Aborting."
+    #     echo "popd"; popd;
+    #     return
+    # fi
     echo "popd"; popd;
 }
 
