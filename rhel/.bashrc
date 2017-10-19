@@ -232,7 +232,11 @@ alias oczk='lszk /srv/alive/oc -r; lszk /srv/oc -r | xargs --delimiter="\n" -n 1
 alias envs='echo PATH $PATH; echo LD_LIBRARY_PATH $LD_LIBRARY_PATH; echo C_INCLUDE_PATH $C_INCLUDE_PATH; echo CPLUS_INCLUDE_PATH $CPLUS_INCLUDE_PATH; echo PYTHONPATH $PYTHONPATH; echo PYTHONHOME $PYTHONHOME; echo SWIG_LIB $SWIG_LIB; echo DEBENV_ENGAGED $DEBENV_ENGAGED'
 
 alias repo="python ~/githome/get-repo.py"
-alias mdbd='sudo mount -o user=intad/tweiss -t cifs //chifs01.int.tt.local/Share/Dead_By_Dawn /mnt/dbd/'
+if [ -e /etc/centos-release ]; then
+    alias mdbd='sudo mount -o user=intad/tweiss -t cifs //chifs01.int.tt.local/Share/Dead_By_Dawn /mnt/dbd/'
+else
+    alias mdbd='sudo mount.cifs -o user=tweiss //chifs01.int.tt.local/Share/Dead_By_Dawn /mnt/dbd'
+fi
 alias kolmar='sudo mount.cifs -o user=weiss //192.168.1.117/Users /mnt/kolmar'
 alias gld2vm49='sudo mount.cifs -o user=tweiss,uid=1000,gid=1000 //10.195.2.49/shared /home/tweiss/gld2vm49'
 alias cli_mt='run `git rev-parse --show-toplevel`/ext/linux/x86-64/release/bin/cli_mt 10.203.0.43:2181'
