@@ -32,9 +32,15 @@ Print disk usage.
 du -hs <directory>
 Print disk usage of some directory, recursive.
 
+
 ps -eo pcpu,pid,user,args | sort -k 1 -r | head -5
 Print top 5 cpu consumers.  Running this command through knife ssh can yield results for lots of
-processes.  Any that have a value greater than 100 typically
+processes.  Any that have a value greater than 100 typically means they are spinning on a core.  The
+'uptime' command will print the overall cpu load which is also useful when trying to track down high
+cpu consumption.
+knife ssh "(chef_environment:int-dev* OR chef_environment:int-stage* OR chef_environment:int_sqe*) AND (NOT chef_environment:int-dev-jenkins) (NOT chef_environment:*perf*) AND name:gl*vm* AND (NOT creation_info_machine_origin:temp_hive)" "uptime" -a ipaddress --concurrency 20 | grep -v "load average: 0."
+
+
 
 lsof
 Print open files (which may not be shown in find or ls if the file

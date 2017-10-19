@@ -50,6 +50,5 @@
 
 [git-tt]
         delete-branch = true
-        validate-jira-number = true
         include-jira-summary = true
         jira-summary-length = 40

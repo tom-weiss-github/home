@@ -86,6 +86,7 @@ export DEPT=""
 export PATH=$PATH:~/Downloads/meld-1.6.1/bin
 export PATH=$PATH:/opt/redis/redis-2.8.17/src
 export PATH=$PATH:/opt/scala-2.9.3/bin/
+export PATH=$JAVA_HOME/bin:$PATH
 export INTAD_USER=tweiss
 export INTAD_SSH_KEY=~/.ssh/id_rsa
 export BCV_ENABLE_LDAP=1
@@ -106,7 +107,8 @@ export FEATURE_TEST_USER=tweiss
 # To run ringer:
 # cp ringer.conf/srl_config_ringer.xml from some machine in int-dev-sim
 # cp deploy/chef/cookbooks/srlabs/files/default/smds.lic /etc/debesys/
-export JAVA_HOME=/usr/java/jdk1.7.0_17
+export JAVA_HOME=/usr/java/jdk1.7.0_51
+export JRE_HOME=$JAVA_HOME/jre
 # run /usr/java/jdk1.7.0_17/bin/java -Dversion="0.0.0" -cp ./ringer/target/Ringer.jar Ringer --srl-config /etc/debesys/srl_config_ringer.xml -v -o
 export MY_ONE_OFF_VERSION=0.88.88
 export ENABLE_POST_TO_SERVICENOW=1
@@ -240,6 +242,13 @@ alias grp="git rev-parse --short"
 alias myec2='aws ec2 describe-instances --region us-east-1 --filters "Name=tag-value,Values=tweiss"'
 # alias chrome="/opt/google/chrome/google-chrome --enable-plugins &"
 alias chgenv='./run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/change_environment.py '
+
+alias algoconfig='cd /home/tweiss/dev-root/algo/build/x86-64/debug/etc/algo_local/'
+alias newconfig='cd /etc/debesys'
+alias algoconfigrel='cd /home/tweiss/dev-root/algo/build/x86-64/release/etc/algo_local/'
+alias logsrel='cd /home/tweiss/dev-root/algo/build/x86-64/release/var/log/algo_local/'
+alias logs='cd /home/tweiss/repo/dev-root/algo/x86-64/debug/var/log/algo_local/'
+alias hsm='(cd /home/tweiss/dev-root/hsmproxy/bin; ./start.sh ../etc/hsmproxy.properties)&'
 
 set_display()
 {
