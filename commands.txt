@@ -72,6 +72,12 @@ Search for nodes in int-dev-cert that are not running.
 ttknife search node "chef_environment:int-dev-sparepool" -a name | grep name | grep ip- | grep -v 10-203-0-74 | tr -s " " | cut -d" " -f 3 | xargs -n 1 -i knife client delete \{\} --yes
 ttknife search node "chef_environment:int-dev-sparepool" -a name | grep name | grep ip- | grep -v 10-203-0-74 | tr -s " " | cut -d" " -f 3 | xargs -n 1 -i knife node delete \{\} --yes
 
+Find all cookbook that depend on ps_client and trim them down.  Then determine their build targets.
+eknife search node "deployed_cookbooks:ps_client" -a expanded_run_list --no-color | grep default | grep -v "base::default" | sed 's/::default//' | sort | uniq
+
+eknife search node "deployed_cookbooks:ps_client AND chef_environment:ext-prod-*" -a expanded_run_list --no-color | grep "::" | grep -v "base::default" | sed 's/::default//' | sed -E 's/::.*//' | sort | uniq | tr -s " "
+
+
 Delete a collection of nodes in the sparepool.
 
 g glog | grep -E "(17cbad3|release-15.6.1)"

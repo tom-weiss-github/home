@@ -136,6 +136,7 @@ alias gdb='gdb -n'
 alias gt='gnome-terminal &'
 alias push='echo git push origin $b; git push origin $b'
 alias swarm="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/swarm.py --verbose "
+alias vc="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/view_changes.py "
 alias vcloud="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/vcloud_server.py"
 export TEMP_VM_CHEF_ENV=int-dev-cert
 export TEMP_VM_CHEF_TAG='basegofast'
@@ -826,6 +827,14 @@ function build__()
 }
 alias build=build__
 
+function distmake() {
+   reporoot=$(git rev-parse --show-toplevel)
+   chef_distcc_get_hosts_script="$reporoot/deploy/chef/cookbooks/distcc/files/default/get_distcc_hosts.rb"
+   test -f $chef_distcc_get_hosts_script && knife exec $chef_distcc_get_hosts_script
+   make c_compiler="distcc /opt/build/gcc-4.9.1/bin/gcc" cpp_compiler="distcc /opt/build/gcc-4.9.1/bin/g++" "$@"
+}
+# distmake -j16 <target>
+
 # To view the definition of a function, do 'type <function>'.
 function cf() { $myemacsclient -n `find . -name $1`; }
 function f() { find . -name $1 -print; }
@@ -1103,6 +1112,28 @@ function knf()
     popd >> /dev/null
 }
 
+function pes()
+{
+    if [ -z "$1" ]; then
+        echo "Usage: pes [on|off] node"
+        return
+    fi
+    if [ -z "$2" ]; then
+        echo "Usage: pes [on|off] node"
+        return
+    fi
+
+    if [ "on" == "$1" ]; then
+        knife exec `git rev-parse --show-toplevel`/deploy/chef/scripts/snacks/add_attribute.rb "name:$2" add haproxy.skip_haproxy _true_ 2> /dev/null
+        knife exec `git rev-parse --show-toplevel`/deploy/chef/scripts/snacks/add_attribute.rb "name:$2" add haproxy.weight 0 2> /dev/null
+        knife exec `git rev-parse --show-toplevel`/deploy/chef/scripts/snacks/add_attribute.rb "name:$2" add edgeserver.disable_smoke_test _true_ 2> /dev/null
+    fi
+
+    if [ "off" == "$1" ]; then
+        knife exec `git rev-parse --show-toplevel`/deploy/chef/scripts/snacks/add_attribute.rb "name:$2" remove haproxy 2> /dev/null
+        knife exec `git rev-parse --show-toplevel`/deploy/chef/scripts/snacks/add_attribute.rb "name:$2" remove edgeserver 2> /dev/null
+    fi
+}
 
 function rename_terminal_title_no_prefix()
 {
@@ -1167,6 +1198,30 @@ function gitcleanall()
         echo "Cleaning repo $repo."
         gitclean
         popd
+    done
+}
+
+function cbv()
+{
+    rm /tmp/cbv > /dev/null 2>&1
+    git show origin/$2:deploy/chef/cookbooks/$1/metadata.rb > /tmp/cbv
+    grep version /tmp/cbv
+}
+
+function check_envs()
+{
+    mergetest
+    for env_file in 'ext-prod-live' 'ext-prod-sim' 'ext-prod-delayed' 'ext-prod-md-pp' 'ext-prod-cassandra' 'ext-prod-coreinfra' 'ext-prod-live-eex' 'ext-prod-md-pp-delayed' 'ext-prod-md-pp-eex' 'ext-prod-mon' 'ext-prod-other-cassandra' 'ext-prod-sparepool';
+    do
+        echo "Checking $env_file."
+        git diff master:deploy/chef/environments/$env_file.rb release/current:deploy/chef/environments/$env_file.rb
+        git diff release/current:deploy/chef/environments/$env_file.rb develop:deploy/chef/environments/$env_file.rb
+    done
+
+    for env_file in 'int-stage-cert' 'int-stage-md-sp';
+    do
+        echo "Checking $env_file."
+        git diff release/current:deploy/chef/environments/$env_file.rb develop:deploy/chef/environments/$env_file.rb
     done
 }
 
