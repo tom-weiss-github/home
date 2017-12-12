@@ -26,9 +26,9 @@
 (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
 
 ;; Load Scala on linux.
-(if (eq system-type 'gnu/linux)
-    (progn (add-to-list 'load-path "~/.emacs.d/scala-mode")
-           (require 'scala-mode-auto)))
+;; (if (eq system-type 'gnu/linux)
+;;     (progn (add-to-list 'load-path "~/.emacs.d/scala-mode")
+;;            (require 'scala-mode-auto)))
 
 ;; map f2 to goto line number
 (global-set-key (quote[f2]) (quote goto-line))

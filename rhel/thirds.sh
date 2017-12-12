@@ -10,9 +10,11 @@ function program_count()
     fi
 }
 
+logger -t thirds "Starting."
+
 # These names are obtained from running 'wmctrl -lx'.
 terminator='terminator.Terminator'
-emacs='emacs-24_3.Emacs'
+emacs='emacs.Emacs'
 chrome='chromium-browser.Chromium-browser'
 
 # Some useful commands when callibrating this script.
@@ -52,8 +54,7 @@ fi
 
 if ! [ -z $emacs_id ]; then
     wmctrl -r $emacs_id -i -b remove,maximized_vert,maximized_horz
-    # wmctrl -r $emacs_id -i -e 0,1100,0,1130,1386
-    wmctrl -r $emacs_id -i -e 0,1110,0,1130,1386
+    wmctrl -r $emacs_id -i -e 0,1050,0,1190,1386
     wmctrl -r $emacs_id -i -b add,maximized_vert
 fi
 

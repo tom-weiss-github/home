@@ -1,0 +1,41 @@
+
+Get my classical music working.
+
+
+Figure out why I can't log into gnome anymore.  After I cloned githome and created some files the
+logout froze.  Perhaps try reinstalling gnome.
+
+Figure out how to get alt-f4 to kill programs.
+https://ubuntu-mate.community/t/how-to-fix-broken-alt-key/14602/50
+
+Seems to work fine when I use my logitech keyboard.  Might be related to the function keys on the laptop and perhaps they need to be switched to act as function keys by default.
+
+
+RESOLVED
+
+Get the thirds.sh and nothirds.sh working again via the shortcut menu.
+https://askubuntu.com/questions/37401/how-do-i-add-a-launcher-for-sh-applications
+Examples:
+
+~/.local/share/applications/nothirds.desktop
+[Desktop Entry]
+Version=1.0
+Name=nothirds
+Exec=bash -i /home/tweiss/githome/rhel/thirds.sh off
+Terminal=false
+Icon=utilities-terminal
+Type=Application
+
+
+Figure out how to limit the pidgin notifications.
+Most of the detailed notifications can be found in the various plugins.  They need to be configured to limit the notifications.
+
+https://askubuntu.com/questions/152156/how-do-i-prevent-an-external-monitor-from-shutting-off-when-closing-my-laptop-li
+/etc/UPower/UPower.conf
+ignoreLid=true
+
+
+gnome terminal stop blink
+https://geoff.greer.fm/2016/08/26/gnome-terminal-cursor-blinking-saga/
+
+Clone githome.
