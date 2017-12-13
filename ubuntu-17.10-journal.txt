@@ -1,17 +1,28 @@
 
-Get my classical music working.
-
+Figure out the emacs option to always follow softlinks so I stop getting that message.
 
 Figure out why I can't log into gnome anymore.  After I cloned githome and created some files the
 logout froze.  Perhaps try reinstalling gnome.
 
-Figure out how to get alt-f4 to kill programs.
-https://ubuntu-mate.community/t/how-to-fix-broken-alt-key/14602/50
-
-Seems to work fine when I use my logitech keyboard.  Might be related to the function keys on the laptop and perhaps they need to be switched to act as function keys by default.
+Change 30 grub timeout.
+I changed the GRUB_DEFAULT from 0 to 1.  I copied the orginal file to ~/tmp/grub.cfg.
+https://askubuntu.com/questions/148095/how-do-i-set-the-grub-timeout-and-the-grub-default-boot-entry
 
 
 RESOLVED
+========
+
+Figure out shortcut to lock screen.
+super-l (super is the Windows key on this laptop)
+
+
+Get my classical music working.  Worked much better via external drive transfer than wifi.
+
+Figure out how to get alt-f4 to kill programs.
+https://ubuntu-mate.community/t/how-to-fix-broken-alt-key/14602/50
+This seems to be me accidentally setting the function keys on the laptop.  I used the esc-fn hotkey
+to switch them back and the issue was resolved.
+
 
 Get the thirds.sh and nothirds.sh working again via the shortcut menu.
 https://askubuntu.com/questions/37401/how-do-i-add-a-launcher-for-sh-applications
@@ -37,5 +48,3 @@ ignoreLid=true
 
 gnome terminal stop blink
 https://geoff.greer.fm/2016/08/26/gnome-terminal-cursor-blinking-saga/
-
-Clone githome.
