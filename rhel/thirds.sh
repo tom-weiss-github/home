@@ -14,7 +14,7 @@ logger -t thirds "Starting."
 
 # These names are obtained from running 'wmctrl -lx'.
 terminator='terminator.Terminator'
-emacs='emacs.Emacs'
+emacs='emacs-24_3.Emacs'
 chrome='chromium-browser.Chromium-browser'
 
 # Some useful commands when callibrating this script.

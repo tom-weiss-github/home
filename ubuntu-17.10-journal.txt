@@ -1,6 +1,4 @@
 
-Figure out the emacs option to always follow softlinks so I stop getting that message.
-
 Figure out why I can't log into gnome anymore.  After I cloned githome and created some files the
 logout froze.  Perhaps try reinstalling gnome.
 
@@ -11,6 +9,11 @@ https://askubuntu.com/questions/148095/how-do-i-set-the-grub-timeout-and-the-gru
 
 RESOLVED
 ========
+
+Bluetooth headphones.
+https://askubuntu.com/questions/676853/bluetooth-headset-with-poor-sound-quality-on-ubuntu
+Resolved by opening the sound settings, and in the Profile, switching to
+'High Fidelity Playback (A2DP Sink)'.
 
 Figure out shortcut to lock screen.
 super-l (super is the Windows key on this laptop)
