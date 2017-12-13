@@ -427,6 +427,10 @@
 ;; yari
 (global-set-key (quote[f5]) (quote yari))
 
+;; Stop emacs from asking me,
+;; Symbolic link to Git-controlled source file; follow link? (yes or no)
+(setq vc-follow-symlinks nil)
+
 ;; pydoc-info
 ;; C-h S (to search)
 
