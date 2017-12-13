@@ -238,7 +238,7 @@ if [ -e /etc/centos-release ]; then
 else
     alias mdbd='sudo mount.cifs -o user=tweiss //chifs01.int.tt.local/Share/Dead_By_Dawn /mnt/dbd'
 fi
-alias kolmar='sudo mount.cifs -o user=weiss //192.168.1.117/Users /mnt/kolmar'
+alias kolmar='sudo mount.cifs -o user=weiss //192.168.0.3/Users /mnt/kolmar'
 alias gld2vm49='sudo mount.cifs -o user=tweiss,uid=1000,gid=1000 //10.195.2.49/shared /home/tweiss/gld2vm49'
 alias cli_mt='run `git rev-parse --show-toplevel`/ext/linux/x86-64/release/bin/cli_mt 10.203.0.43:2181'
 alias jtrader="/usr/java/jdk1.7.0_03/bin/java -cp JTrader.jar JTrader &"
