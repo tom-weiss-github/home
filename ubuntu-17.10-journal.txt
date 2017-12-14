@@ -10,6 +10,13 @@ https://askubuntu.com/questions/148095/how-do-i-set-the-grub-timeout-and-the-gru
 RESOLVED
 ========
 
+Pidgin persistent notifications.  Installed the chrome gnome shell extention (after installing I
+also had to run the command 'sudo apt install chrome-gnome-shell'.  This let me install a nice
+pidgin plugin called Pidgin Persistent Notification at
+https://extensions.gnome.org/extension/170/pidgin-peristent-notification/.  This puts a nice icon on
+the top tray that turns red and stays red when I get a message (until I read it).  I also installed
+'Frippery Move Clock' to move the clock over to the right.
+
 Bluetooth headphones.
 https://askubuntu.com/questions/676853/bluetooth-headset-with-poor-sound-quality-on-ubuntu
 Resolved by opening the sound settings, and in the Profile, switching to
