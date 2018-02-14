@@ -1,14 +1,18 @@
 
+Monitor Settings
+
+
 Figure out why I can't log into gnome anymore.  After I cloned githome and created some files the
 logout froze.  Perhaps try reinstalling gnome.
 
-Change 30 grub timeout.
-I changed the GRUB_DEFAULT from 0 to 1.  I copied the orginal file to ~/tmp/grub.cfg.
-https://askubuntu.com/questions/148095/how-do-i-set-the-grub-timeout-and-the-grub-default-boot-entry
 
 
 RESOLVED
 ========
+Can't resolve rest.int.tt.local.  This can be resolved by opening /etc/nsswitch.conf and change the line
+marked hosts to be:
+hosts: files mdns4_minimal dns [NOTFOUND=return] mdns4
+This will move 'dns' to be before NOTFOUND.
 
 Pidgin persistent notifications.  Installed the chrome gnome shell extention (after installing I
 also had to run the command 'sudo apt install chrome-gnome-shell'.  This let me install a nice
@@ -58,3 +62,7 @@ ignoreLid=true
 
 gnome terminal stop blink
 https://geoff.greer.fm/2016/08/26/gnome-terminal-cursor-blinking-saga/
+
+Change 30 grub timeout.
+I changed the GRUB_DEFAULT from 0 to 1.  I copied the orginal file to ~/tmp/grub.cfg.
+https://askubuntu.com/questions/148095/how-do-i-set-the-grub-timeout-and-the-grub-default-boot-entry
