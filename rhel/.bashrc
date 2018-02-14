@@ -115,7 +115,8 @@ export ENABLE_POST_TO_SERVICENOW=1
 
 
 alias off='sudo shutdown -P now'
-alias hibernate='sudo systemctl hibernate'
+alias hibernate='echo sudo systemctl hibernate is broken'
+alias suspend='sudo systemctl suspend'
 alias lock='gnome-screensaver-command -l'
 alias wifiscan='nmcli device wifi rescan'
 alias wifils='nmcli device wifi list'
@@ -236,7 +237,7 @@ alias repo="python ~/githome/get-repo.py"
 if [ -e /etc/centos-release ]; then
     alias mdbd='sudo mount -o user=intad/tweiss -t cifs //chifs01.int.tt.local/Share/Dead_By_Dawn /mnt/dbd/'
 else
-    alias mdbd='sudo mount.cifs -o user=tweiss //chifs01.int.tt.local/Share/Dead_By_Dawn /mnt/dbd'
+    alias mdbd='sudo mount.cifs -o user=tweiss,vers=1.0 //chifs01.int.tt.local/Share/Dead_By_Dawn /mnt/dbd'
 fi
 alias kolmar='sudo mount.cifs -o user=weiss //192.168.0.3/Users /mnt/kolmar'
 alias gld2vm49='sudo mount.cifs -o user=tweiss,uid=1000,gid=1000 //10.195.2.49/shared /home/tweiss/gld2vm49'
