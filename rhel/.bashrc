@@ -114,6 +114,7 @@ export MY_ONE_OFF_VERSION=0.88.88
 export ENABLE_POST_TO_SERVICENOW=1
 
 
+alias xclip='xclip -sel clip'
 alias off='sudo shutdown -P now'
 alias hibernate='sudo systemctl hibernate'
 alias lock='gnome-screensaver-command -l'
@@ -175,7 +176,10 @@ alias brm='git tt br m'
 alias gtt='sudo pip install --upgrade git+ssh://git@github.com/tradingtechnologies/git_tools.git@master'
 alias aec='source /opt/virtualenv/exchange_compliance/bin/activate && source orders/cf/audit/pythonpath.sh'
 alias cdr='cat `ls -d1t ~/deployment_receipts/* | head -n 1` | xclip -i'
-
+alias esetrcv='eknife exec $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/snacks/set_rc_version.rb'
+alias nutanix_cpu='knife ssh "(chef_environment:int-dev* OR chef_environment:int-stage* OR chef_environment:int-sqe*) AND (NOT chef_environment:int-dev-jenkins) (NOT chef_environment:*perf*) AND name:*vm* AND (NOT creation_info_machine_origin:temp_hive)" "uptime" -a ipaddress --concurrency 20 | grep -v "load average: 0."'
+alias kcu="knife cookbook upload --config ~/.chef/knife.rb --cookbook-path=deploy/chef/cookbooks "
+alias ekcu="knife cookbook upload --config ~/.chef/knife.external.rb --cookbook-path=deploy/chef/cookbooks"
 # Use optimize-find.py to help decide which directories and extensions to filter.
 #alias ff='find . -type d -path "*/build" -prune -o -path "*/.git" -prune -o -path "*/ext" -prune -o -path "*/pycommon" -prune -o \( \! -iname "*.ico" -and \! -iname "TAGS" -and \! -iname "FILES" -and \! -iname "BROWSE" -and \! -iname "*.cs" -and \! -iname "*.png" -and \! -iname "*.jar" -and \! -iname "*.pyc" -and \! -iname "*.o" -and \! -iname "*.d" -and \! -iname "*.a" -and \! -name "*.so" -and \! -iname "*.bin" -and \! -iname "*pdf" -and \! -iname "*.java"  -and \! -iname "*xml" -and \! -iname "*.scala" -and \! -iname "*png" -and \! -iname "*.txt" -and \! -iname "*.html" -and \! -iname "*.php" -and \! -iname "*.css" -and \! -iname "*.js" -and \! -iname "*.cs" -and \! -iname "*.json" -and \! -iname "*.sql" -and \! -iname "*.dat" \) -print0 | xargs -0 grep -iHn'
 
@@ -209,7 +213,7 @@ alias ff="find . -type d $ff_dir \( $ff_file \) -print0 | xargs -0 grep -iHns"
 
 alias git-add-mod='git status | grep modified | cut -d " " -f 4 | xargs --max-args=1 git add -v'
 alias allbranches="git for-each-ref --format='%(committerdate) %09 %(authorname) %09 %(refname)' | sort -k5n -k2M -k3n -k4n"
-alias glog='git --no-pager glog -13'
+alias glog='git --no-pager glog -10'
 alias galias='git config --list | grep alias'
 alias soc='kill `cat /var/run/cme.pid`'
 alias oc?='cat /var/run/cme.pid; ps -ef | grep cme | grep -v grep'
@@ -295,6 +299,8 @@ function setchefconfig()
     if [[ $1 == ar* || $1 == ch* || $1 == ny* || $1 = fr* ]]; then
         chef_config=~/.chef/knife.external.rb
     elif [[ $1 == sy* || $1 == sg* || $1 == ln* || $1 == hk* ]]; then
+        chef_config=~/.chef/knife.external.rb
+    elif [[ $1 == ty* ]]; then
         chef_config=~/.chef/knife.external.rb
     elif [[ $1 == *"ip-10-210-0"* || $1 == *"ip-10-210-2"* || $1 == *"ip-10-210-4"* ]]; then
         chef_config=~/.chef/knife.external.rb
@@ -770,6 +776,42 @@ function deploy__()
 }
 alias deploy=deploy__
 
+function set_many_rcv()
+{
+    if [ -z "$1" ]; then
+        echo Usage: You must pass the query \(quoted\) and some number of cookbooks.
+        echo "Example: esetrcvs \"chef_environment:ext-uat-cert\" cme ice"
+        return
+    fi
+
+    local query="$1"
+    local first=false
+    for COOKBOOK in "$@"
+    do
+        if [ $first == false ]; then
+            # The first argument is the query, skip it.
+            first=true
+            continue
+        fi
+
+        echo knife exec $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/snacks/set_rc_version.rb \"$query AND deployed_cookbooks:$COOKBOOK\" $COOKBOOK --config ~/.chef/knife.external.rb
+        knife exec $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/snacks/set_rc_version.rb "$query AND deployed_cookbooks:$COOKBOOK" $COOKBOOK --config ~/.chef/knife.external.rb
+    done
+
+}
+alias esetrcvs=set_many_rcv
+
+function find_environments()
+{
+    if [ -z "$1" ]; then
+        echo Usage: You must pass a cookbook
+        return
+    fi
+
+    knife search node "deployed_cookbooks:$1" -a chef_environment --config ~/.chef/knife.external.rb | grep chef_env | sort | uniq
+}
+alias fenv=find_environments
+
 function bootstrap__()
 {
     local found_dash_a=false
@@ -1211,7 +1253,7 @@ function cbv()
 function check_envs()
 {
     mergetest
-    for env_file in 'ext-prod-live' 'ext-prod-sim' 'ext-prod-delayed' 'ext-prod-md-pp' 'ext-prod-cassandra' 'ext-prod-coreinfra' 'ext-prod-live-eex' 'ext-prod-md-pp-delayed' 'ext-prod-md-pp-eex' 'ext-prod-mon' 'ext-prod-other-cassandra' 'ext-prod-sparepool';
+    for env_file in 'ext-prod-live' 'ext-prod-sim' 'ext-prod-delayed' 'ext-prod-md-pp' 'ext-prod-cassandra' 'ext-prod-coreinfra' 'ext-prod-live-eex' 'ext-prod-md-pp-delayed' 'ext-prod-md-pp-eex' 'ext-prod-mon' 'ext-prod-other-cassandra' 'ext-prod-sparepool' 'int-stage-cert-master' 'int-stage-md-sp-master';
     do
         echo "Checking $env_file."
         git diff master:deploy/chef/environments/$env_file.rb release/current:deploy/chef/environments/$env_file.rb

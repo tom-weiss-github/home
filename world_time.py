@@ -28,6 +28,7 @@ else:
 
 print_tz_time("Chicago", "America/Chicago", "CDT" if is_dst_in_effect else "CST")
 print_tz_time("New York", "America/New_York", "")
+print_tz_time("Sao Paulo", "America/Sao_Paulo", "")
 print_tz_time("UTC", "UTC", "")
 print_tz_time("London", "Europe/London", "")
 print_tz_time("Frankfurt", "Europe/Berlin", "")
@@ -36,5 +37,3 @@ print_tz_time("Singapore", "Asia/Singapore", "")
 print_tz_time("Hong Kong", "Asia/Hong_Kong", "")
 print_tz_time("Tokyo", "Asia/Tokyo", "")
 print_tz_time("Sydney","Australia/Sydney", "")
-
-

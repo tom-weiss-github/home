@@ -38,7 +38,7 @@ Print top 5 cpu consumers.  Running this command through knife ssh can yield res
 processes.  Any that have a value greater than 100 typically means they are spinning on a core.  The
 'uptime' command will print the overall cpu load which is also useful when trying to track down high
 cpu consumption.
-knife ssh "(chef_environment:int-dev* OR chef_environment:int-stage* OR chef_environment:int_sqe*) AND (NOT chef_environment:int-dev-jenkins) (NOT chef_environment:*perf*) AND name:gl*vm* AND (NOT creation_info_machine_origin:temp_hive)" "uptime" -a ipaddress --concurrency 20 | grep -v "load average: 0."
+knife ssh "(chef_environment:int-dev* OR chef_environment:int-stage* OR chef_environment:int-sqe*) AND (NOT chef_environment:int-dev-jenkins) (NOT chef_environment:*perf*) AND name:*vm* AND (NOT creation_info_machine_origin:temp_hive)" "uptime" -a ipaddress --concurrency 20 | grep -v "load average: 0."
 
 
 
