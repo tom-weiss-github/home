@@ -66,3 +66,6 @@ https://geoff.greer.fm/2016/08/26/gnome-terminal-cursor-blinking-saga/
 Change 30 grub timeout.
 I changed the GRUB_DEFAULT from 0 to 1.  I copied the orginal file to ~/tmp/grub.cfg.
 https://askubuntu.com/questions/148095/how-do-i-set-the-grub-timeout-and-the-grub-default-boot-entry
+
+Used this article to set to an older kernel.
+https://askubuntu.com/questions/82140/how-can-i-boot-with-an-older-kernel-version?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
