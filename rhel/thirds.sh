@@ -1,5 +1,24 @@
 #!/bin/bash
 
+# This logic is referred to in ~/.local/share/applications/thirds.desktop
+# [Desktop Entry]
+# Version=1.0
+# Name=thirds
+# Exec=bash -i /home/tweiss/githome/rhel/thirds.sh on
+# Terminal=false
+# Icon=utilities-terminal
+# Type=Application
+#
+# and in ~/.local/share/applications/nothirds.desktop
+#
+# [Desktop Entry]
+# Version=1.0
+# Name=nothirds
+# Exec=bash -i /home/tweiss/githome/rhel/thirds.sh off
+# Terminal=false
+# Icon=utilities-terminal
+# Type=Application
+
 function program_count()
 {
     # The -x shows the WM_CLASS and that seems to be unique for applications.
@@ -17,13 +36,17 @@ terminator='terminator.Terminator'
 emacs='emacs-24_3.Emacs'
 chrome='chromium-browser.Chromium-browser'
 
+terminator_count=`wmctrl -lx | grep -o $terminator | wc -l`
+emacs_count=`wmctrl -lx | grep -o $emacs | wc -l`
+chrome_count=`wmctrl -lx | grep -o $chrome | wc -l`
+
+echo terminator count is $terminator_count
+echo emacs count is $emacs_count
+echo chrome count is $chrome_count
+
 # Some useful commands when callibrating this script.
 # wmctrl -lG will show x-offset, y-offset, width, and height.
 # xprop -id 0x00001234 (0x00001234 from wmctrl will list properties of the window).
-
-program_count $terminator
-program_count $emacs
-program_count $chrome
 
 terminator_id=`wmctrl -lx | grep $terminator | tr -s " " | cut -d " " -f 1`
 chrome_id=`wmctrl -lx | grep $chrome | tr -s " " | cut -d " " -f 1`
@@ -35,7 +58,8 @@ echo terminator_id is $terminator_id
 echo chrome_id is $chrome_id
 echo emacs_id is $emacs_id
 
-if [ "$1" == "off" ]; then
+if [[ "$1" == "off" ]]; then
+    echo off
     wmctrl -r $terminator_id -i -b add,maximized_vert,maximized_horz
     wmctrl -r $emacs_id -i -b add,maximized_vert,maximized_horz
     wmctrl -r $chrome_id -i -b add,maximized_vert,maximized_horz
@@ -44,7 +68,8 @@ if [ "$1" == "off" ]; then
     exit 0
 fi
 
-if ! [ -z $terminator_id ]; then
+if [[ ! -z $terminator_id && $terminator_count == 1 ]]; then
+    echo Setting terminator.
     # If a window is maximized, then its dimensions cannot be changed.  This will remove
     # maximization if it's set.
     wmctrl -r $terminator_id -i -b remove,maximized_vert,maximized_horz
@@ -52,13 +77,15 @@ if ! [ -z $terminator_id ]; then
     wmctrl -r $terminator_id -i -b add,maximized_vert
 fi
 
-if ! [ -z $emacs_id ]; then
+if [[ ! -z $emacs_id && $emacs_count == 1 ]]; then
+    echo Setting emacs.
     wmctrl -r $emacs_id -i -b remove,maximized_vert,maximized_horz
     wmctrl -r $emacs_id -i -e 0,1050,0,1190,1386
     wmctrl -r $emacs_id -i -b add,maximized_vert
 fi
 
-if ! [ -z $chrome_id ]; then
+if [[ ! -z $chrome_id && $chrome_count == 1 ]]; then
+    echo Setting chrome.
     wmctrl -r $chrome_id -i -b remove,maximized_vert,maximized_horz
     wmctrl -r $chrome_id -i -e 0,2240,0,1200,1367
     wmctrl -r $chrome_id -i -b add,maximized_vert

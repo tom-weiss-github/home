@@ -1,0 +1,9 @@
+
+After suspend, bluetooth headphones would connect and then disconnect.
+https://askubuntu.com/questions/1036195/bluetooth-doesnt-work-after-resuming-from-sleep-ubuntu-18-04-lts?rq=1
+sudo add-apt-repository ppa:bluetooth/bluez
+sudo apt install bluez
+This upgraded bluez from
+bluez/bionic,now 5.48-0ubuntu3 amd64 [installed]
+to
+bluez/bionic,now 5.49-0ubuntu0ppa1 amd64 [installed]
