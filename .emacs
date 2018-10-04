@@ -515,7 +515,7 @@
 ;; (Above was used to find log message helpers, starts with sv_, then an 8 digit number.)
 ;;
 ;; do M C-s  MessageType: JC-qC-jMessage.*C-qC-jMarketID: 197140
-;; The 'C-qC-j' part is the newline.
+;; The 'C-qC-j' part is the newline ('C-qC-A' is the fix soh character)
 ;; M-x replace-regexp --> regular expression search-replace (query-replace-regexp to choose which ones)
 ;; example of regular expression search-replace:
 ;; M-x replace-regexp TEXT[ ]* <enter> ' = ' (that's space equals space)
@@ -579,3 +579,7 @@
 ;; make
 ;; make install
 ;; ~/bin/emacs-24.3
+
+;; Simple json format:
+;; 1) Highlight json code.
+;; 2) C-u M-| python -m json.tool

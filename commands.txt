@@ -40,6 +40,8 @@ processes.  Any that have a value greater than 100 typically means they are spin
 cpu consumption.
 knife ssh "(chef_environment:int-dev* OR chef_environment:int-stage* OR chef_environment:int-sqe*) AND (NOT chef_environment:int-dev-jenkins) (NOT chef_environment:*perf*) AND name:*vm* AND (NOT creation_info_machine_origin:temp_hive)" "uptime" -a ipaddress --concurrency 20 | grep -v "load average: 0."
 
+Splunk search
+sourcetype=compliance_logs "Compliance Elapsed Time" seconds>6000
 
 
 lsof
@@ -66,6 +68,9 @@ It uses sh -c to use the directory for 2 commands.
 knife search "recipe:zookeeper AND environment:dev" -a ipaddress | grep ipaddress | tail -1 | tr -s " " | cut -d":" -f 2
 Similar to other cut examples, but this one uses the tr command to trim extra whitespace to assist cut.
 
+Find the contact info of all the teams who use java.
+ff install_jdk | cut -d"/" -f 5 | sort | uniq | grep -v jdk | xargs -n 1 -i grep email deploy/chef/cookbooks/\{\}/attributes/contact_info.rb
+
 ttknife search node "chef_environment:int-dev-cert" -a ipaddress |  grep ipaddress  | tr -s " " | cut -d" " -f 3 | xargs -n 1 -i ping -c 5 -q \{\} | grep -iE "statistics|packet"
 Search for nodes in int-dev-cert that are not running.
 
@@ -76,6 +81,9 @@ Find all cookbook that depend on ps_client and trim them down.  Then determine t
 eknife search node "deployed_cookbooks:ps_client" -a expanded_run_list --no-color | grep default | grep -v "base::default" | sed 's/::default//' | sort | uniq
 
 eknife search node "deployed_cookbooks:ps_client AND chef_environment:ext-prod-*" -a expanded_run_list --no-color | grep "::" | grep -v "base::default" | sed 's/::default//' | sed -E 's/::.*//' | sort | uniq | tr -s " "
+
+Find all the cookbook emails.
+find deploy/chef/cookbooks -name contact_info.rb | xargs grep email | cut -d"=" -f 2 | sed 's/"//' | sed 's/"//' | sort | uniq | xclip
 
 
 Delete a collection of nodes in the sparepool.
@@ -102,6 +110,13 @@ sed -i 's/replaceme/withme/g' file
 Replace all occurences of 'replaceme' with 'withme' in 'file'.
 
 Find and replace text in files.
+
+
+If 6875cae through 2e02f97 (including both endpoints) are the commits I want to cherry pick,
+then 6875cae^..2e02f97 is the option to 'git cherry-pick'.
+git fetch
+git log master --format=format:%H --grep DEB-76400 -n 1 ==> gives me the final commit that contains DEB-76400
+git log master--format=format:%H --grep DEB-76400 -n 1 --reverse ==> gives me the final commit that contains DEB-76400
 
 Needs more investigation: After merging a branch into develop, the push to origin/develop fails
 because someone else beat me to it.  John suggests the following commands to avoid the bad merge
@@ -130,6 +145,11 @@ watch -n 1 ntpstat
 Run a command over and over (once per second).  In this case the command will
 indicate if ntp is synchronized.
 
+service ntpd stop
+ntpd -gq
+service ntpd start
+Those commands will force ntp to sync to the source regardless of the offset.
+
 files=`aws s3 ls s3://deploy-debesys | grep debesys_ | tr -s " " | cut -d" " -f 4`
 for old in $files; do
     echo old $old
@@ -138,6 +158,22 @@ for old in $files; do
     aws s3 mv s3://deploy-debesys/$old s3://deploy-debesys/$new
 done
 Rename all files in S3 with a new name based on a regular expression.
+
+$($DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/aws_authenticator.py --account deb --role dev --env)
+
+$($DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/aws_authenticator.py --account prod --role dev --env)
+
+aws ec2 describe-images --filters "Name=description,Values=*ec2_instance.py*" --query 'Images[*].{AMI:ImageId,Name:Name,Description:Description,Creation:CreationDate,Snapshot:BlockDeviceMappings[*].Ebs.SnapshotId}' --region us-east-1
+(add this to get the list of snapshots)
+| grep snap- | tr -d "\"" | tr -s " " | tr "\n" " "
+(add this to get the list of amis)
+| grep ami- | cut -d":" -f 2 | tr -d "\"" | tr -d "," | tr "\n" " "
+
+(aws ec2 deregister-image --region us-east-1 --image-id)
+for AMI_ID in a1 a2; do aws ec2 deregister-image --region -1 --image-id $AMI_ID; done
+
+(aws ec2 delete-snapshot --region us-east-1 --snapshot-id)
+for SNAP_ID in s1 s2; do aws ec2 delete-snapshot --region -1 --snapshot-id $SNAP_ID; done
 
 abrt-cli list -f | grep Directory | cut -d" " -f 7 | xargs -n 1 abrt-cli rm
 

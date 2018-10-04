@@ -23,14 +23,22 @@ export PATH
 #     sudo chmod a+rw /var/log/profiles
 # fi
 
-if [ -z "$SSH_AUTH_SOCK" ]; then
-    eval `ssh-agent -s`
-    ssh-add
-fi
+# if [ -z "$SSH_AUTH_SOCK" ]; then
+#     eval `ssh-agent -s`
+#     ssh-add
+# fi
+
+RED='\033[91m'
+BOLD='\033[1m'
+ENDC='\033[0m'
 
 if [ -z "$TMUX" ]; then
     # The TMUX environment variable is not set, we're not inside tmux.
-    echo DISPLAY is $DISPLAY.
+    if [[ $DISPLAY = *"10.0"* ]]; then
+        echo DISPLAY is $DISPLAY.
+    else
+        echo -e "${RED}${BOLD}DISPLAY is $DISPLAY${ENDC}"
+    fi
     echo sudo netstat -tulpn | grep "127.0.0.0:60"
     sudo netstat -tulpn | grep "127.0.0.0:60"
     echo ps -ef | grep sshd | grep tweiss@

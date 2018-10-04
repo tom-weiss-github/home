@@ -83,6 +83,7 @@ export DEPT=""
 # in scala caused an LBM symbol to not be recognized and failed to run.  To unset use:
 # unset LD_BIND_NOW
 # export LD_BIND_NOW=yes
+export UPLOAD_RC_VERSION_HERE=/home/tweiss/dev-root/__deploy_alternate
 export PATH=$PATH:~/Downloads/meld-1.6.1/bin
 export PATH=$PATH:/opt/redis/redis-2.8.17/src
 export PATH=$PATH:/opt/scala-2.9.3/bin/
@@ -96,11 +97,20 @@ export TT_EMAIL=tom.weiss@tradingtechnologies.com
 if [ -f ~/jenkins_token ]; then
     export JENKINS_TOKEN=$(head -n 1 ~/jenkins_token)
 fi
+if [ -f ~/github_token ]; then
+    export GITHUB_TOKEN=$(head -n 1 ~/github_token)
+fi
 export DEPLOYMENT_SCRIPTS_REPO_ROOT=~/dev-root/scripts
+if [ -f $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/bashrc/chef.bash ]; then
+    source $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/bashrc/chef.bash
+    alias tth=ssh_by_hostname
+fi
 # export BUMP_COOKBOOK_VERSION_ALTERNATE_REPO=~/dev-root/cookbooks
 export REQUEST_BUILD_SUPPRESS_TIPS=1
+export DEPLOY_ONE_OFF_HIDE_EXPIRE_MSG=1
 export BUMP_COOKBOOK_VERSION_AUTO_EXECUTE=1
 export BUMP_COOKBOOK_VERSION_ALLOW_MULTIBUMP=1
+export KNIFE_SSH_ENABLE_INTERNAL_POOL=1
 export FEATURE_TEST_EMAIL=tom.weiss@tradingtechnologies.com
 export FEATURE_TEST_COMPANY="Deployment Team"
 export FEATURE_TEST_USER=tweiss
@@ -144,7 +154,9 @@ export TEMP_VM_CHEF_ENV=int-dev-cert
 export TEMP_VM_CHEF_TAG='basegofast'
 alias tempvm="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/temp_vm.py -v --log-dir /var/log/debesys "
 alias nutanix="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/nutanix_server.py -ov "
-alias bcv="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/bump_cookbook_version.py"
+alias bcv="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/bump_cookbook.py"
+alias nochef="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/disable_chef.py"
+alias upenv="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/update_environment.py"
 alias ec2="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/ec2_instance.py -vo --route53 "
 alias mergetest="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/check_repo.py"
 alias fta="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/feature_test_assistant.py"
@@ -165,22 +177,19 @@ alias tsud="tmux split-window"
 alias tnw="tmux new-window"
 alias tks="tmux kill-server"
 alias tcp="tmux show-buffer -b 0 | xclip -i"
-alias fakechef="cp -v ~/.chef/knife.training.rb.orig ~/.chef/knife.rb && cp -v ~/.chef/knife.training.rb.orig ~/.chef/knife.external.rb && export BUMP_COOKBOOK_VERSION_NO_NOTES=1 && export BUMP_COOKBOOK_VERSION_NO_KNIFE_CHECK=1 && echo BUMP_COOKBOOK_VERSION_NO_NOTES/BUMP_COOKBOOK_VERSION_NO_KNIFE_CHECK have been set."
-alias realchef="cp -v ~/.chef/knife.rb.orig ~/.chef/knife.rb && cp -v ~/.chef/knife.external.rb.orig ~/.chef/knife.external.rb && unset BUMP_COOKBOOK_VERSION_NO_NOTES && unset BUMP_COOKBOOK_VERSION_NO_KNIFE_CHECK && echo BUMP_COOKBOOK_VERSION_NO_NOTES/BUMP_COOKBOOK_VERSION_NO_KNIFE_CHECK have been unset."
-alias awsauth="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/aws_authenticator.py --account deb --role read --env"
+alias fakechef="cp -v ~/.chef/knife.training.rb.orig ~/.chef/knife.rb && cp -v ~/.chef/knife.training.rb.orig ~/.chef/knife.external.rb && cp -v ~/.chef/knife.training.rb.orig ~/.chef/knife.ttsdk.rb && export BUMP_COOKBOOK_VERSION_NO_NOTES=1 && export BUMP_COOKBOOK_VERSION_NO_KNIFE_CHECK=1 && echo BUMP_COOKBOOK_VERSION_NO_NOTES/BUMP_COOKBOOK_VERSION_NO_KNIFE_CHECK have been set."
+alias realchef="cp -v ~/.chef/knife.rb.orig ~/.chef/knife.rb && cp -v ~/.chef/knife.external.rb.orig ~/.chef/knife.external.rb && cp -v ~/.chef/knife.ttsdk.rb.orig ~/.chef/knife.ttsdk.rb && unset BUMP_COOKBOOK_VERSION_NO_NOTES && unset BUMP_COOKBOOK_VERSION_NO_KNIFE_CHECK && echo BUMP_COOKBOOK_VERSION_NO_NOTES/BUMP_COOKBOOK_VERSION_NO_KNIFE_CHECK have been unset."
 alias awsauthexcomp="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/aws_authenticator.py --account prod --role exchange-compliance --env"
-alias upenv='pushd deploy/chef/environments; for env_file in int-dev*.rb; do knife environment from file $env_file --config ~/.chef/knife.rb; done; popd'
-alias brd='git tt br d'
-alias brr='git tt br r'
-alias bru='git tt br u'
+alias upintenv='pushd deploy/chef/environments; for env_file in int-dev*.rb; do knife environment from file $env_file --config ~/.chef/knife.rb; done; popd'
 alias brm='git tt br m'
-alias gtt='sudo pip install --upgrade git+ssh://git@github.com/tradingtechnologies/git_tools.git@master'
 alias aec='source /opt/virtualenv/exchange_compliance/bin/activate && source orders/cf/audit/pythonpath.sh'
+alias apython='source `git rev-parse --show-toplevel`/orders/cf/audit/pythonpath.sh; /opt/virtualenv/exchange_compliance_2_7_14/bin/python'
 alias cdr='cat `ls -d1t ~/deployment_receipts/* | head -n 1` | xclip -i'
 alias esetrcv='eknife exec $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/snacks/set_rc_version.rb'
 alias nutanix_cpu='knife ssh "(chef_environment:int-dev* OR chef_environment:int-stage* OR chef_environment:int-sqe*) AND (NOT chef_environment:int-dev-jenkins) (NOT chef_environment:*perf*) AND name:*vm* AND (NOT creation_info_machine_origin:temp_hive)" "uptime" -a ipaddress --concurrency 20 | grep -v "load average: 0."'
 alias kcu="knife cookbook upload --config ~/.chef/knife.rb --cookbook-path=deploy/chef/cookbooks "
 alias ekcu="knife cookbook upload --config ~/.chef/knife.external.rb --cookbook-path=deploy/chef/cookbooks"
+
 # Use optimize-find.py to help decide which directories and extensions to filter.
 #alias ff='find . -type d -path "*/build" -prune -o -path "*/.git" -prune -o -path "*/ext" -prune -o -path "*/pycommon" -prune -o \( \! -iname "*.ico" -and \! -iname "TAGS" -and \! -iname "FILES" -and \! -iname "BROWSE" -and \! -iname "*.cs" -and \! -iname "*.png" -and \! -iname "*.jar" -and \! -iname "*.pyc" -and \! -iname "*.o" -and \! -iname "*.d" -and \! -iname "*.a" -and \! -name "*.so" -and \! -iname "*.bin" -and \! -iname "*pdf" -and \! -iname "*.java"  -and \! -iname "*xml" -and \! -iname "*.scala" -and \! -iname "*png" -and \! -iname "*.txt" -and \! -iname "*.html" -and \! -iname "*.php" -and \! -iname "*.css" -and \! -iname "*.js" -and \! -iname "*.cs" -and \! -iname "*.json" -and \! -iname "*.sql" -and \! -iname "*.dat" \) -print0 | xargs -0 grep -iHn'
 
@@ -280,6 +289,11 @@ set_display()
     echo DISPLAY is $DISPLAY.
 }
 
+function ekeu()
+{
+    knife environment from file deploy/chef/environments/$1 --config ~/.chef/knife.external.rb
+}
+
 function eknifessh ()
 {
     eknife ssh "$1" "$2" --ssh-user $INTAD_USER --identity-file $INTAD_SSH_KEY -a ipaddress
@@ -301,13 +315,17 @@ function setchefconfig()
         chef_config=~/.chef/knife.external.rb
     elif [[ $1 == sy* || $1 == sg* || $1 == ln* || $1 == hk* ]]; then
         chef_config=~/.chef/knife.external.rb
-    elif [[ $1 == ty* ]]; then
+    elif [[ $1 == ty* || $1 == sp* ]]; then
         chef_config=~/.chef/knife.external.rb
     elif [[ $1 == *"ip-10-210-0"* || $1 == *"ip-10-210-2"* || $1 == *"ip-10-210-4"* ]]; then
+        chef_config=~/.chef/knife.external.rb
+    elif [[ $1 == *"ip-10-210-12"* || $1 == *"ip-10-210-17"* ]]; then
         chef_config=~/.chef/knife.external.rb
     elif [[ $1 == *"ip-10-213-0"* || $1 == *"ip-10-213-2"* || $1 == *"ip-10-213-4"* ]]; then
         chef_config=~/.chef/knife.external.rb
     elif [[ $1 == *"ip-10-215-0"* || $1 == *"ip-10-215-2"* || $1 == *"ip-10-215-4"* ]]; then
+        chef_config=~/.chef/knife.external.rb
+    elif [[ $1 == *"ip-10-215-14"* ]]; then
         chef_config=~/.chef/knife.external.rb
     fi
 }
@@ -421,7 +439,7 @@ function addrun2hosts__()
 }
 alias addrun2hosts=addrun2hosts__
 
-function addattr__()
+function addattr2hosts()
 {
     local usage="Usage: addattr2hosts attribute value host1 host2 ... hostN\n\nExample:\naddattr2hosts zookeeper_ensemble_name service_discovery gla3vm115 gla3vm128 gla3vm135\naddattr2hosts stealthwatch.logmaxretain 100 gla1vm187\naddattr2hosts algojob.overrides.use_price_unifier _1_ ar0srv100"
     if [ -z "$1" ]; then
@@ -463,7 +481,49 @@ function addattr__()
     echo knife exec ~/dev-root/scripts/deploy/chef/scripts/snacks/add_attribute.rb "$query" add "$1" "$2" --config $chef_config
     knife exec ~/dev-root/scripts/deploy/chef/scripts//snacks/add_attribute.rb "$query" add "$1" "$2" --config $chef_config
 }
-alias addattr2hosts=addattr__
+
+function addattr2query()
+{
+    local usage="Usage: addattr2query attribute value quoted_query\n\nExample:\naddattr2query zookeeper_ensemble_name service_discovery \"chef_environment:ext-alt-live\"\naddattr2query stealthwatch.logmaxretain 100 \"name:sy*\"\naddattr2query algojob.overrides.use_price_unifier _1_ \"deployed_cookbooks:algoserver_exec\""
+    if [ -z "$1" ]; then
+        echo -e $usage
+        return
+    fi
+
+    if [ -z "$2" ]; then
+        echo -e $usage
+        return
+    fi
+
+    if [ -z "$3" ]; then
+        echo -e $usage
+        return
+    fi
+
+    setchefconfig $3
+
+    # local query=""
+    # local first=0
+    # local second=0
+    # for var in "$@"
+    # do
+    #     if [ $first == 0 ]; then
+    #         first=1
+    #         continue
+    #     fi
+
+    #     if [ $second == 0 ]; then
+    #         second=1
+    #         continue
+    #     fi
+
+    #     query+="name:$var OR "
+    # done
+    # query=$(echo -n $query | head -c -3)
+
+    echo knife exec ~/dev-root/scripts/deploy/chef/scripts/snacks/add_attribute.rb "$3" add "$1" "$2" --config $chef_config
+    knife exec ~/dev-root/scripts/deploy/chef/scripts//snacks/add_attribute.rb "$3" add "$1" "$2" --config $chef_config
+}
 
 
 function rmattr__()
@@ -1251,10 +1311,22 @@ function cbv()
     grep version /tmp/cbv
 }
 
+function gg()
+{
+    git rev-parse --verify tweiss_gg > /dev/null 2>&1
+    if [ $? == 0 ]; then
+        echo "Found tweiss_gg, deleting via 'git branch -d tweiss_gg'."
+        git branch -d tweiss_gg
+    fi
+
+    echo "git checkout -b tweiss_gg"
+    git checkout -b tweiss_gg
+}
+
 function check_envs()
 {
     mergetest
-    for env_file in 'ext-prod-live' 'ext-prod-sim' 'ext-prod-delayed' 'ext-prod-md-pp' 'ext-prod-cassandra' 'ext-prod-coreinfra' 'ext-prod-live-eex' 'ext-prod-md-pp-delayed' 'ext-prod-md-pp-eex' 'ext-prod-mon' 'ext-prod-other-cassandra' 'ext-prod-sparepool' 'int-stage-cert-master' 'int-stage-md-sp-master';
+    for env_file in 'ext-prod-live' 'ext-prod-sim' 'ext-prod-delayed' 'ext-prod-md-pp' 'ext-prod-cassandra' 'ext-prod-coreinfra' 'ext-prod-live-eex' 'ext-prod-md-pp-delayed' 'ext-prod-md-pp-eex' 'ext-prod-mon' 'ext-prod-other-cassandra' 'ext-prod-sparepool' 'int-stage-cert-master' 'int-stage-md-sp-master' 'int-prod-sim' 'int-prod-md-pp';
     do
         echo "Checking $env_file."
         git diff master:deploy/chef/environments/$env_file.rb release/current:deploy/chef/environments/$env_file.rb
@@ -1267,6 +1339,12 @@ function check_envs()
         git diff release/current:deploy/chef/environments/$env_file.rb develop:deploy/chef/environments/$env_file.rb
     done
 }
+
+function awsauth()
+{
+    $($DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/aws_authenticator.py --account deb --role read --env)
+}
+
 
 #
 # Virtual Box Notes

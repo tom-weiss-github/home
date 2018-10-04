@@ -6,6 +6,14 @@ Host 10.*
      User tweiss
      ConnectTimeout 20
 
+Host *.trade.tt
+     StrictHostKeyChecking no
+     UserKnownHostsFile=/dev/null
+     LogLevel=quiet
+     IdentityFile ~/.ssh/id_rsa
+     User tweiss
+     ConnectTimeout 20
+
 Host github.com
      StrictHostKeyChecking no
      UserKnownHostsFile=/dev/null

@@ -52,3 +52,5 @@
         delete-branch = true
         include-jira-summary = true
         jira-summary-length = 40
+[push]
+	default = nothing
