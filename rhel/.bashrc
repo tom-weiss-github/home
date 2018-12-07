@@ -148,28 +148,24 @@ alias gdb='gdb -n'
 alias gt='gnome-terminal &'
 alias push='echo git push origin $b; git push origin $b'
 alias swarm="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/swarm.py --verbose "
-alias vc="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/view_changes.py "
-alias vcloud="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/vcloud_server.py"
+# alias vc="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/view_changes.py "
 export TEMP_VM_CHEF_ENV=int-dev-cert
 export TEMP_VM_CHEF_TAG='basegofast'
-alias tempvm="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/temp_vm.py -v --log-dir /var/log/debesys "
-alias nutanix="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/nutanix_server.py -ov "
-alias bcv="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/bump_cookbook.py"
+# alias tempvm="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/temp_vm.py -v --log-dir /var/log/debesys "
+# alias nutanix="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/nutanix_server.py -ov "
+# alias bcv="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/bump_cookbook.py"
 alias nochef="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/disable_chef.py"
-alias upenv="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/update_environment.py"
-alias ec2="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/ec2_instance.py -vo --route53 "
-alias mergetest="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/check_repo.py"
-alias fta="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/feature_test_assistant.py"
-alias cof="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/deploy_one_off.py"
-alias decom="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_prod_decom.py"
-alias vlan="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_vlan.py"
+# alias upenv="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/update_environment.py"
+# alias ec2="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/ec2_instance.py -vo --route53 "
+# alias mergetest="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/check_repo.py"
+# alias fta="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/feature_test_assistant.py"
+# alias cof="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/deploy_one_off.py"
+# alias decom="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_prod_decom.py"
+# alias vlan="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_vlan.py"
 alias smile='rename_terminal_title ":-)"'
-alias prdp='echo "@bcordonn @elmedinam @jkess @joanne-wilson @srubik @TIMSTACY @jfrumkin @jerdmann" | xclip -selection clipboard'
-alias proc='echo "@mdw55189 @corystricklin @jingheelu @lmancini54" | xclip -selection clipboard'
-alias prpr='echo "@amschwarz @tt-tabion @rahul-TT @ajoshi2 @avinashdutta" | xclip -selection clipboard'
 alias git-commit-hook="cp ~/githome/prepare-commit-msg .git/hooks/; chmod a+x .git/hooks/prepare-commit-msg"
-alias tdeploy='history -s "./run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/knife_ssh.py --knife-config ~/.chef/knife.external.rb --audit-runlist --concurrency 50 -a -e environments -q query -c cookbooks -r CHG123456 --test-run"; echo Test run command inserted into history, use up arrow to edit.'
-alias hotfixer='$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/hotfixer.py --prod --uat'
+# alias tdeploy='history -s "./run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/knife_ssh.py --knife-config ~/.chef/knife.external.rb --audit-runlist --concurrency 50 -a -e environments -q query -c cookbooks -r CHG123456 --test-run"; echo Test run command inserted into history, use up arrow to edit.'
+# alias hotfixer='$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/hotfixer.py --prod --uat'
 # alias edeploy='\^--test-run\^--send-summary-email\^'
 alias tkw="tmux kill-window"
 alias tkp="tmux kill-pane"
@@ -184,8 +180,9 @@ alias upintenv='pushd deploy/chef/environments; for env_file in int-dev*.rb; do 
 alias brm='git tt br m'
 alias aec='source /opt/virtualenv/exchange_compliance/bin/activate && source orders/cf/audit/pythonpath.sh'
 alias apython='source `git rev-parse --show-toplevel`/orders/cf/audit/pythonpath.sh; /opt/virtualenv/exchange_compliance_2_7_14/bin/python'
+alias dpython=/opt/virtualenv/devws/bin/python
 alias cdr='cat `ls -d1t ~/deployment_receipts/* | head -n 1` | xclip -i'
-alias esetrcv='eknife exec $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/snacks/set_rc_version.rb'
+# alias esetrcv='eknife exec $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/snacks/set_rc_version.rb'
 alias nutanix_cpu='knife ssh "(chef_environment:int-dev* OR chef_environment:int-stage* OR chef_environment:int-sqe*) AND (NOT chef_environment:int-dev-jenkins) (NOT chef_environment:*perf*) AND name:*vm* AND (NOT creation_info_machine_origin:temp_hive)" "uptime" -a ipaddress --concurrency 20 | grep -v "load average: 0."'
 alias kcu="knife cookbook upload --config ~/.chef/knife.rb --cookbook-path=deploy/chef/cookbooks "
 alias ekcu="knife cookbook upload --config ~/.chef/knife.external.rb --cookbook-path=deploy/chef/cookbooks"
@@ -238,7 +235,8 @@ alias prt='pushd `git rev-parse --show-toplevel`'
 alias default="cd ~/dev-root/default"
 alias alternate="cd ~/dev-root/alternate"
 alias edcfg="$myemacs -nw /etc/debesys/cme_oc_config.conf"
-alias run='`git rev-parse --show-toplevel`/run'
+#alias run='`git rev-parse --show-toplevel`/run'
+alias dpython=/opt/virtualenv/devws/bin/python2
 alias ttknife='`git rev-parse --show-toplevel`/run `git rev-parse --show-toplevel`/ttknife'
 alias envvers='knife environment list | xargs -n 1 -i knife environment show \{\} -a cookbook_versions'
 alias lszk='`git rev-parse --show-toplevel`/run python `git rev-parse --show-toplevel`/darwin/python/lszk'
@@ -260,7 +258,7 @@ alias ttr='`git rev-parse --show-toplevel`/run python `git rev-parse --show-topl
 alias grp="git rev-parse --short"
 alias myec2='aws ec2 describe-instances --region us-east-1 --filters "Name=tag-value,Values=tweiss"'
 # alias chrome="/opt/google/chrome/google-chrome --enable-plugins &"
-alias chgenv='./run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/change_environment.py '
+# alias chgenv='./run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/change_environment.py '
 
 alias algoconfig='cd /home/tweiss/dev-root/algo/build/x86-64/debug/etc/algo_local/'
 alias newconfig='cd /etc/debesys'
@@ -268,6 +266,11 @@ alias algoconfigrel='cd /home/tweiss/dev-root/algo/build/x86-64/release/etc/algo
 alias logsrel='cd /home/tweiss/dev-root/algo/build/x86-64/release/var/log/algo_local/'
 alias logs='cd /home/tweiss/repo/dev-root/algo/x86-64/debug/var/log/algo_local/'
 alias hsm='(cd /home/tweiss/dev-root/hsmproxy/bin; ./start.sh ../etc/hsmproxy.properties)&'
+
+if [ -f $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/bashrc/devws.bash ]; then
+    source $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/bashrc/devws.bash
+fi
+alias nutanix="devws_nutanix_server -vo"
 
 set_display()
 {
@@ -317,15 +320,11 @@ function setchefconfig()
         chef_config=~/.chef/knife.external.rb
     elif [[ $1 == ty* || $1 == sp* ]]; then
         chef_config=~/.chef/knife.external.rb
-    elif [[ $1 == *"ip-10-210-0"* || $1 == *"ip-10-210-2"* || $1 == *"ip-10-210-4"* ]]; then
+    elif [[ $1 == *"ip-10-210"* ]]; then
         chef_config=~/.chef/knife.external.rb
-    elif [[ $1 == *"ip-10-210-12"* || $1 == *"ip-10-210-17"* ]]; then
+    elif [[ $1 == *"ip-10-213"* ]]; then
         chef_config=~/.chef/knife.external.rb
-    elif [[ $1 == *"ip-10-213-0"* || $1 == *"ip-10-213-2"* || $1 == *"ip-10-213-4"* ]]; then
-        chef_config=~/.chef/knife.external.rb
-    elif [[ $1 == *"ip-10-215-0"* || $1 == *"ip-10-215-2"* || $1 == *"ip-10-215-4"* ]]; then
-        chef_config=~/.chef/knife.external.rb
-    elif [[ $1 == *"ip-10-215-14"* ]]; then
+    elif [[ $1 == *"ip-10-215"* ]]; then
         chef_config=~/.chef/knife.external.rb
     fi
 }

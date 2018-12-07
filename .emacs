@@ -582,4 +582,4 @@
 
 ;; Simple json format:
 ;; 1) Highlight json code.
-;; 2) C-u M-| python -m json.tool
+;; 2) C-u M-| python -m json.tool (M is esc) or shell-command-on-region

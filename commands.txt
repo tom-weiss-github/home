@@ -33,6 +33,9 @@ du -hs <directory>
 Print disk usage of some directory, recursive.
 
 
+sudo chef-shell -z
+Runs shell with chef variables loaded like irb.
+
 ps -eo pcpu,pid,user,args | sort -k 1 -r | head -5
 Print top 5 cpu consumers.  Running this command through knife ssh can yield results for lots of
 processes.  Any that have a value greater than 100 typically means they are spinning on a core.  The
