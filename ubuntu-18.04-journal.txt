@@ -1,4 +1,7 @@
 
+Helps resolve this issue of top bar.  Install the Gnome Shell Extensions.
+https://askubuntu.com/questions/1030833/app-indicators-not-working-on-ubuntu-18-04
+
 After suspend, bluetooth headphones would connect and then disconnect.
 https://askubuntu.com/questions/1036195/bluetooth-doesnt-work-after-resuming-from-sleep-ubuntu-18-04-lts?rq=1
 sudo add-apt-repository ppa:bluetooth/bluez
