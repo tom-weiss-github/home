@@ -16,7 +16,6 @@
 [core]
 	editor = emacs -nw
 	excludesfile = ~/.gitignore_global
-        auto = 0
 	pager = less -F -X
 
 [diff]
@@ -52,5 +51,8 @@
         delete-branch = true
         include-jira-summary = true
         jira-summary-length = 40
+        use-jira-as-prefix = false
 [push]
 	default = nothing
+[gc]
+	auto = 0

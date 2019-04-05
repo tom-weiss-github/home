@@ -83,6 +83,8 @@ export DEPT=""
 # in scala caused an LBM symbol to not be recognized and failed to run.  To unset use:
 # unset LD_BIND_NOW
 # export LD_BIND_NOW=yes
+export DEVWS_SKIP_VALIDATE_REQUIREMENTS=1
+export GIT_TT_BRANCH_IN_COMMIT_MSG=true
 export UPLOAD_RC_VERSION_HERE=/home/tweiss/dev-root/__deploy_alternate
 export PATH=$PATH:~/Downloads/meld-1.6.1/bin
 export PATH=$PATH:/opt/redis/redis-2.8.17/src
@@ -147,14 +149,14 @@ alias clk='python ~/githome/world_time.py'
 alias gdb='gdb -n'
 alias gt='gnome-terminal &'
 alias push='echo git push origin $b; git push origin $b'
-alias swarm="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/swarm.py --verbose "
+alias swarm="/opt/virtualenv/devws/bin/python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/swarm.py --verbose "
 # alias vc="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/view_changes.py "
 export TEMP_VM_CHEF_ENV=int-dev-cert
 export TEMP_VM_CHEF_TAG='basegofast'
 # alias tempvm="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/temp_vm.py -v --log-dir /var/log/debesys "
 # alias nutanix="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/nutanix_server.py -ov "
 # alias bcv="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/bump_cookbook.py"
-alias nochef="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/disable_chef.py"
+alias nochef="/opt/virtualenv/devws/bin/python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/disable_chef.py"
 # alias upenv="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/update_environment.py"
 # alias ec2="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/ec2_instance.py -vo --route53 "
 # alias mergetest="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/check_repo.py"
@@ -164,7 +166,7 @@ alias nochef="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_
 # alias vlan="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_vlan.py"
 alias smile='rename_terminal_title ":-)"'
 alias git-commit-hook="cp ~/githome/prepare-commit-msg .git/hooks/; chmod a+x .git/hooks/prepare-commit-msg"
-# alias tdeploy='history -s "./run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/knife_ssh.py --knife-config ~/.chef/knife.external.rb --audit-runlist --concurrency 50 -a -e environments -q query -c cookbooks -r CHG123456 --test-run"; echo Test run command inserted into history, use up arrow to edit.'
+# alias tdeploy='history -s "/opt/virtualenv/devws/bin/python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/knife_ssh.py --knife-config ~/.chef/knife.external.rb --audit-runlist --concurrency 50 -a -e environments -q query -c cookbooks -r CHG123456 --test-run"; echo Test run command inserted into history, use up arrow to edit.'
 # alias hotfixer='$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/hotfixer.py --prod --uat'
 # alias edeploy='\^--test-run\^--send-summary-email\^'
 alias tkw="tmux kill-window"
@@ -175,12 +177,12 @@ alias tks="tmux kill-server"
 alias tcp="tmux show-buffer -b 0 | xclip -i"
 alias fakechef="cp -v ~/.chef/knife.training.rb.orig ~/.chef/knife.rb && cp -v ~/.chef/knife.training.rb.orig ~/.chef/knife.external.rb && cp -v ~/.chef/knife.training.rb.orig ~/.chef/knife.ttsdk.rb && export BUMP_COOKBOOK_VERSION_NO_NOTES=1 && export BUMP_COOKBOOK_VERSION_NO_KNIFE_CHECK=1 && echo BUMP_COOKBOOK_VERSION_NO_NOTES/BUMP_COOKBOOK_VERSION_NO_KNIFE_CHECK have been set."
 alias realchef="cp -v ~/.chef/knife.rb.orig ~/.chef/knife.rb && cp -v ~/.chef/knife.external.rb.orig ~/.chef/knife.external.rb && cp -v ~/.chef/knife.ttsdk.rb.orig ~/.chef/knife.ttsdk.rb && unset BUMP_COOKBOOK_VERSION_NO_NOTES && unset BUMP_COOKBOOK_VERSION_NO_KNIFE_CHECK && echo BUMP_COOKBOOK_VERSION_NO_NOTES/BUMP_COOKBOOK_VERSION_NO_KNIFE_CHECK have been unset."
-alias awsauthexcomp="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/aws_authenticator.py --account prod --role exchange-compliance --env"
+alias awsauthexcomp="/opt/virtualenv/devws/bin/python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/aws_authenticator.py --account prod --role exchange-compliance --env"
 alias upintenv='pushd deploy/chef/environments; for env_file in int-dev*.rb; do knife environment from file $env_file --config ~/.chef/knife.rb; done; popd'
 alias brm='git tt br m'
 alias aec='source /opt/virtualenv/exchange_compliance/bin/activate && source orders/cf/audit/pythonpath.sh'
 alias apython='source `git rev-parse --show-toplevel`/orders/cf/audit/pythonpath.sh; /opt/virtualenv/exchange_compliance_2_7_14/bin/python'
-alias dpython=/opt/virtualenv/devws/bin/python
+alias dpy=/opt/virtualenv/devws/bin/python
 alias cdr='cat `ls -d1t ~/deployment_receipts/* | head -n 1` | xclip -i'
 # alias esetrcv='eknife exec $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/snacks/set_rc_version.rb'
 alias nutanix_cpu='knife ssh "(chef_environment:int-dev* OR chef_environment:int-stage* OR chef_environment:int-sqe*) AND (NOT chef_environment:int-dev-jenkins) (NOT chef_environment:*perf*) AND name:*vm* AND (NOT creation_info_machine_origin:temp_hive)" "uptime" -a ipaddress --concurrency 20 | grep -v "load average: 0."'
@@ -237,10 +239,10 @@ alias alternate="cd ~/dev-root/alternate"
 alias edcfg="$myemacs -nw /etc/debesys/cme_oc_config.conf"
 #alias run='`git rev-parse --show-toplevel`/run'
 alias dpython=/opt/virtualenv/devws/bin/python2
-alias ttknife='`git rev-parse --show-toplevel`/run `git rev-parse --show-toplevel`/ttknife'
+alias ttknife='/opt/virtualenv/devws/bin/python `git rev-parse --show-toplevel`/ttknife'
 alias envvers='knife environment list | xargs -n 1 -i knife environment show \{\} -a cookbook_versions'
-alias lszk='`git rev-parse --show-toplevel`/run python `git rev-parse --show-toplevel`/darwin/python/lszk'
-alias rmzk='`git rev-parse --show-toplevel`/run python `git rev-parse --show-toplevel`/darwin/python/rmzk'
+#alias lszk='`git rev-parse --show-toplevel`/run python `git rev-parse --show-toplevel`/darwin/python/lszk'
+#alias rmzk='`git rev-parse --show-toplevel`/run python `git rev-parse --show-toplevel`/darwin/python/rmzk'
 alias oczk='lszk /srv/alive/oc -r; lszk /srv/oc -r | xargs --delimiter="\n" -n 1 echo "     "'
 alias envs='echo PATH $PATH; echo LD_LIBRARY_PATH $LD_LIBRARY_PATH; echo C_INCLUDE_PATH $C_INCLUDE_PATH; echo CPLUS_INCLUDE_PATH $CPLUS_INCLUDE_PATH; echo PYTHONPATH $PYTHONPATH; echo PYTHONHOME $PYTHONHOME; echo SWIG_LIB $SWIG_LIB; echo DEBENV_ENGAGED $DEBENV_ENGAGED'
 
@@ -258,7 +260,7 @@ alias ttr='`git rev-parse --show-toplevel`/run python `git rev-parse --show-topl
 alias grp="git rev-parse --short"
 alias myec2='aws ec2 describe-instances --region us-east-1 --filters "Name=tag-value,Values=tweiss"'
 # alias chrome="/opt/google/chrome/google-chrome --enable-plugins &"
-# alias chgenv='./run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/change_environment.py '
+# alias chgenv='/opt/virtualenv/devws/bin/python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/change_environment.py '
 
 alias algoconfig='cd /home/tweiss/dev-root/algo/build/x86-64/debug/etc/algo_local/'
 alias newconfig='cd /etc/debesys'
@@ -673,7 +675,7 @@ function external()
         export PRE_EXTERNAL_TERMINAL_TITLE=$CURRENT_TERMINAL_TITLE
         export PS1="\[\033[0;31m\]EXTERNAL DEBESYS\[\033[0;0m\] \h\[\033[1;30m\]\$(__git_ps1) \[\033[0;0m\]\w \n>"
         rename_terminal_title "EXTERNAL DEBESYS"
-        alias ttknife='`git rev-parse --show-toplevel`/run `git rev-parse --show-toplevel`/ttknife -C ~/.chef/knife.external.rb'
+        alias ttknife='/opt/virtualenv/devws/bin/python `git rev-parse --show-toplevel`/ttknife -C ~/.chef/knife.external.rb'
         alias ttknife
         echo
         echo '######## ##     ## ######## ######## ########  ##    ##    ###    ##'
@@ -700,7 +702,7 @@ function external()
             fi
         fi
 
-        alias ttknife='`git rev-parse --show-toplevel`/run `git rev-parse --show-toplevel`/ttknife'
+        alias ttknife='/opt/virtualenv/devws/bin/python `git rev-parse --show-toplevel`/ttknife'
         alias ttknife
         aws_keys ~/amazon_keys.sh
         export EXTERNAL_DEBESYS="disabled"
@@ -735,10 +737,10 @@ function rmchefnode()
     fi
 
     echo "ttknife $config node delete --yes $1"
-    `git rev-parse --show-toplevel`/run `git rev-parse --show-toplevel`/ttknife $config node delete --yes "$1"
+    /opt/virtualenv/devws/bin/python `git rev-parse --show-toplevel`/ttknife $config node delete --yes "$1"
 
     echo "ttknife $config client delete --yes $1"
-    `git rev-parse --show-toplevel`/run `git rev-parse --show-toplevel`/ttknife $config client delete --yes "$1"
+    /opt/virtualenv/devws/bin/python `git rev-parse --show-toplevel`/ttknife $config client delete --yes "$1"
 }
 
 function search_chef_environment()
@@ -762,7 +764,7 @@ function search_chef_environment()
     fi
 
     echo ttknife --config $config search node $search
-    `git rev-parse --show-toplevel`/run `git rev-parse --show-toplevel`/ttknife $config search node "$search" -a name -a chef_environment -a ipaddress -a run_list -a tags
+    /opt/virtualenv/devws/bin/python `git rev-parse --show-toplevel`/ttknife $config search node "$search" -a name -a chef_environment -a ipaddress -a run_list -a tags
 }
 alias sce=search_chef_environment
 
@@ -786,7 +788,7 @@ function ssh_to_chef_node()
 
     found=$(knife search node "chef_environment:$1 AND recipe:$2*" --config $knife_config -a ipaddress -a run_list --no-color)
     echo "$found"
-    local ips=$($(git rev-parse --show-toplevel)/run $(git rev-parse --show-toplevel)/ttknife --config $knife_config search node "chef_environment:$1 AND recipe:$2*" -a ipaddress --no-color | grep ipaddress | tr -s " " | cut -d " " -f 3)
+    local ips=$(/opt/virtualenv/devws/bin/python $(git rev-parse --show-toplevel)/ttknife --config $knife_config search node "chef_environment:$1 AND recipe:$2*" -a ipaddress --no-color | grep ipaddress | tr -s " " | cut -d " " -f 3)
 
     echo ""
     echo Found: $ips
@@ -807,34 +809,34 @@ function ssh_to_chef_node()
 }
 alias visit=ssh_to_chef_node
 
-function deploy__()
-{
-    local found_dash_a=false
-    # Example of bash substring match.
-    if [[ "$@" == *"-a"* ]]; then
-        found_dash_a=true
-    fi
+# function deploy__()
+# {
+#     local found_dash_a=false
+#     # Example of bash substring match.
+#     if [[ "$@" == *"-a"* ]]; then
+#         found_dash_a=true
+#     fi
 
-    local found_dash_h=false
-    if [[ "$@" == *"-h"* ]]; then
-        found_dash_h=true
-    fi
+#     local found_dash_h=false
+#     if [[ "$@" == *"-h"* ]]; then
+#         found_dash_h=true
+#     fi
 
-    if [ $found_dash_h == false -a $found_dash_a == false ]; then
-        local title_start="deploying..."
-        local window=`tmux list-windows | grep "\(active\)" | cut -d" " -f 1 | sed s'/://g'`
-        rename_terminal_title "$title_start"
-    fi
+#     if [ $found_dash_h == false -a $found_dash_a == false ]; then
+#         local title_start="deploying..."
+#         local window=`tmux list-windows | grep "\(active\)" | cut -d" " -f 1 | sed s'/://g'`
+#         rename_terminal_title "$title_start"
+#     fi
 
-    echo $DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_deploy.py "$@"
-    $DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_deploy.py "$@"
+#     echo $DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_deploy.py "$@"
+#     $DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_deploy.py "$@"
 
-    if [ $found_dash_h == false -a $found_dash_a == false ]; then
-        local title_done="deploying...done"
-        rename_terminal_title "$title_done" "$window"
-    fi
-}
-alias deploy=deploy__
+#     if [ $found_dash_h == false -a $found_dash_a == false ]; then
+#         local title_done="deploying...done"
+#         rename_terminal_title "$title_done" "$window"
+#     fi
+# }
+# alias deploy=deploy__
 
 function set_many_rcv()
 {
@@ -868,38 +870,39 @@ function find_environments()
         return
     fi
 
-    knife search node "deployed_cookbooks:$1" -a chef_environment --config ~/.chef/knife.external.rb | grep chef_env | sort | uniq
+    knife search node "deployed_cookbooks:$1" -a chef_environment --config ~/.chef/knife.rb 2> /dev/null | grep environment | sed 's/chef_environment: //g' | sed 's/ //g' | sort | uniq
+    knife search node "deployed_cookbooks:$1" -a chef_environment --config ~/.chef/knife.external.rb 2> /dev/null | grep chef_environment | sed 's/chef_environment: //g' | sed 's/ //g' | sort | uniq
 }
 alias fenv=find_environments
 
-function bootstrap__()
-{
-    local found_dash_a=false
-    # Example of bash substring match.
-    if [[ "$@" == *"-a"* ]]; then
-        found_dash_a=true
-    fi
+# function bootstrap__()
+# {
+#     local found_dash_a=false
+#     # Example of bash substring match.
+#     if [[ "$@" == *"-a"* ]]; then
+#         found_dash_a=true
+#     fi
 
-    local found_dash_h=false
-    if [[ "$@" == *"-h"* ]]; then
-        found_dash_h=true
-    fi
+#     local found_dash_h=false
+#     if [[ "$@" == *"-h"* ]]; then
+#         found_dash_h=true
+#     fi
 
-    if [ $found_dash_h == false -a $found_dash_a == false ]; then
-        local title_start="bootstrapping..."
-        local window=`tmux list-windows | grep "\(active\)" | cut -d" " -f 1 | sed s'/://g'`
-        rename_terminal_title "$title_start"
-    fi
+#     if [ $found_dash_h == false -a $found_dash_a == false ]; then
+#         local title_start="bootstrapping..."
+#         local window=`tmux list-windows | grep "\(active\)" | cut -d" " -f 1 | sed s'/://g'`
+#         rename_terminal_title "$title_start"
+#     fi
 
-    echo $DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_bootstrap.py "$@"
-    $DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_bootstrap.py "$@"
+#     echo $DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_bootstrap.py "$@"
+#     $DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_bootstrap.py "$@"
 
-    if [ $found_dash_h == false -a $found_dash_a == false ]; then
-        local title_done="bootstrapping...done"
-        rename_terminal_title "$title_done" "$window"
-    fi
-}
-alias bootstrap=bootstrap__
+#     if [ $found_dash_h == false -a $found_dash_a == false ]; then
+#         local title_done="bootstrapping...done"
+#         rename_terminal_title "$title_done" "$window"
+#     fi
+# }
+# alias bootstrap=bootstrap__
 
 function build__()
 {
@@ -913,19 +916,19 @@ function build__()
         found_dash_a=true
     fi
 
-    if [ $found_dash_h == false -a $found_dash_a == false ]; then
-        local title_start="building..."
-        local window=`tmux list-windows | grep "\(active\)" | cut -d" " -f 1 | sed s'/://g'`
-        rename_terminal_title "$title_start"
-    fi
+    # if [ $found_dash_h == false -a $found_dash_a == false ]; then
+    #     local title_start="building..."
+    #     local window=`tmux list-windows | grep "\(active\)" | cut -d" " -f 1 | sed s'/://g'`
+    #     rename_terminal_title "$title_start"
+    # fi
 
-    echo $DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_build.py "$@"
-    $DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_build.py "$@"
+    echo /opt/virtualenv/devws/bin/python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_build.py "$@"
+    /opt/virtualenv/devws/bin/python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_build.py "$@"
 
-    if [ $found_dash_h == false -a $found_dash_a == false ]; then
-        local title_done="building...done"
-        rename_terminal_title "$title_done" "$window"
-    fi
+    # if [ $found_dash_h == false -a $found_dash_a == false ]; then
+    #     local title_done="building...done"
+    #     rename_terminal_title "$title_done" "$window"
+    # fi
 }
 alias build=build__
 
@@ -1130,8 +1133,8 @@ function mkchefec2()
         ebs_size="--ebs-size $2"
     fi
 
-    echo ./run python deploy/chef/scripts/ec2_server.py --size m1.medium --ami ami-eb6b0182 --dept debesys --cost-center "Engineering-490" --project debesys --manager "Tom Weiss" --user root --environment int-dev-sparepool --recipe base $ebs_size -a $1
-    ./run python deploy/chef/scripts/ec2_server.py --size m1.medium --ami ami-eb6b0182 --dept debesys --cost-center "Engineering-490" --project debesys --manager "Tom Weiss" --user root --environment int-dev-sparepool --recipe base $ebs_size -a $1
+    echo /opt/virtualenv/devws/bin/python deploy/chef/scripts/ec2_server.py --size m1.medium --ami ami-eb6b0182 --dept debesys --cost-center "Engineering-490" --project debesys --manager "Tom Weiss" --user root --environment int-dev-sparepool --recipe base $ebs_size -a $1
+    /opt/virtualenv/devws/bin/python deploy/chef/scripts/ec2_server.py --size m1.medium --ami ami-eb6b0182 --dept debesys --cost-center "Engineering-490" --project debesys --manager "Tom Weiss" --user root --environment int-dev-sparepool --recipe base $ebs_size -a $1
 
     local ip=`knife node show $1 | grep IP | tr -s ' ' | cut -d" " -f 2`
     if [ -z ip ]; then
@@ -1165,8 +1168,8 @@ function rmchefec2()
 
     pushd `git rev-parse --show-toplevel`
 
-    echo ./run python deploy/chef/scripts/ec2_server.py -d $1
-    ./run python deploy/chef/scripts/ec2_server.py -d $1
+    echo /opt/virtualenv/devws/bin/python deploy/chef/scripts/ec2_server.py -d $1
+    /opt/virtualenv/devws/bin/python deploy/chef/scripts/ec2_server.py -d $1
 
     # echo sudo umount ~/mnt/$1
     # sudo umount ~/mnt/$1
@@ -1188,7 +1191,7 @@ function upld()
     rm orders/cme/source/*.fix.* -v
     m_ config=release clean
     rm -rfv build
-    ./run python ./deploy/chef/scripts/upload_debesys.py --tag $1
+    /opt/virtualenv/devws/bin/python ./deploy/chef/scripts/upload_debesys.py --tag $1
     popd
 }
 
@@ -1341,9 +1344,14 @@ function check_envs()
 
 function awsauth()
 {
-    $($DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/aws_authenticator.py --account deb --role read --env)
+    $(/opt/virtualenv/devws/bin/python python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/aws_authenticator.py --account deb --role read --env)
 }
 
+function cpr()
+{
+
+    echo "https://github.com/tradingtechnologies/debesys/pull/new/`git rev-parse --abbrev-ref HEAD`"
+}
 
 #
 # Virtual Box Notes

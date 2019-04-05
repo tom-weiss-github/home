@@ -15,6 +15,11 @@ This command is useful to explore if some directory or file is the major contrib
 exhaustion.  Starting from '/', examine which folders are using the most space and traverse to the
 culprit.
 
+free -g | grep Mem | tr -s " " | cut -d " " -f 2,3 | tr " " "/"
+free | grep Mem | awk '{print $3/$2 * 100.0}'
+knife ssh "name:gl*vm* OR name:sqe*vm*" "free -g | grep Mem | tr -s \" \" | cut -d \" \" -f 2,3,4" -a ipaddress --concurrency 5
+When used with knife ssh, a quick way to see which hosts might be able to give back memory.
+
 sudo lsof -a +L1 /
 Show all the files in '/' with a link count less than 1, that is, deleted files.
 If not there, sudo yum -y install lsof.
@@ -81,6 +86,7 @@ ttknife search node "chef_environment:int-dev-sparepool" -a name | grep name | g
 ttknife search node "chef_environment:int-dev-sparepool" -a name | grep name | grep ip- | grep -v 10-203-0-74 | tr -s " " | cut -d" " -f 3 | xargs -n 1 -i knife node delete \{\} --yes
 
 Find all cookbook that depend on ps_client and trim them down.  Then determine their build targets.
+
 eknife search node "deployed_cookbooks:ps_client" -a expanded_run_list --no-color | grep default | grep -v "base::default" | sed 's/::default//' | sort | uniq
 
 eknife search node "deployed_cookbooks:ps_client AND chef_environment:ext-prod-*" -a expanded_run_list --no-color | grep "::" | grep -v "base::default" | sed 's/::default//' | sed -E 's/::.*//' | sort | uniq | tr -s " "
@@ -88,6 +94,8 @@ eknife search node "deployed_cookbooks:ps_client AND chef_environment:ext-prod-*
 Find all the cookbook emails.
 find deploy/chef/cookbooks -name contact_info.rb | xargs grep email | cut -d"=" -f 2 | sed 's/"//' | sed 's/"//' | sort | uniq | xclip
 
+Similar to the command above, but also include the cookbooks.
+for COOKBOOK in `find deploy/chef/cookbooks -name contact_info.rb` ; do cb=`echo $COOKBOOK | sed s:deploy/chef/cookbooks/::g | sed s:/attributes/contact_info.rb::g`; email=`echo $COOKBOOK | xargs grep email | cut -d"=" -f 2 | sed 's/"//' | sed 's/"//' | sort | uniq`; echo $cb,$email; done
 
 Delete a collection of nodes in the sparepool.
 
