@@ -95,6 +95,7 @@ export INTAD_SSH_KEY=~/.ssh/id_rsa
 export BCV_ENABLE_LDAP=1
 export VCD_ORG=Dev_General
 export JENKINS_USER=tweiss
+export TTID_EMAIL=tom.weiss+--ttsa@tradingtechnologies.com
 export TT_EMAIL=tom.weiss@tradingtechnologies.com
 if [ -f ~/jenkins_token ]; then
     export JENKINS_TOKEN=$(head -n 1 ~/jenkins_token)
@@ -102,6 +103,7 @@ fi
 if [ -f ~/github_token ]; then
     export GITHUB_TOKEN=$(head -n 1 ~/github_token)
 fi
+export PDS_REPO_ROOT=~/dev-root/pds
 export DEPLOYMENT_SCRIPTS_REPO_ROOT=~/dev-root/scripts
 if [ -f $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/bashrc/chef.bash ]; then
     source $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/bashrc/chef.bash
@@ -439,6 +441,34 @@ function addrun2hosts__()
     knife exec ~/dev-root/scripts/deploy/chef/scripts//snacks/add_runlist.rb "$query" add "$1" --config $chef_config
 }
 alias addrun2hosts=addrun2hosts__
+
+function addruns2host()
+{
+    local usage="Usage: addruns2host host run1 run2 ... runN\necho node1 node2 | tr \" \" \"\\\n\" | xargs -i -n 1 bash -cil \'addruns2host {} run1 run2 ... runN\'\nknife search node \"n:gla1vm85 OR n:gla2vm202\" -i 2> /dev/null | tr \" \" \"\\\n\" | xargs -i -n 1 bash -cil \'addruns2host {} run1 run2 ... runN\'\n"
+    if [ -z "$1" ]; then
+        printf "$usage"
+        return
+    fi
+
+    if [ -z "$2" ]; then
+        printf "$usage"
+        return
+    fi
+
+    setchefconfig $2
+
+    local first=0
+    for var in "$@"
+    do
+        if [ $first == 0 ]; then
+            first=1
+            continue
+        fi
+
+        echo knife exec ~/dev-root/scripts/deploy/chef/scripts/snacks/add_runlist.rb "n:$1" add "$var" --config $chef_config
+        knife exec ~/dev-root/scripts/deploy/chef/scripts/snacks/add_runlist.rb "n:$1" add "$var" --config $chef_config
+    done
+}
 
 function addattr2hosts()
 {
@@ -1351,6 +1381,11 @@ function cpr()
 {
 
     echo "https://github.com/tradingtechnologies/debesys/pull/new/`git rev-parse --abbrev-ref HEAD`"
+}
+
+function chg()
+{
+    echo "/opt/virtualenv/devws/bin/python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/knife_ssh.py --knife-config ~/.chef/knife.external.rb --audit-runlist --concurrency 50 -a -e  -r  --test-run" | xclip
 }
 
 #
