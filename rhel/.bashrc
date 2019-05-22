@@ -136,6 +136,7 @@ alias lock='gnome-screensaver-command -l'
 alias wifiscan='nmcli device wifi rescan'
 alias wifils='nmcli device wifi list'
 alias wks='ssh -X 10.195.2.49'
+alias wks7='ssh -X 10.195.1.89'
 alias todo='emacs -nw ~/todo.txt'
 alias rooms='cat ~/githome/rooms.txt'
 alias sb='source ~/.bashrc'
@@ -455,7 +456,7 @@ function addruns2host()
         return
     fi
 
-    setchefconfig $2
+    setchefconfig $1
 
     local first=0
     for var in "$@"
@@ -467,6 +468,23 @@ function addruns2host()
 
         echo knife exec ~/dev-root/scripts/deploy/chef/scripts/snacks/add_runlist.rb "n:$1" add "$var" --config $chef_config
         knife exec ~/dev-root/scripts/deploy/chef/scripts/snacks/add_runlist.rb "n:$1" add "$var" --config $chef_config
+    done
+}
+
+function emptyrunlist()
+{
+    local usage="Usage: emptyrunlist host1 host2 hostN\n"
+    if [ -z "$1" ]; then
+        printf "$usage"
+        return
+    fi
+
+    setchefconfig $1
+
+    for var in "$@"
+    do
+        echo knife exec ~/dev-root/scripts/deploy/chef/scripts/snacks/add_runlist.rb "n:$var" empty --config $chef_config
+        knife exec ~/dev-root/scripts/deploy/chef/scripts/snacks/add_runlist.rb "n:$var" empty --config $chef_config
     done
 }
 
@@ -1347,8 +1365,8 @@ function gg()
 {
     git rev-parse --verify tweiss_gg > /dev/null 2>&1
     if [ $? == 0 ]; then
-        echo "Found tweiss_gg, deleting via 'git branch -d tweiss_gg'."
-        git branch -d tweiss_gg
+        echo "Found tweiss_gg, deleting via 'git branch -D tweiss_gg'."
+        git branch -D tweiss_gg
     fi
 
     echo "git checkout -b tweiss_gg"
@@ -1374,7 +1392,7 @@ function check_envs()
 
 function awsauth()
 {
-    $(/opt/virtualenv/devws/bin/python python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/aws_authenticator.py --account deb --role read --env)
+    $(/opt/virtualenv/devws/bin/python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/aws_authenticator.py --account deb --role read --env)
 }
 
 function cpr()
