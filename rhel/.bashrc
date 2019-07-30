@@ -127,7 +127,7 @@ export JRE_HOME=$JAVA_HOME/jre
 export MY_ONE_OFF_VERSION=0.88.88
 export ENABLE_POST_TO_SERVICENOW=1
 
-
+alias nojava="rm -rf client.java && rm -rf .git/modules/client.java"
 alias xclip='xclip -sel clip'
 alias off='sudo shutdown -P now'
 alias hibernate='echo sudo systemctl hibernate is broken'
@@ -155,7 +155,7 @@ alias push='echo git push origin $b; git push origin $b'
 alias swarm="/opt/virtualenv/devws/bin/python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/swarm.py --verbose "
 # alias vc="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/view_changes.py "
 export TEMP_VM_CHEF_ENV=int-dev-cert
-export TEMP_VM_CHEF_TAG='basegofast'
+# export TEMP_VM_CHEF_TAG='basegofast'
 # alias tempvm="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/temp_vm.py -v --log-dir /var/log/debesys "
 # alias nutanix="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/nutanix_server.py -ov "
 # alias bcv="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/bump_cookbook.py"
@@ -323,7 +323,7 @@ function setchefconfig()
         chef_config=~/.chef/knife.external.rb
     elif [[ $1 == sy* || $1 == sg* || $1 == ln* || $1 == hk* ]]; then
         chef_config=~/.chef/knife.external.rb
-    elif [[ $1 == ty* || $1 == sp* ]]; then
+    elif [[ $1 == ty* || $1 == sp* || $1 == bk* ]]; then
         chef_config=~/.chef/knife.external.rb
     elif [[ $1 == *"ip-10-210"* ]]; then
         chef_config=~/.chef/knife.external.rb
@@ -629,8 +629,8 @@ function kns()
         knife node show "$1" --config $chef_config -f j -l > /tmp/$1.json
         $myemacs -nw /tmp/$1.json
     else
-        echo knife node show "$1" --config $chef_config -a chef_environment -a run_list -a tags -a ipaddress
-        knife node show "$1" --config $chef_config  -a chef_environment -a run_list -a tags -a ipaddress | sed 's/recipe\[//g' | sed 's/\]//g'
+        echo knife node show "$1" --config $chef_config -a chef_environment -a run_list -a tags -a ipaddress -a platform_version
+        knife node show "$1" --config $chef_config  -a chef_environment -a run_list -a tags -a ipaddress -a platform_version | sed 's/recipe\[//g' | sed 's/\]//g'
     fi
 }
 
@@ -1403,7 +1403,7 @@ function cpr()
 
 function chg()
 {
-    echo "/opt/virtualenv/devws/bin/python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/knife_ssh.py --knife-config ~/.chef/knife.external.rb --audit-runlist --concurrency 50 -a -e  -r  --test-run" | xclip
+    printf "/opt/virtualenv/devws/bin/python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/update_environment.py --support-locks -r  -c  -b release_v/current -e ext- \\n\\n/opt/virtualenv/devws/bin/python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/knife_ssh.py --knife-config ~/.chef/knife.external.rb --audit-runlist --concurrency 50 -a -e  -r  --test-run" | xclip
 }
 
 #

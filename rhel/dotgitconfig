@@ -48,10 +48,13 @@
 	cmd = 'emacs -Q $LOCAL $REMOTE $BASE $MERGED'
 
 [git-tt]
+        validate-jira-number = true
+        branch-skip-confirm = false
         delete-branch = true
         include-jira-summary = true
-        jira-summary-length = 40
+        jira-summary-length = 30
         use-jira-as-prefix = false
+        branch-prefix = ""
 [push]
 	default = nothing
 [gc]
