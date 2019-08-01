@@ -446,3 +446,6 @@ create file /etc/sudoers.d/YOUR_USERNAME with contents:
 YOUR_USERNAME  ALL=(ALL)     NOPASSWD: ALL
 
 export PS1="\h \w ROOT \n>"Set root's prompt in .bashrc:
+
+Backup dev workstation
+# rm dws-backup-tweiss.tar.gz; tar -cvpzf dws-backup-tweiss.tar.gz /home/tweiss --exclude=dev-root --exclude=githome --exclude=secdefnodecollection --exclude=jdks --exclude=.cache --exclude=.ivy2 --exclude=secdefcollection --exclude=emacs24_centos6.4 --exclude=emacs24 --exclude=share --exclude=.vagrant.d

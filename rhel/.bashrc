@@ -47,6 +47,7 @@ export PS1="\h\[\033[0;33m\]\$(__git_ps1) \[\033[0;0m\]\w \n>"
 
 # History across terminal sessions.
 export HISTSIZE=20000
+export HISTCONTROL=ignorespace
 shopt -s histappend
 # history -a => append current session's history to history file (happens at session exit)
 # history -c => clear the current session's history
@@ -651,7 +652,7 @@ alias spares=spares__
 
 function find_spare()
 {
-    usage='find_spare [chef_environment] [data_center_prefix] [cookbook]'
+    usage='find_spare [Chef Environment] [Data Center Prefix] [cookbook]'
     if [ -z "$1" ]; then
         echo $usage
         return
