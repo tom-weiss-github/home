@@ -13,7 +13,7 @@ if [ -f /etc/bashrc ]; then
 fi
 
 # User specific aliases and functions
-ulimit -c unlimited
+# ulimit -c unlimited
 
 # This seems to really slow down the __git_ps1 function, sometimes up to 1 second,
 # which is too long for the prompt to return.
@@ -128,6 +128,7 @@ export JRE_HOME=$JAVA_HOME/jre
 export MY_ONE_OFF_VERSION=0.88.88
 export ENABLE_POST_TO_SERVICENOW=1
 
+alias ireboot="t3 int-dev-cert server_actions post_reboot --name "
 alias nojava="rm -rf client.java && rm -rf .git/modules/client.java"
 alias xclip='xclip -sel clip'
 alias off='sudo shutdown -P now'
@@ -156,6 +157,7 @@ alias push='echo git push origin $b; git push origin $b'
 alias swarm="/opt/virtualenv/devws/bin/python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/swarm.py --verbose "
 # alias vc="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/view_changes.py "
 export TEMP_VM_CHEF_ENV=int-dev-cert
+export TEMP_VM_CPU=4
 # export TEMP_VM_CHEF_TAG='basegofast'
 # alias tempvm="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/temp_vm.py -v --log-dir /var/log/debesys "
 # alias nutanix="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/nutanix_server.py -ov "
@@ -185,7 +187,8 @@ alias awsauthexcomp="/opt/virtualenv/devws/bin/python $DEPLOYMENT_SCRIPTS_REPO_R
 alias upintenv='pushd deploy/chef/environments; for env_file in int-dev*.rb; do knife environment from file $env_file --config ~/.chef/knife.rb; done; popd'
 alias brm='git tt br m'
 alias aec='source /opt/virtualenv/exchange_compliance/bin/activate && source orders/cf/audit/pythonpath.sh'
-alias apython='source `git rev-parse --show-toplevel`/orders/cf/audit/pythonpath.sh; /opt/virtualenv/exchange_compliance_2_7_14/bin/python'
+alias apython='source `git rev-parse --show-toplevel`/orders/compliance/cf/pythonpath.sh; /opt/virtualenv/exchange_compliance_2_7_14/bin/python'
+alias a3python='source `git rev-parse --show-toplevel`/orders/compliance/cf/pythonpath.sh; /opt/virtualenv/exchange_compliance_3_6_5/bin/python'
 alias dpy=/opt/virtualenv/devws/bin/python
 alias cdr='cat `ls -d1t ~/deployment_receipts/* | head -n 1` | xclip -i'
 # alias esetrcv='eknife exec $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/snacks/set_rc_version.rb'
@@ -324,7 +327,9 @@ function setchefconfig()
         chef_config=~/.chef/knife.external.rb
     elif [[ $1 == sy* || $1 == sg* || $1 == ln* || $1 == hk* ]]; then
         chef_config=~/.chef/knife.external.rb
-    elif [[ $1 == ty* || $1 == sp* || $1 == bk* ]]; then
+    elif [[ $1 == ty* || $1 == sp* || $1 == bk* || $1 == ba* ]]; then
+        chef_config=~/.chef/knife.external.rb
+    elif [[ $1 == se* ]]; then
         chef_config=~/.chef/knife.external.rb
     elif [[ $1 == *"ip-10-210"* ]]; then
         chef_config=~/.chef/knife.external.rb
@@ -626,8 +631,8 @@ function kns()
 {
     setchefconfig "$1"
     if [ '-l' == "$2" ]; then
-        echo "knife node show "$1" --config $chef_config -f j -l > /tmp/$1.json"
-        knife node show "$1" --config $chef_config -f j -l > /tmp/$1.json
+        echo "knife node show "$1" --config $chef_config --format json -l > /tmp/$1.json"
+        knife node show "$1" --config $chef_config --format json -l > /tmp/$1.json
         $myemacs -nw /tmp/$1.json
     else
         echo knife node show "$1" --config $chef_config -a chef_environment -a run_list -a tags -a ipaddress -a platform_version
@@ -645,8 +650,8 @@ function spares__()
         echo $usage
         return
     fi
-    echo knife search node "chef_environment:ext-prod-sparepool AND name:$1*" -a tags --config ~/.chef/knife.external.rb
-    knife search node "chef_environment:ext-prod-sparepool AND name:$1*" -a tags --config ~/.chef/knife.external.rb
+    echo knife search node "chef_environment:ext-prod-sparepool AND name:$1*" -a platform_version -a tags --config ~/.chef/knife.external.rb
+    knife search node "chef_environment:ext-prod-sparepool AND name:$1*" -a platform_version -a tags --config ~/.chef/knife.external.rb
 }
 alias spares=spares__
 
@@ -1406,6 +1411,7 @@ function chg()
 {
     printf "/opt/virtualenv/devws/bin/python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/update_environment.py --support-locks -r  -c  -b release_v/current -e ext- \\n\\n/opt/virtualenv/devws/bin/python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/knife_ssh.py --knife-config ~/.chef/knife.external.rb --audit-runlist --concurrency 50 -a -e  -r  --test-run" | xclip
 }
+
 
 #
 # Virtual Box Notes
