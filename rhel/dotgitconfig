@@ -50,7 +50,7 @@
 [git-tt]
         validate-jira-number = true
         branch-skip-confirm = false
-        delete-branch = true
+        # delete-branch = true
         include-jira-summary = true
         jira-summary-length = 30
         use-jira-as-prefix = false

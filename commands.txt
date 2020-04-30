@@ -8,9 +8,9 @@ find / -type f -size +1000k | xargs -n 1 ls -l --block-size=M
 Find all files over 1000 kbs and then print the size of each of those
 files in mbs.
 
-sudo find / -maxdepth 1 -type d | xargs sudo du -hs
-sudo find /var -maxdepth 1 -type d | xargs sudo du -hs
-sudo find /var/lib -maxdepth 1 -type d | xargs sudo du -hs
+sudo find / -maxdepth 1 -type d | xargs -n 1 -i sudo du -hs \{\}
+sudo find /var -maxdepth 1 -type d | xargs -n 1 -i sudo du -hs \{\}
+sudo find /var/lib -maxdepth 1 -type d | xargs -n 1 -i sudo du -hs \{\}
 This command is useful to explore if some directory or file is the major contributor to partition
 exhaustion.  Starting from '/', examine which folders are using the most space and traverse to the
 culprit.
@@ -23,6 +23,9 @@ When used with knife ssh, a quick way to see which hosts might be able to give b
 sudo lsof -a +L1 /
 Show all the files in '/' with a link count less than 1, that is, deleted files.
 If not there, sudo yum -y install lsof.
+
+awk '{printf "%s\\n", $0}' /var/lib/tt/sslcert/debesys_net_root_cert_exp_05_11_2022_private_key
+Command to convert a file with newlines to text with '\n' characters.
 
 find . -mtime +10 | xargs -n 1 --no-run-if-empty rm -v
 Remove files older than 10 days.  The -n 1 ensure that if there are large numbers of files the

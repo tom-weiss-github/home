@@ -128,6 +128,8 @@ export JRE_HOME=$JAVA_HOME/jre
 export MY_ONE_OFF_VERSION=0.88.88
 export ENABLE_POST_TO_SERVICENOW=1
 
+alias nocolor="sed 's/\x1b\[[0-9;]*m//g'"
+alias ssh?='ss | grep ssh'
 alias ireboot="t3 int-dev-cert server_actions post_reboot --name "
 alias nojava="rm -rf client.java && rm -rf .git/modules/client.java"
 alias xclip='xclip -sel clip'
@@ -155,9 +157,11 @@ alias gdb='gdb -n'
 alias gt='gnome-terminal &'
 alias push='echo git push origin $b; git push origin $b'
 alias swarm="/opt/virtualenv/devws/bin/python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/swarm.py --verbose "
+alias rr="cd `git rev-parse --show-toplevel`"
 # alias vc="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/view_changes.py "
 export TEMP_VM_CHEF_ENV=int-dev-cert
 export TEMP_VM_CPU=4
+export TEMP_VM_MEMORY=8
 # export TEMP_VM_CHEF_TAG='basegofast'
 # alias tempvm="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/temp_vm.py -v --log-dir /var/log/debesys "
 # alias nutanix="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/nutanix_server.py -ov "
@@ -187,9 +191,10 @@ alias awsauthexcomp="/opt/virtualenv/devws/bin/python $DEPLOYMENT_SCRIPTS_REPO_R
 alias upintenv='pushd deploy/chef/environments; for env_file in int-dev*.rb; do knife environment from file $env_file --config ~/.chef/knife.rb; done; popd'
 alias brm='git tt br m'
 alias aec='source /opt/virtualenv/exchange_compliance/bin/activate && source orders/cf/audit/pythonpath.sh'
-alias apython='source `git rev-parse --show-toplevel`/orders/compliance/cf/pythonpath.sh; /opt/virtualenv/exchange_compliance_2_7_14/bin/python'
-alias a3python='source `git rev-parse --show-toplevel`/orders/compliance/cf/pythonpath.sh; /opt/virtualenv/exchange_compliance_3_6_5/bin/python'
+# alias apython='source `git rev-parse --show-toplevel`/orders/compliance/cf/pythonpath.sh; /opt/virtualenv/exchange_compliance_2_7_14/bin/python'
+alias apython='source `git rev-parse --show-toplevel`/orders/compliance/cf/pythonpath.sh; /opt/virtualenv/exchange_compliance_3_6_5/bin/python'
 alias dpy=/opt/virtualenv/devws/bin/python
+alias dpy3=/opt/virtualenv/devws3/bin/python
 alias cdr='cat `ls -d1t ~/deployment_receipts/* | head -n 1` | xclip -i'
 # alias esetrcv='eknife exec $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/snacks/set_rc_version.rb'
 alias nutanix_cpu='knife ssh "(chef_environment:int-dev* OR chef_environment:int-stage* OR chef_environment:int-sqe*) AND (NOT chef_environment:int-dev-jenkins) (NOT chef_environment:*perf*) AND name:*vm* AND (NOT creation_info_machine_origin:temp_hive)" "uptime" -a ipaddress --concurrency 20 | grep -v "load average: 0."'
@@ -304,6 +309,11 @@ set_display()
 function ekeu()
 {
     knife environment from file deploy/chef/environments/$1 --config ~/.chef/knife.external.rb
+}
+
+function ecnow()
+{
+    knife ssh "chef_environment:ext-prod-live AND recipe:exchange_compliance*" "find /var/log/debesys -name compliance*log -mtime -0.25" -a ipaddress --config ~/.chef/knife.external.rb
 }
 
 function eknifessh ()
@@ -618,6 +628,11 @@ alias rmattrhosts=rmattr__
 function eaddtag2query()
 {
     addtag2query "$1" "$2" ext
+}
+
+function eaddtag()
+{
+    eknife exec $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/snacks/add_tag.rb
 }
 
 function kne()
@@ -1409,9 +1424,34 @@ function cpr()
 
 function chg()
 {
-    printf "/opt/virtualenv/devws/bin/python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/update_environment.py --support-locks -r  -c  -b release_v/current -e ext- \\n\\n/opt/virtualenv/devws/bin/python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/knife_ssh.py --knife-config ~/.chef/knife.external.rb --audit-runlist --concurrency 50 -a -e  -r  --test-run" | xclip
+    printf "/opt/virtualenv/devws/bin/python \$DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/update_environment.py --support-locks -r  -c  -b release_v/current -e ext- \\n\\n/opt/virtualenv/devws/bin/python \$DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/knife_ssh.py --knife-config ~/.chef/knife.external.rb --audit-runlist --concurrency 50 -a -e  -r  --test-run" | xclip
 }
 
+function xbump()
+{
+    usage="xbump [cookbook] [r1 r2 rN]\nFor each release, checkout the branch and bump the cookbook.\n"
+    if [[ -z "$1" ]]; then
+        printf "$usage"
+        return
+    fi
+
+    if [[ -z "$2" ]]; then
+        printf "$usage"
+        return
+    fi
+
+    local first=0
+    for release in "$@"
+    do
+        if [[ $first == 0 ]]; then
+            first=1
+            continue
+        fi
+
+        git tt co $release
+        devws_bump_cookbook -c $1 -n
+    done
+}
 
 #
 # Virtual Box Notes
