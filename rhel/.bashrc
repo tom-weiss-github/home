@@ -111,6 +111,7 @@ if [ -f $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/bashrc/chef.bash ]; th
     alias tth=ssh_by_hostname
 fi
 # export BUMP_COOKBOOK_VERSION_ALTERNATE_REPO=~/dev-root/cookbooks
+export USE_PYTHON3=1
 export REQUEST_BUILD_SUPPRESS_TIPS=1
 export DEPLOY_ONE_OFF_HIDE_EXPIRE_MSG=1
 export BUMP_COOKBOOK_VERSION_AUTO_EXECUTE=1
@@ -196,6 +197,7 @@ alias apython='source `git rev-parse --show-toplevel`/orders/compliance/cf/pytho
 alias dpy=/opt/virtualenv/devws/bin/python
 alias dpy3=/opt/virtualenv/devws3/bin/python
 alias cdr='cat `ls -d1t ~/deployment_receipts/* | head -n 1` | xclip -i'
+alias deploy="devws_request_deploy -d 0"
 # alias esetrcv='eknife exec $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/snacks/set_rc_version.rb'
 alias nutanix_cpu='knife ssh "(chef_environment:int-dev* OR chef_environment:int-stage* OR chef_environment:int-sqe*) AND (NOT chef_environment:int-dev-jenkins) (NOT chef_environment:*perf*) AND name:*vm* AND (NOT creation_info_machine_origin:temp_hive)" "uptime" -a ipaddress --concurrency 20 | grep -v "load average: 0."'
 alias kcu="knife cookbook upload --config ~/.chef/knife.rb --cookbook-path=deploy/chef/cookbooks "
@@ -1451,6 +1453,29 @@ function xbump()
         git tt co $release
         devws_bump_cookbook -c $1 -n
     done
+}
+
+function dedicated()
+{
+    commands="The following commands were used to generate the data:\n"
+
+    printf "Report on Dedicated JPM hosts. @tom.mckee @melissa.waitz @russ.cotton @ryan.ohnemus\n\n"
+
+    for cb in orderrtgnode backofficenode
+    do
+        commands="${commands}knife search node \"chef_environment:ext-prod-live AND recipe:${cb} AND haproxy:* AND recipe:*dedicated_for_jpm\" -a run_list -a base.groups -a cookbook_deployment_data.${cb}.version -a cookbook_deployment_data.${cb}.installed --config ~/.chef/knife.external.rb --no-color 2> /dev/null\n\n"
+        knife search node "chef_environment:ext-prod-live AND recipe:${cb} AND haproxy:* AND recipe:*dedicated_for_jpm" -a run_list -a base.groups -a cookbook_deployment_data.${cb}.version -a cookbook_deployment_data.${cb}.installed --config ~/.chef/knife.external.rb --no-color 2> /dev/null
+    done
+
+
+    for cb in hkex tfex ose sgx asx_ntp
+    do
+        commands="${commands}knife search node \"chef_environment:ext-prod-live AND recipe:*dedicated_for_jpm AND recipe:${cb}*\" -a run_list -a base.groups -a cookbook_deployment_data.${cb}.version -a cookbook_deployment_data.${cb}.installed --config ~/.chef/knife.external.rb --no-color 2> /dev/null\n\n"
+        knife search node "chef_environment:ext-prod-live AND recipe:*dedicated_for_jpm AND recipe:${cb}*" -a run_list -a base.groups -a cookbook_deployment_data.${cb}.version -a cookbook_deployment_data.${cb}.installed --config ~/.chef/knife.external.rb --no-color 2> /dev/null
+    done
+
+
+    printf "\n $commands \n"
 }
 
 #
