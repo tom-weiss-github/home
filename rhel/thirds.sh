@@ -31,40 +31,46 @@ function program_count()
 
 logger -t thirds "Starting."
 
+
+
 # These names are obtained from running 'wmctrl -lx'.
 terminator='terminator.Terminator'
 emacs='emacs-24_3.Emacs'
-chrome='chromium-browser.Chromium-browser'
+# browser='chromium-browser.Chromium-browser'
+browser='Navigator.Firefox'
+
 
 terminator_count=`wmctrl -lx | grep -o $terminator | wc -l`
 emacs_count=`wmctrl -lx | grep -o $emacs | wc -l`
-chrome_count=`wmctrl -lx | grep -o $chrome | wc -l`
+browser_count=`wmctrl -lx | grep -o $browser | wc -l`
+
 
 echo terminator count is $terminator_count
 echo emacs count is $emacs_count
-echo chrome count is $chrome_count
+echo browser count is $browser_count
 
 # Some useful commands when callibrating this script.
 # wmctrl -lG will show x-offset, y-offset, width, and height.
 # xprop -id 0x00001234 (0x00001234 from wmctrl will list properties of the window).
 
 terminator_id=`wmctrl -lx | grep $terminator | tr -s " " | cut -d " " -f 1`
-chrome_id=`wmctrl -lx | grep $chrome | tr -s " " | cut -d " " -f 1`
+browser_id=`wmctrl -lx | grep $browser | tr -s " " | cut -d " " -f 1`
 # The 'grep -v xps' is there because I don't want to use emacs from my xps host, but from another
 # host.  Part of the output of the command contains the client host.
 emacs_id=`wmctrl -lx | grep $emacs | grep -v xps | tr -s " " | cut -d " " -f 1`
 
+
 echo terminator_id is $terminator_id
-echo chrome_id is $chrome_id
+echo browser_id is $browser_id
 echo emacs_id is $emacs_id
 
 if [[ "$1" == "off" ]]; then
     echo off
     wmctrl -r $terminator_id -i -b add,maximized_vert,maximized_horz
     wmctrl -r $emacs_id -i -b add,maximized_vert,maximized_horz
-    wmctrl -r $chrome_id -i -b add,maximized_vert,maximized_horz
-    # Give chrome focus after we are done.
-    wmctrl -i -a $chrome_id
+    wmctrl -r $browser_id -i -b add,maximized_vert,maximized_horz
+    # Give browser focus after we are done.
+    wmctrl -i -a $browser_id
     exit 0
 fi
 
@@ -84,11 +90,11 @@ if [[ ! -z $emacs_id && $emacs_count == 1 ]]; then
     wmctrl -r $emacs_id -i -b add,maximized_vert
 fi
 
-if [[ ! -z $chrome_id && $chrome_count == 1 ]]; then
-    echo Setting chrome.
-    wmctrl -r $chrome_id -i -b remove,maximized_vert,maximized_horz
-    wmctrl -r $chrome_id -i -e 0,2240,0,1200,1367
-    wmctrl -r $chrome_id -i -b add,maximized_vert
-    # Give chrome focus after we are done.
-    wmctrl -i -a $chrome_id
+if [[ ! -z $browser_id && $browser_count == 1 ]]; then
+    echo Setting browser.
+    wmctrl -r $browser_id -i -b remove,maximized_vert,maximized_horz
+    wmctrl -r $browser_id -i -e 0,2240,0,1200,1367
+    wmctrl -r $browser_id -i -b add,maximized_vert
+    # Give browser focus after we are done.
+    wmctrl -i -a $browser_id
 fi
