@@ -32,7 +32,7 @@ RED='\033[91m'
 BOLD='\033[1m'
 ENDC='\033[0m'
 
-if [ -z "$TMUX" ]; then
+if [[ -z "$TMUX" && -f ~/display_check ]]; then
     # The TMUX environment variable is not set, we're not inside tmux.
     if [[ $DISPLAY = *"10.0"* ]]; then
         echo DISPLAY is $DISPLAY.
