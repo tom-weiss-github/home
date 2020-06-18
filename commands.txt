@@ -41,6 +41,9 @@ du -hs <directory>
 Print disk usage of some directory, recursive.
 
 
+grep '"chef_environment": "ext-prod-live"' *.json | cut -d ":" -f 1 | xargs -I '{}' -n 1 -i sh -c 'echo $1; grep -E recipe.*juno_up $1' - {}
+Example to look in the nodes repo to find all juno_up nodes in ext-prod-live.  This is useful since the repo can go back in time.
+
 sudo chef-shell -z
 Runs shell with chef variables loaded like irb.
 

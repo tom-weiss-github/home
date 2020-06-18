@@ -198,7 +198,6 @@ alias apython='source `git rev-parse --show-toplevel`/orders/compliance/cf/pytho
 alias dpy=/opt/virtualenv/devws/bin/python
 alias dpy3=/opt/virtualenv/devws3/bin/python
 alias cdr='cat `ls -d1t ~/deployment_receipts/* | head -n 1` | xclip -i'
-alias deploy="devws_request_deploy -d 0"
 # alias esetrcv='eknife exec $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/snacks/set_rc_version.rb'
 alias nutanix_cpu='knife ssh "(chef_environment:int-dev* OR chef_environment:int-stage* OR chef_environment:int-sqe*) AND (NOT chef_environment:int-dev-jenkins) (NOT chef_environment:*perf*) AND name:*vm* AND (NOT creation_info_machine_origin:temp_hive)" "uptime" -a ipaddress --concurrency 20 | grep -v "load average: 0."'
 alias kcu="knife cookbook upload --config ~/.chef/knife.rb --cookbook-path=deploy/chef/cookbooks "
@@ -288,6 +287,7 @@ if [ -f $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/bashrc/devws.bash ]; t
     source $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/bashrc/devws.bash
 fi
 alias nutanix="devws_nutanix_server -vo"
+alias deploy="devws_request_deploy -d 0"
 
 set_display()
 {
@@ -307,6 +307,11 @@ set_display()
     echo DISPLAY was $DISPLAY.
     export DISPLAY="localhost:$1.0"
     echo DISPLAY is $DISPLAY.
+}
+
+function csvs()
+{
+    find /tmp/compliance_* -name "*$1*csv" | xargs -n 1 -i ls -sh \{\}
 }
 
 function ekeu()
@@ -1462,21 +1467,30 @@ function dedicated()
 
     printf "Report on Dedicated JPM hosts. @tom.mckee @melissa.waitz @russ.cotton @ryan.ohnemus\n\n"
 
-    for cb in orderrtgnode backofficenode
+    for cb in orderrtgnode backofficenode fixorderrouting fixdropcopy
     do
         commands="${commands}knife search node \"chef_environment:ext-prod-live AND recipe:${cb} AND haproxy:* AND recipe:*dedicated_for_jpm\" -a run_list -a base.groups -a cookbook_deployment_data.${cb}.version -a cookbook_deployment_data.${cb}.installed --config ~/.chef/knife.external.rb --no-color 2> /dev/null\n\n"
         knife search node "chef_environment:ext-prod-live AND recipe:${cb} AND haproxy:* AND recipe:*dedicated_for_jpm" -a run_list -a base.groups -a cookbook_deployment_data.${cb}.version -a cookbook_deployment_data.${cb}.installed --config ~/.chef/knife.external.rb --no-color 2> /dev/null
     done
 
 
-    for cb in hkex tfex ose sgx asx_ntp
+    for cb in hkex tfex ose sgx asx_ntp bouncer
     do
         commands="${commands}knife search node \"chef_environment:ext-prod-live AND recipe:*dedicated_for_jpm AND recipe:${cb}*\" -a run_list -a base.groups -a cookbook_deployment_data.${cb}.version -a cookbook_deployment_data.${cb}.installed --config ~/.chef/knife.external.rb --no-color 2> /dev/null\n\n"
         knife search node "chef_environment:ext-prod-live AND recipe:*dedicated_for_jpm AND recipe:${cb}*" -a run_list -a base.groups -a cookbook_deployment_data.${cb}.version -a cookbook_deployment_data.${cb}.installed --config ~/.chef/knife.external.rb --no-color 2> /dev/null
     done
 
 
-    printf "\n $commands \n"
+    printf "\n$commands \n"
+}
+
+function fix_audit()
+{
+    for cb in orderrtgnode fixorderrouting backofficenode fixdropcopy secdefnode fixmarketdata miaminode binarymarketdata
+    do
+        printf "\n***** $cb *****\n"
+        knife search node "chef_environment:ext-prod-live AND recipe:${cb}*" -a run_list -a base.groups -a instance_identifier.dedicated --config ~/.chef/knife.external.rb
+    done
 }
 
 #
