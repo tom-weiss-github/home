@@ -59,3 +59,12 @@ fi
 # Commented this out since Ubuntu laptop has sudo prompt.
 # sudo echo .bash_profile ran at $(date) >> /var/log/profiles
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+
+# For setting machine specific environment settings.
+if [[ -f ~/environment ]]; then
+    source ~/environment
+fi
+
+if [[ -n "${CD_HERE}" ]]; then
+    cd ${CD_HERE}
+fi
