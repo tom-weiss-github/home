@@ -20,6 +20,11 @@ free | grep Mem | awk '{print $3/$2 * 100.0}'
 knife ssh "name:gl*vm* OR name:sqe*vm*" "free -g | grep Mem | tr -s \" \" | cut -d \" \" -f 2,3,4" -a ipaddress --concurrency 5
 When used with knife ssh, a quick way to see which hosts might be able to give back memory.
 
+cmdr -C 'if [[ $(cat /proc/meminfo | grep MemTotal | tr -s " " | cut -d" " -f 2) -gt 9000000 ]]; then cat /proc/meminfo | grep MemTotal; false; else true; fi' -q "n:gl*vm*" --execute -e int-dev-sim int-dev-md-pp int-dev-delayed int-dev-md-pp-delayed int-dev-cert int-dev-md-sp int-stage-cert int-stage-md-sp int-stage-sim int-stage-md-pp int-sqe-cert int-sqe-md-sp | grep -v Attention | tr " " "\n" | xargs -n 1 -i knife node show \{\} -a memory.total -a run_list
+Find nodes using more that ~8G memory.
+If redirected to a file (e.g., /tmp/highmem, use this command to add better spacing): cat /tmp/highmem | sed 's/^gl/\ngl/g'
+
+
 sudo lsof -a +L1 /
 Show all the files in '/' with a link count less than 1, that is, deleted files.
 If not there, sudo yum -y install lsof.
