@@ -289,6 +289,10 @@ fi
 alias nutanix="devws_nutanix_server -vo"
 alias deploy="devws_request_deploy -d 0"
 
+if [[ -f ~/bin/tig ]]; then
+    alias tig=~/bin/tig
+fi
+
 set_display()
 {
     # When tmux gets disconnected the DISPLAY environment variable often needs to be changed.

@@ -56,6 +56,10 @@ if [ -f /opt/rh/git19/enable ]; then
     source /opt/rh/git19/enable
 fi
 
+if [ -f /opt/rh/rh-git218/enable ]; then
+    source /opt/rh/rh-git218/enable
+fi
+
 # Commented this out since Ubuntu laptop has sudo prompt.
 # sudo echo .bash_profile ran at $(date) >> /var/log/profiles
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
