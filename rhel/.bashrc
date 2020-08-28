@@ -478,6 +478,19 @@ function addrun2hosts__()
 }
 alias addrun2hosts=addrun2hosts__
 
+function runlist()
+{
+    local usage='Usage: runlist host'
+    if [ -z "$1" ]; then
+        echo $usage
+        return
+    fi
+
+    setchefconfig $1
+
+    knife node show "$1" --config $chef_config -a run_list | grep run_list | sed 's/recipe\[//g' | sed 's/\]//g' | sed 's/run_list: base,//g' | tr "," " " | tr -s " " | sed 's/^[[:blank:]]*//g'
+}
+
 function addruns2host()
 {
     local usage="Usage: addruns2host host run1 run2 ... runN\necho node1 node2 | tr \" \" \"\\\n\" | xargs -i -n 1 bash -cil \'addruns2host {} run1 run2 ... runN\'\nknife search node \"n:gla1vm85 OR n:gla2vm202\" -i 2> /dev/null | tr \" \" \"\\\n\" | xargs -i -n 1 bash -cil \'addruns2host {} run1 run2 ... runN\'\n"
