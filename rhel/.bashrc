@@ -117,6 +117,7 @@ export DEPLOY_ONE_OFF_HIDE_EXPIRE_MSG=1
 export BUMP_COOKBOOK_VERSION_AUTO_EXECUTE=1
 export BUMP_COOKBOOK_VERSION_ALLOW_MULTIBUMP=1
 export KNIFE_SSH_ENABLE_INTERNAL_POOL=1
+export KNIFE_SSH_UPGRADE_CHEF=14.10.9
 export FEATURE_TEST_EMAIL=tom.weiss@tradingtechnologies.com
 export FEATURE_TEST_COMPANY="Deployment Team"
 export FEATURE_TEST_USER=tweiss
@@ -242,7 +243,7 @@ alias soc='kill `cat /var/run/cme.pid`'
 alias oc?='cat /var/run/cme.pid; ps -ef | grep cme | grep -v grep'
 # Why 'grep -v ' -nw '?  I want to find if Emacs is running in non-terminal mode, I don't care about
 # terminal mode instances.
-alias emacs?='ps -ef | grep emacs | grep -v "grep emacs" | grep -v " -nw "'
+alias emacs?='ps -ef | grep emacs | grep -v "grep" | grep -v " -nw "'
 alias rmvol='rm /var/lib/order-connector/*'
 alias pbin='pushd `git rev-parse --show-toplevel`/build/x86-64/debug/bin'
 alias pext='pushd `git rev-parse --show-toplevel`/ext'
@@ -331,6 +332,12 @@ function ecnow()
 function eknifessh ()
 {
     eknife ssh "$1" "$2" --ssh-user $INTAD_USER --identity-file $INTAD_SSH_KEY -a ipaddress
+}
+
+function kitchenauth()
+{
+    rm -v ~/.aws-keys*
+    $(/opt/virtualenv/devws3/bin/python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/aws_authenticator.py --account deb --role dev --env)
 }
 
 function setchefconfig()
