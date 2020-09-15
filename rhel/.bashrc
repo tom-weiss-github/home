@@ -44,6 +44,17 @@ export PS1="\h\[\033[0;33m\]\$(__git_ps1) \[\033[0;0m\]\w \n>"
 #. ~/githome/rhel/.git-prompt-alternate.sh
 #export PS1="\h \[\033[1;30m\]\$(parse_git_branch) \[\033[0;0m\]\w \n>"
 
+# Ubuntu stuff to make tig completion fast.
+if [[ -f ~/.bash_completion.d/tig-completion.bash ]]; then
+    # This file came from compiling tig from source.
+    source ~/.bash_completion.d/tig-completion.bash
+fi
+
+if [[ -f /usr/share/bash-completion/completions/git ]]; then
+    # This file was already present in Ubuntu, but I copied a slightly newer one from Git's git
+    # repository to ensure a symbol was defined that the updated tig bash completion needed.
+    source /usr/share/bash-completion/completions/git
+fi
 
 # History across terminal sessions.
 export HISTSIZE=20000
@@ -269,6 +280,7 @@ else
 fi
 alias kolmar='sudo mount.cifs -o user=weiss //192.168.0.3/Users /mnt/kolmar'
 alias gld2vm49='sudo mount.cifs -o user=tweiss,uid=1000,gid=1000 //10.195.2.49/shared /home/tweiss/gld2vm49'
+alias gld1vm89='sudo mount.cifs -o user=tweiss,uid=1000,gid=1000 //10.195.1.89/shared /home/tweiss/gld1vm89'
 alias cli_mt='run `git rev-parse --show-toplevel`/ext/linux/x86-64/release/bin/cli_mt 10.203.0.43:2181'
 alias jtrader="/usr/java/jdk1.7.0_03/bin/java -cp JTrader.jar JTrader &"
 alias ttr='`git rev-parse --show-toplevel`/run python `git rev-parse --show-toplevel`/t_trader/tt/ttrader/t_trader.py --stdout'
