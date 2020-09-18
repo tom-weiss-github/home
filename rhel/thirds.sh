@@ -45,7 +45,6 @@ terminator_count=`wmctrl -lx | grep -o $terminator | wc -l`
 emacs_count=`wmctrl -lx | grep -o $emacs | wc -l`
 browser_count=`wmctrl -lx | grep -o $browser | wc -l`
 
-
 echo terminator count is $terminator_count
 echo emacs count is $emacs_count
 echo browser count is $browser_count
@@ -58,7 +57,7 @@ terminator_id=`wmctrl -lx | grep $terminator | tr -s " " | cut -d " " -f 1`
 browser_id=`wmctrl -lx | grep $browser | tr -s " " | cut -d " " -f 1`
 # The 'grep -v xps' is there because I don't want to use emacs from my xps host, but from another
 # host.  Part of the output of the command contains the client host.
-emacs_id=`wmctrl -lx | grep $emacs | grep -v xps | tr -s " " | cut -d " " -f 1`
+emacs_id=`wmctrl -lx | grep $emacs | tr -s " " | cut -d " " -f 1`
 
 
 echo terminator_id is $terminator_id
