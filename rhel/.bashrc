@@ -262,6 +262,7 @@ alias cdrt='cd `git rev-parse --show-toplevel`'
 alias prt='pushd `git rev-parse --show-toplevel`'
 alias default="cd ~/dev-root/default"
 alias alternate="cd ~/dev-root/alternate"
+alias another="cd ~/dev-root/another"
 alias edcfg="$myemacs -nw /etc/debesys/cme_oc_config.conf"
 #alias run='`git rev-parse --show-toplevel`/run'
 alias dpython=/opt/virtualenv/devws/bin/python2
@@ -987,63 +988,6 @@ function find_environments()
     knife search node "deployed_cookbooks:$1" -a chef_environment --config ~/.chef/knife.external.rb 2> /dev/null | grep chef_environment | sed 's/chef_environment: //g' | sed 's/ //g' | sort | uniq
 }
 alias fenv=find_environments
-
-# function bootstrap__()
-# {
-#     local found_dash_a=false
-#     # Example of bash substring match.
-#     if [[ "$@" == *"-a"* ]]; then
-#         found_dash_a=true
-#     fi
-
-#     local found_dash_h=false
-#     if [[ "$@" == *"-h"* ]]; then
-#         found_dash_h=true
-#     fi
-
-#     if [ $found_dash_h == false -a $found_dash_a == false ]; then
-#         local title_start="bootstrapping..."
-#         local window=`tmux list-windows | grep "\(active\)" | cut -d" " -f 1 | sed s'/://g'`
-#         rename_terminal_title "$title_start"
-#     fi
-
-#     echo $DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_bootstrap.py "$@"
-#     $DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_bootstrap.py "$@"
-
-#     if [ $found_dash_h == false -a $found_dash_a == false ]; then
-#         local title_done="bootstrapping...done"
-#         rename_terminal_title "$title_done" "$window"
-#     fi
-# }
-# alias bootstrap=bootstrap__
-
-function build__()
-{
-    local found_dash_h=false
-    if [[ "$@" == *"-h"* ]]; then
-        found_dash_h=true
-    fi
-
-    local found_dash_a=false
-    if [[ "$@" == *"-a"* ]]; then
-        found_dash_a=true
-    fi
-
-    # if [ $found_dash_h == false -a $found_dash_a == false ]; then
-    #     local title_start="building..."
-    #     local window=`tmux list-windows | grep "\(active\)" | cut -d" " -f 1 | sed s'/://g'`
-    #     rename_terminal_title "$title_start"
-    # fi
-
-    echo /opt/virtualenv/devws/bin/python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_build.py "$@"
-    /opt/virtualenv/devws/bin/python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/request_build.py "$@"
-
-    # if [ $found_dash_h == false -a $found_dash_a == false ]; then
-    #     local title_done="building...done"
-    #     rename_terminal_title "$title_done" "$window"
-    # fi
-}
-alias build=build__
 
 function distmake() {
    reporoot=$(git rev-parse --show-toplevel)
