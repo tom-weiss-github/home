@@ -337,6 +337,17 @@ function ekeu()
     knife environment from file deploy/chef/environments/$1 --config ~/.chef/knife.external.rb
 }
 
+function mtail()
+{
+    chef_env=$1
+    cookbook=$2
+    log_file=$3
+
+    mtail_args=$(knife search node "chef_environment:${chef_env} AND recipe:${cookbook}" -a ipaddress 2>/dev/null | grep ipaddress | cut -d":" -f 2 | xargs -I '{}' -n 1 -i sh -c 'echo -l \"ssh $1 tail -f /var/log/debesys/${log_file}\"' - {} | tr "\n" " ")
+    # x=$(knife search node "chef_environment:${chef_env} AND recipe:${cookbook}")
+    eval multitail $mtail_args
+}
+
 function ecnow()
 {
     knife ssh "chef_environment:ext-prod-live AND recipe:exchange_compliance*" "find /var/log/debesys -name compliance*log -mtime -0.25" -a ipaddress --config ~/.chef/knife.external.rb
@@ -1439,6 +1450,42 @@ function xbump()
         git tt co $release
         devws_bump_cookbook -c $1 -n
     done
+}
+
+function eftxfer()
+{
+    usage="eftxfer COMPANY_ID\n"
+    if [[ -z "$1" ]]; then
+        printf "$usage"
+        return
+    fi
+
+    homedir=~
+    eval homedir=$homedir
+
+    if [[ ! -d $homedir/compliance/${1} ]]; then
+        echo "Directory $homedir/compliance/${1} not found!"
+        return
+    fi
+
+    if [[ ! -f $homedir/.ssh/scp_private_key.pem ]]; then
+        echo "Missing authentication key $homedir/.ssh/scp_private_key.pem!"
+        return
+    fi
+
+    transfer_count=`/bin/ls -1 $homedir/compliance/${1} | wc -l`
+    echo "Transferring $transfer_count files from $homedir/compliance/${1} to /TT_NextGen/tt_company_${1} in 10 seconds."
+    for i in $(seq 1 10); do echo -n ".";  sleep 1; done
+    echo ""
+
+    echo "progress" > /tmp/transfer.${1}.sftp
+    echo "cd /TT_NextGen/tt_company_${1}" >> /tmp/transfer.${1}.sftp
+    echo "put $homedir/compliance/${1}/*" >> /tmp/transfer.${1}.sftp
+
+    sftp -oIdentityFile=$homedir/.ssh/scp_private_key.pem Debesys@119.0.0.229 < /tmp/transfer.${1}.sftp
+
+    echo ""
+    echo "Transfer completed."
 }
 
 function dedicated()

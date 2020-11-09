@@ -460,3 +460,17 @@ export PS1="\h \w ROOT \n>"Set root's prompt in .bashrc:
 
 Backup dev workstation
 # rm dws-backup-tweiss.tar.gz; tar -cvpzf dws-backup-tweiss.tar.gz /home/tweiss --exclude=dev-root --exclude=githome --exclude=secdefnodecollection --exclude=jdks --exclude=.cache --exclude=.ivy2 --exclude=secdefcollection --exclude=emacs24_centos6.4 --exclude=emacs24 --exclude=share --exclude=.vagrant.d
+
+
+#!/bin/bash
+for commits_ago in $(seq 1 100); do
+    git checkout `git log -n 7 --pretty=format:"%h" | tail -n 1` > /dev/null 2>&1
+    ls sy*vm* > /dev/null 2>&1
+    return_code=$?
+    if [[ $return_code -ne 0 ]]; then
+        count=0
+    else
+        count=$(ls sy*vm* -1 | wc -l)
+    fi
+    echo There were ${count} sy vms on $(git show -s --format=%ci HEAD).
+done
