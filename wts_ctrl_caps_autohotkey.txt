@@ -1,0 +1,10 @@
+
+
+On the desktop create the file ctrlcaps.ahk with contents:
+SetCapsLockState, alwaysoff
+CapsLock::Control
+
+
+Create a shortcut in
+C:\Users\tweiss\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
+to ctrlcaps.ahk on the desktop.
