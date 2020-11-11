@@ -710,8 +710,8 @@ function kns()
         knife node show "$1" --config $chef_config --format json -l > /tmp/$1.json
         $myemacs -nw /tmp/$1.json
     else
-        echo knife node show "$1" --config $chef_config -a chef_environment -a run_list -a tags -a ipaddress -a platform_version
-        knife node show "$1" --config $chef_config  -a chef_environment -a run_list -a tags -a ipaddress -a platform_version | sed 's/recipe\[//g' | sed 's/\]//g'
+        echo knife search node "n:$1" --config $chef_config -a chef_environment -a run_list -a tags -a ipaddress -a platform_version
+        knife search node "n:$1" --config $chef_config  -a chef_environment -a run_list -a tags -a ipaddress -a platform_version | sed 's/recipe\[//g' | sed 's/\]//g'
     fi
 }
 
