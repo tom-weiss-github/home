@@ -282,6 +282,7 @@ fi
 alias kolmar='sudo mount.cifs -o user=weiss //192.168.0.3/Users /mnt/kolmar'
 alias gld2vm49='sudo mount.cifs -o user=tweiss,uid=1000,gid=1000 //10.195.2.49/shared /home/tweiss/gld2vm49'
 alias gld1vm89='sudo mount.cifs -o user=tweiss,uid=1000,gid=1000 //10.195.1.89/shared /home/tweiss/gld1vm89'
+alias jch='sudo mount.cifs -o user=tweiss //chijchfs01/share/replication /home/tweiss/jchfs01'
 alias cli_mt='run `git rev-parse --show-toplevel`/ext/linux/x86-64/release/bin/cli_mt 10.203.0.43:2181'
 alias jtrader="/usr/java/jdk1.7.0_03/bin/java -cp JTrader.jar JTrader &"
 alias ttr='`git rev-parse --show-toplevel`/run python `git rev-parse --show-toplevel`/t_trader/tt/ttrader/t_trader.py --stdout'

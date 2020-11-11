@@ -388,11 +388,11 @@
 ;;(paren-set-mode 'blink-paren)
 
 ;; I am picky about what colors to use when matching parens.
-(set-face-foreground 'show-paren-match-face "Red")
-(set-face-background 'show-paren-match-face "Black")
+;;(set-face-foreground 'show-paren-match-face "Red")
+;;(set-face-background 'show-paren-match-face "Black")
 
-(set-face-foreground 'show-paren-mismatch-face "Red")
-(set-face-background 'show-paren-mismatch-face "Black")
+;;(set-face-foreground 'show-paren-mismatch-face "Red")
+;;(set-face-background 'show-paren-mismatch-face "Black")
 
 (put 'scroll-left 'disabled nil)
 
