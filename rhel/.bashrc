@@ -68,9 +68,12 @@ shopt -s histappend
 export HISTTIMEFORMAT='%F %T '
 alias often='cat $HISTFILE | grep -v "#1" | sort | uniq -c'
 
-if [ -f ~/bin/emacs-24.3 ]; then
+if [[ -f ~/bin/emacs-24.3 ]]; then
     export myemacs=~/bin/emacs-24.3
     export myemacsclient=~/bin/emacsclient
+elif [[ -f /usr/local/bin/emacs ]]; then
+    export myemacs=/usr/local/bin/emacs
+    export myemacsclient=/usr/local/bin/emacsclient
 else
     export myemacs=/usr/bin/emacs
     export myemacsclient=/usr/bin/emacsclient
