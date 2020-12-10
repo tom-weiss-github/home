@@ -56,6 +56,10 @@ if [[ -f /usr/share/bash-completion/completions/git ]]; then
     source /usr/share/bash-completion/completions/git
 fi
 
+if [[ $HOSTNAME == jchi* ]]; then
+    export NPM_CONFIG_PREFIX=~/.npm-global
+fi
+
 # History across terminal sessions.
 export HISTSIZE=20000
 export HISTCONTROL=ignorespace
@@ -1391,6 +1395,8 @@ function gg()
     if [ $? == 0 ]; then
         echo "Found tweiss_gg, deleting via 'git branch -D tweiss_gg'."
         git branch -D tweiss_gg
+        echo "Deleting from remote via 'git push origin --delete tweiss_gg'."
+        git push origin --delete tweiss_gg
     fi
 
     echo "git checkout -b tweiss_gg"
