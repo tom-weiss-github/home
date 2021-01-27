@@ -1499,6 +1499,7 @@ function eftxfer()
     echo "Transfer completed."
     echo ""
     echo "Your EFT compliance restore is complete (${transfer_count} files were restored)."
+    echo "Restores happen in chunks of a month (you may get more files than requested)."
     echo "The files are available in your company's EFT folder (company id ${1}).  Please"
     echo "make sure to collect these files as they will automatically be purged after 30 days."
     echo "Also please ensure newly created files are being regularly collected."
