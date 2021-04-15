@@ -359,7 +359,7 @@ function mtail()
 
 function ecnow()
 {
-    knife ssh "chef_environment:ext-prod-live AND recipe:exchange_compliance*" "find /var/log/debesys -name compliance*log -mtime -0.25" -a ipaddress --config ~/.chef/knife.external.rb
+    knife ssh "chef_environment:ext-prod-live AND recipe:exchange_compliance*" "find /var/log/debesys -name compliance*log -mtime -0.05" -a ipaddress --config ~/.chef/knife.external.rb
 }
 
 function eknifessh ()
@@ -1434,7 +1434,7 @@ function cpr()
 
 function chg()
 {
-    printf "/opt/virtualenv/devws/bin/python \$DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/update_environment.py --support-locks -r  -c  -b release_v/current -e ext- \\n\\n/opt/virtualenv/devws/bin/python \$DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/knife_ssh.py --knife-config ~/.chef/knife.external.rb --audit-runlist --concurrency 50 -a -e  -r  --test-run" | xclip
+    printf "/opt/virtualenv/devws/bin/python \$DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/update_environment.py --support-locks -r  -c  -e ext- \\n\\n/opt/virtualenv/devws/bin/python \$DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/knife_ssh.py --knife-config ~/.chef/knife.external.rb --audit-runlist --concurrency 50 -a -e  -r  --test-run" | xclip
 }
 
 function xbump()
@@ -1527,6 +1527,25 @@ function dedicated()
 
 
     printf "\n$commands \n"
+}
+
+function deployed_releases()
+{
+    if [ -z "$1" ]; then
+        echo Invalid usage of deployed_releses, you must pass the initial release number.
+        return
+    fi
+
+    for index in $(seq 30 1 ${1} | tac);
+    do
+        echo Checking for release ${index} cookbooks that are still deployed...
+        echo "knife search node \"*\" -a deployed_cookbooks --config ~/.chef/knife.external.rb 2>/dev/null | grep \"\.${index}\.\" | wc -l"
+        count=$(knife search node "*" -a deployed_cookbooks --config ~/.chef/knife.external.rb 2>/dev/null | grep "\.${index}\." | wc -l)
+        knife search node "*" -a deployed_cookbooks --config ~/.chef/knife.external.rb 2>/dev/null | grep "\.${index}\." | tr -s " " | sort -u
+        echo "Nodes found: $count"
+        echo ""
+    done
+
 }
 
 function fix_audit()
@@ -1633,7 +1652,6 @@ function merge()
     # merge cause I just chose it.
     history -s "git merge --no-ff $selection"
 }
-
 
 
 # Uncomment to debug command to see when this file is sourced.
