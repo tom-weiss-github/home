@@ -1,0 +1,7 @@
+[Desktop Entry]
+Version=1.0
+Name=nothirds
+Exec=bash -i /home/tweiss/githome/rhel/thirds.sh off
+Terminal=false
+Icon=utilities-terminal
+Type=Application

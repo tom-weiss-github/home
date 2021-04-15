@@ -1,0 +1,7 @@
+[Desktop Entry]
+Version=1.0
+Name=thirds
+Exec=bash -i /home/tweiss/githome/rhel/thirds.sh on
+Terminal=false
+Icon=utilities-terminal
+Type=Application

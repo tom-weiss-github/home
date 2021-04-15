@@ -1,0 +1,7 @@
+[Desktop Entry]
+Version=1.0
+Name=hop
+Exec=xfreerdp /v:JCHRDSH01 /d:intad /dynamic-resolution -grab-keyboard /p:**********
+Terminal=true
+Icon=utilities-terminal
+Type=Application
