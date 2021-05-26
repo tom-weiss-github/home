@@ -72,3 +72,6 @@ fi
 if [[ -n "${CD_HERE}" ]]; then
     cd ${CD_HERE}
 fi
+
+# Created by `pipx` on 2021-05-26 15:07:17
+export PATH="$PATH:/home/tweiss/.local/bin"

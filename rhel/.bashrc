@@ -1681,3 +1681,6 @@ alias killmyssh='ps -ef | grep sshd | grep tweiss@ | tr -s " " | cut -d" " -f 2 
 # wmctrol -lp will list windows and their process ids
 # Find chrome's window name.
 # wmctrl -lp | tr -s " " | cut -d " " -f 3
+
+# Created by `pipx` on 2021-05-26 15:07:17
+export PATH="$PATH:/home/tweiss/.local/bin"
