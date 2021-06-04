@@ -103,6 +103,7 @@ export DEPT=""
 # in scala caused an LBM symbol to not be recognized and failed to run.  To unset use:
 # unset LD_BIND_NOW
 # export LD_BIND_NOW=yes
+export CHGCMD_SET_STATE="false"
 export DEVWS_SKIP_VALIDATE_REQUIREMENTS=1
 export GIT_TT_BRANCH_IN_COMMIT_MSG=true
 export UPLOAD_RC_VERSION_HERE=/home/tweiss/dev-root/__deploy_alternate
