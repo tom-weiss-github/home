@@ -150,6 +150,7 @@ export JRE_HOME=$JAVA_HOME/jre
 export MY_ONE_OFF_VERSION=0.88.88
 export ENABLE_POST_TO_SERVICENOW=1
 
+alias exc="knife search node \"chef_environment:ext-prod-live AND recipe:exchange_compliance*\" -a run_list"
 alias nocolor="sed 's/\x1b\[[0-9;]*m//g'"
 alias ssh?='ss | grep ssh'
 alias ireboot="t3 int-dev-cert server_actions post_reboot --name "
