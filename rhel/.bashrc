@@ -149,6 +149,7 @@ export JRE_HOME=$JAVA_HOME/jre
 # run /usr/java/jdk1.7.0_17/bin/java -Dversion="0.0.0" -cp ./ringer/target/Ringer.jar Ringer --srl-config /etc/debesys/srl_config_ringer.xml -v -o
 export MY_ONE_OFF_VERSION=0.88.88
 export ENABLE_POST_TO_SERVICENOW=1
+export BUMP_COOKBOOK_EMAIL_ON_PYTHON_PACKAGE_EXCEPTION=1
 
 alias exc="knife search node \"chef_environment:ext-prod-live AND recipe:exchange_compliance*\" -a run_list --config ~/.chef/knife.external.rb"
 alias nocolor="sed 's/\x1b\[[0-9;]*m//g'"
@@ -882,9 +883,9 @@ function rmchefnode()
 function search_chef_environment()
 {
     local hm=~
-    local config="-C $hm/.chef/knife.rb"
+    local config="--config $hm/.chef/knife.rb"
     if [ "$EXTERNAL_DEBESYS" == "enabled" ]; then
-        config=" -C $hm/.chef/knife.external.rb"
+        config=" --config $hm/.chef/knife.external.rb"
     fi
 
     if [ -z "$1" ]; then
@@ -899,8 +900,8 @@ function search_chef_environment()
         search=$search" AND recipe:$2*"
     fi
 
-    echo ttknife --config $config search node $search
-    /opt/virtualenv/devws/bin/python `git rev-parse --show-toplevel`/ttknife $config search node "$search" -a name -a chef_environment -a ipaddress -a run_list -a tags
+    echo knife --config $config search node $search
+    knife search node "$search" $config -a name -a chef_environment -a ipaddress -a run_list -a tags
 }
 alias sce=search_chef_environment
 
@@ -1558,6 +1559,22 @@ function fix_audit()
         knife search node "chef_environment:ext-prod-live AND recipe:${cb}*" -a run_list -a base.groups -a instance_identifier.dedicated --config ~/.chef/knife.external.rb
     done
 }
+
+function envv()
+{
+    if [ -z "$1" ]; then
+        echo Invalid usage of envv: envv COOKBOOK int|ext.
+        return
+    fi
+
+    if [ -z "$2" ]; then
+        echo Invalid usage of envv: envv COOKBOOK int|ext.
+        return
+    fi
+
+    grep ${1} deploy/chef/environments/${2}* | grep -vE "ext-uat-sim|ext-uat-sparepool|algo-backtest|tmorris|perf|jenkins|stage-sparepool|pp-etl" | sed 's:deploy/chef/environments/::g' | sed 's/.rb://g' | sed 's/",//g' | tr -s " " | cut -d" " -f 1,5 | awk '{print $2, $1}' | column -t | sort
+}
+
 
 #
 # Virtual Box Notes
