@@ -1563,18 +1563,17 @@ function fix_audit()
 function envv()
 {
     if [ -z "$1" ]; then
-        echo Invalid usage of envv: envv COOKBOOK int|ext.
+        echo 'Invalid usage of envv: envv COOKBOOK int|ext.'
         return
     fi
 
     if [ -z "$2" ]; then
-        echo Invalid usage of envv: envv COOKBOOK int|ext.
+        echo 'Invalid usage of envv: envv COOKBOOK int|ext.'
         return
     fi
 
     grep ${1} deploy/chef/environments/${2}* | grep -vE "ext-uat-sim|ext-uat-sparepool|algo-backtest|tmorris|perf|jenkins|stage-sparepool|pp-etl" | sed 's:deploy/chef/environments/::g' | sed 's/.rb://g' | sed 's/",//g' | tr -s " " | cut -d" " -f 1,5 | awk '{print $2, $1}' | column -t | sort
 }
-
 
 #
 # Virtual Box Notes
