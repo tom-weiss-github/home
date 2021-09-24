@@ -212,7 +212,7 @@ alias tks="tmux kill-server"
 alias tcp="tmux show-buffer -b 0 | xclip -i"
 alias fakechef="cp -v ~/.chef/knife.training.rb.orig ~/.chef/knife.rb && cp -v ~/.chef/knife.training.rb.orig ~/.chef/knife.external.rb && cp -v ~/.chef/knife.training.rb.orig ~/.chef/knife.ttsdk.rb && export BUMP_COOKBOOK_VERSION_NO_NOTES=1 && export BUMP_COOKBOOK_VERSION_NO_KNIFE_CHECK=1 && echo BUMP_COOKBOOK_VERSION_NO_NOTES/BUMP_COOKBOOK_VERSION_NO_KNIFE_CHECK have been set."
 alias realchef="cp -v ~/.chef/knife.rb.orig ~/.chef/knife.rb && cp -v ~/.chef/knife.external.rb.orig ~/.chef/knife.external.rb && cp -v ~/.chef/knife.ttsdk.rb.orig ~/.chef/knife.ttsdk.rb && unset BUMP_COOKBOOK_VERSION_NO_NOTES && unset BUMP_COOKBOOK_VERSION_NO_KNIFE_CHECK && echo BUMP_COOKBOOK_VERSION_NO_NOTES/BUMP_COOKBOOK_VERSION_NO_KNIFE_CHECK have been unset."
-alias awsauthexcomp="/opt/virtualenv/devws/bin/python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/aws_authenticator.py --account prod --role exchange-compliance --env"
+alias awsauthexcomp="/opt/virtualenv/devws3/bin/python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/aws_authenticator.py --account prod --role exchange-compliance --env"
 alias upintenv='pushd deploy/chef/environments; for env_file in int-dev*.rb; do knife environment from file $env_file --config ~/.chef/knife.rb; done; popd'
 alias brm='git tt br m'
 alias aec='source /opt/virtualenv/exchange_compliance/bin/activate && source orders/cf/audit/pythonpath.sh'
@@ -1572,7 +1572,7 @@ function envv()
         return
     fi
 
-    grep ${1} deploy/chef/environments/${2}* | grep -vE "ext-uat-sim|ext-uat-sparepool|algo-backtest|tmorris|perf|jenkins|stage-sparepool|pp-etl" | sed 's:deploy/chef/environments/::g' | sed 's/.rb://g' | sed 's/",//g' | tr -s " " | cut -d" " -f 1,5 | awk '{print $2, $1}' | column -t | sort
+    grep \"${1}\" deploy/chef/environments/${2}* | grep -vE "ext-uat-sim|ext-uat-sparepool|algo-backtest|tmorris|int-perf|int-dev-perf|jenkins|stage-sparepool|pp-etl" | sed 's:deploy/chef/environments/::g' | sed 's/.rb://g' | sed 's/",//g' | tr -s " " | cut -d" " -f 1,5 | awk '{print $2, $1}' | column -t | sort
 }
 
 #
