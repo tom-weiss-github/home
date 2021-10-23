@@ -104,6 +104,7 @@ export DEPT=""
 # unset LD_BIND_NOW
 # export LD_BIND_NOW=yes
 export CHGCMD_SET_STATE="false"
+export CHGCMD_DESC_WIDTH=80
 export DEVWS_SKIP_VALIDATE_REQUIREMENTS=1
 export GIT_TT_BRANCH_IN_COMMIT_MSG=true
 export UPLOAD_RC_VERSION_HERE=/home/tweiss/dev-root/__deploy_alternate
@@ -1573,6 +1574,11 @@ function envv()
     fi
 
     grep \"${1}\" deploy/chef/environments/${2}* | grep -vE "ext-uat-sim|ext-uat-sparepool|algo-backtest|tmorris|int-perf|int-dev-perf|jenkins|stage-sparepool|pp-etl" | sed 's:deploy/chef/environments/::g' | sed 's/.rb://g' | sed 's/",//g' | tr -s " " | cut -d" " -f 1,5 | awk '{print $2, $1}' | column -t | sort
+}
+
+function workstations()
+{
+    knife search node "chef_environment:int-dev-workstation" -a devws_base.intad_user -a devws_base.lbm -a devws_base.skip_lbm
 }
 
 #
