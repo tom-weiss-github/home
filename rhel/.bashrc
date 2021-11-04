@@ -1497,7 +1497,7 @@ function eftxfer()
     echo "cd /TT_NextGen/tt_company_${1}" >> /tmp/transfer.${1}.sftp
     echo "put $homedir/compliance/${1}/*" >> /tmp/transfer.${1}.sftp
 
-    sftp -oIdentityFile=$homedir/.ssh/scp_private_key.pem Debesys@119.0.0.229 < /tmp/transfer.${1}.sftp
+    sftp -oIdentityFile=$homedir/.ssh/scp_private_key.pem Debesys@10.111.0.200 < /tmp/transfer.${1}.sftp
 
     echo ""
     echo "Transfer completed."
