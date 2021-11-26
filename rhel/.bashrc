@@ -1581,6 +1581,17 @@ function workstations()
     knife search node "chef_environment:int-dev-workstation" -a devws_base.intad_user -a devws_base.lbm -a devws_base.skip_lbm
 }
 
+function replication()
+{
+    if [[ $HOSTNAME == jchi* ]]; then
+        echo "mount /home/tweiss/jch76vm40"
+        mount /home/tweiss/jch76vm40
+    else
+        echo "sudo mount.cifs -o user=tweiss //CHIJCHFS01/Share /mnt/CHIJCHFS01"
+        sudo mount.cifs -o user=tweiss //CHIJCHFS01/Share /mnt/CHIJCHFS01
+    fi
+}
+
 #
 # Virtual Box Notes
 #

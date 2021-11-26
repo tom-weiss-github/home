@@ -119,6 +119,8 @@ Example of grep through git log with regular expression.
 eknife search node "chef_environment:ext-prod-live AND deployed_cookbooks:fixorderrouting AND base_groups:genpool" -a deployed_cookbooks.fix_stunnel | sed ':a;N;$!ba;s/:\n//g' | sort
 This command will find all the nodes in the query and then put the single attribute we are interested in on the same line as the node, which makes it possible to use the sort command.
 
+eknife search node "chef_environment:ext-prod-live AND open_onload_version:7.0* AND (recipe:bouncer OR recipe:algoserver_exec OR recipe:ase OR recipe:fixmarketdata OR recipe:fixorderrouting OR order_connector_market:*)" -i | sort | xargs -I '{}' -n 1 -i sh -c 'knife node show $1 -a run_list --config ~/.chef/knife.external.rb | tr "\n" " "; echo ""' - {}
+Query a set of hosts based on some criteria, sort the hosts by data center and then get the run list of each host and for the output to be single line.
 
 rm ~/clients.txt; rm ~/nodes.txt; ttknife client list > ~/clients.txt; ttknife node list > ~/nodes.txt; diff ~/nodes.txt ~/clients.txt | grep "> " | cut -d" " -f 2 | grep ip- | xargs -n 1 -i knife client delete \{\} --yes
 Delete a collection of clients for which the node has been deleted and start with ip-.

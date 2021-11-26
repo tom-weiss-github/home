@@ -5,6 +5,8 @@ Host 10.*
      IdentityFile ~/.ssh/id_rsa
      User tweiss
      ConnectTimeout 20
+     ServerAliveInterval 300
+     ServerAliveCountMax 2
 
 Host *.trade.tt
      StrictHostKeyChecking no
