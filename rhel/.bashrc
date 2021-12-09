@@ -105,6 +105,7 @@ export DEPT=""
 # export LD_BIND_NOW=yes
 export CHGCMD_SET_STATE="false"
 export CHGCMD_DESC_WIDTH=80
+export CHGCMD_FROM_SN=0
 export DEVWS_SKIP_VALIDATE_REQUIREMENTS=1
 export GIT_TT_BRANCH_IN_COMMIT_MSG=true
 export UPLOAD_RC_VERSION_HERE=/home/tweiss/dev-root/__deploy_alternate
