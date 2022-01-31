@@ -62,6 +62,9 @@ processes.  Any that have a value greater than 100 typically means they are spin
 cpu consumption.
 knife ssh "(chef_environment:int-dev* OR chef_environment:int-stage* OR chef_environment:int-sqe*) AND (NOT chef_environment:int-dev-jenkins) (NOT chef_environment:*perf*) AND name:*vm* AND (NOT creation_info_machine_origin:temp_hive)" "uptime" -a ipaddress --concurrency 20 | grep -v "load average: 0."
 
+cmdr -e int-stage-cert int-dev-sparepool int-dev-jenkins int-dev-cert int-dev-mon int-dev-sim int-dev-md-sp int-dev-md-pp -q "creation_info_machine_origin:santorini" -C 'uptime
+| grep -v "load average: 0." && cat /etc/motd | grep recipe && echo "---"' -p slim --ex
+
 Splunk search
 sourcetype=compliance_logs "Compliance Elapsed Time" seconds>6000
 

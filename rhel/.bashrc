@@ -105,7 +105,7 @@ export DEPT=""
 # export LD_BIND_NOW=yes
 export CHGCMD_SET_STATE="false"
 export CHGCMD_DESC_WIDTH=80
-export CHGCMD_FROM_SN=0
+# export CHGCMD_FROM_SN=0
 export DEVWS_SKIP_VALIDATE_REQUIREMENTS=1
 export GIT_TT_BRANCH_IN_COMMIT_MSG=true
 export UPLOAD_RC_VERSION_HERE=/home/tweiss/dev-root/__deploy_alternate
@@ -1588,8 +1588,8 @@ function replication()
         echo "mount /home/tweiss/jch76vm40"
         mount /home/tweiss/jch76vm40
     else
-        echo "sudo mount.cifs -o user=tweiss //CHIJCHFS01/Share /mnt/CHIJCHFS01"
-        sudo mount.cifs -o user=tweiss //CHIJCHFS01/Share /mnt/CHIJCHFS01
+        echo "sudo mount.cifs -o user=tweiss //CHIJCHFS01.int.tt.local/Share /mnt/CHIJCHFS01"
+        sudo mount.cifs -o user=tweiss //CHIJCHFS01.int.tt.local/Share /mnt/CHIJCHFS01
     fi
 }
 

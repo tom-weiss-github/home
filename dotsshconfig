@@ -8,6 +8,16 @@ Host 10.*
      ServerAliveInterval 300
      ServerAliveCountMax 2
 
+Host 172.*
+     StrictHostKeyChecking no
+     UserKnownHostsFile=/dev/null
+     LogLevel=quiet
+     IdentityFile ~/.ssh/id_rsa
+     User tweiss
+     ConnectTimeout 20
+     ServerAliveInterval 300
+     ServerAliveCountMax 2
+
 Host *.trade.tt
      StrictHostKeyChecking no
      UserKnownHostsFile=/dev/null
