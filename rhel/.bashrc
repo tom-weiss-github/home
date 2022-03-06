@@ -1593,6 +1593,12 @@ function replication()
     fi
 }
 
+function fixfix()
+{
+    # Convert FIX delimiter into something more readable.
+    cat ${1} | tr '\01' "|"
+}
+
 #
 # Virtual Box Notes
 #
