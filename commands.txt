@@ -86,6 +86,9 @@ middle of the command xargs is building.  The -n allows some number of
 inputs to be combined together.  This will print four items separated
 by commas on each line.
 
+>cat send_recv.log | tr -s '\001' '|'
+Convert fix soh delimiters to '|' (CentOS 7).
+
 abrt-cli list -f | grep Directory | cut -d" " -f 7 | xargs -i -n 1 sh -c 'echo directory {} has UUID; cat {}/uuid; echo '
 This command will print all the abrt directories and and a file in the directory.
 It uses sh -c to use the directory for 2 commands.

@@ -1439,7 +1439,7 @@ function cpr()
 
 function chg()
 {
-    printf "/opt/virtualenv/devws/bin/python \$DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/update_environment.py --support-locks -r  -c  -e ext- \\n\\n/opt/virtualenv/devws/bin/python \$DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/knife_ssh.py --knife-config ~/.chef/knife.external.rb --audit-runlist --concurrency 50 -a -e  -r  --test-run" | xclip
+    printf "/opt/virtualenv/devws3/bin/python \$DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/update_environment.py --support-locks -r  -c  -e ext- \\n\\n/opt/virtualenv/devws3/bin/python \$DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/knife_ssh.py --knife-config ~/.chef/knife.external.rb --audit-runlist --concurrency 50 -a -e  -r  --test-run" | xclip
 }
 
 function xbump()
