@@ -55,7 +55,7 @@
         jira-summary-length = 30
         use-jira-as-prefix = false
         branch-prefix = ""
-        enforce-jira-status = true
+        enforce-jira-status = false
 
 [push]
 	default = nothing

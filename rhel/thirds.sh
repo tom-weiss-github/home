@@ -94,6 +94,7 @@ if [[ ! -z $browser_id && $browser_count == 1 ]]; then
     echo Setting browser.
     wmctrl -r $browser_id -i -b remove,maximized_vert,maximized_horz
     wmctrl -r $browser_id -i -e 0,2240,0,1200,1367
+    wmctrl -r $browser_id -i -e 0,2250,0,1250,1367
     wmctrl -r $browser_id -i -b add,maximized_vert
     # Give browser focus after we are done.
     wmctrl -i -a $browser_id

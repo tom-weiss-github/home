@@ -133,9 +133,10 @@ if [ -f $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/bashrc/chef.bash ]; th
     alias tth=ssh_by_hostname
 fi
 # export BUMP_COOKBOOK_VERSION_ALTERNATE_REPO=~/dev-root/cookbooks
-export USE_PYTHON3=1
+# export USE_PYTHON3=1
 export REQUEST_BUILD_SUPPRESS_TIPS=1
 export DEPLOY_ONE_OFF_HIDE_EXPIRE_MSG=1
+export DEPLOY_ONE_OFF_NO_WARN_HIDE_DAILY=1
 export BUMP_COOKBOOK_VERSION_AUTO_EXECUTE=1
 export BUMP_COOKBOOK_VERSION_ALLOW_MULTIBUMP=1
 export KNIFE_SSH_ENABLE_INTERNAL_POOL=1
@@ -219,7 +220,7 @@ alias upintenv='pushd deploy/chef/environments; for env_file in int-dev*.rb; do 
 alias brm='git tt br m'
 alias aec='source /opt/virtualenv/exchange_compliance/bin/activate && source orders/cf/audit/pythonpath.sh'
 # alias apython='source `git rev-parse --show-toplevel`/orders/compliance/cf/pythonpath.sh; /opt/virtualenv/exchange_compliance_2_7_14/bin/python'
-alias apython='source `git rev-parse --show-toplevel`/orders/compliance/cf/pythonpath.sh; /opt/virtualenv/exchange_compliance_3_6_5/bin/python'
+alias apython='source `git rev-parse --show-toplevel`/orders/compliance/cf/pythonpath.sh; /opt/virtualenv/exchange_compliance_3_9_13/bin/python'
 alias dpy=/opt/virtualenv/devws/bin/python
 alias dpy3=/opt/virtualenv/devws3/bin/python
 alias cdr='cat `ls -d1t ~/deployment_receipts/* | head -n 1` | xclip -i'
@@ -316,6 +317,7 @@ if [ -f $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/bashrc/devws.bash ]; t
 fi
 alias nutanix="devws_nutanix_server -vo"
 alias deploy="devws_request_deploy -d 0"
+alias tempvm='devws_tempvm --columns "VM Name" "Created Date" "Expiration Date" "Chef Env" "Runlist" "State"'
 
 if [[ -f ~/bin/tig ]]; then
     alias tig=~/bin/tig
@@ -1693,6 +1695,31 @@ function merge()
     # this, the command merge is in the history and it prompts me, but I know the one I want to
     # merge cause I just chose it.
     history -s "git merge --no-ff $selection"
+}
+
+function edit_on_branch()
+{
+    local files=$(git status --no-color | awk -F ' +' '{print $2}' | grep -v master | grep -v uat/current | grep -v release/current | grep -v develop)
+    # if [ "" == "$branches" ]; then
+    #     echo 'There are no candidate branches to merge. The only branches found were the git flow branches.'
+    #     echo Found: $(git branch | awk -F ' +' '{print $2}')
+    #     return
+    # fi
+
+    # PS3="Which branch do you want to merge: "
+    # select selection in $branches
+    # do
+    #     echo git merge --no-ff $selection
+    #     git merge --no-ff $selection
+    #     break
+    # done
+
+    # if [ $? != 0 ]; then
+    #     echo "The merge failed."
+    # else
+    #     echo "The merge was successful."
+    # fi
+
 }
 
 

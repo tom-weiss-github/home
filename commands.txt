@@ -24,6 +24,13 @@ cmdr -C 'if [[ $(cat /proc/meminfo | grep MemTotal | tr -s " " | cut -d" " -f 2)
 Find nodes using more that ~8G memory.
 If redirected to a file (e.g., /tmp/highmem, use this command to add better spacing): cat /tmp/highmem | sed 's/^gl/\ngl/g'
 
+devwspy deploy/chef/scripts/swarm.py --cluster Barbados --list all | tr -s " " | cut -d" " -f 1 | grep gla | xargs -n 1 -i knife node show \{\} -a run_list | nocolor > ~/barbados.txt
+cat ~/barbados.txt | sed ':a;N;$!ba;s/:\n//g'
+Command to get the run lists of all the hosts in Barbados cluster.  The sed command can be used to get the host and run list on the same line to allow filtering by run list.
+
+
+cmdr --knife-config ~/.chef/knife.external.rb -e ext-uat-cert -c algoserver_exec -C 'free | grep Mem | awk '\''{print $4/$2 * 100.0}'\'''  -p slim --ex
+Example escaping single quotes.
 
 sudo lsof -a +L1 /
 Show all the files in '/' with a link count less than 1, that is, deleted files.
@@ -64,6 +71,8 @@ knife ssh "(chef_environment:int-dev* OR chef_environment:int-stage* OR chef_env
 
 cmdr -e int-stage-cert int-dev-sparepool int-dev-jenkins int-dev-cert int-dev-mon int-dev-sim int-dev-md-sp int-dev-md-pp -q "creation_info_machine_origin:santorini" -C 'uptime
 | grep -v "load average: 0." && cat /etc/motd | grep recipe && echo "---"' -p slim --ex
+
+cmdr -e int-dev-cert int-dev-md-sp -q "creation_info_machine_origin:Hawaii" -C 'uptime | grep -v "load average:0." && cat /etc/motd | grep recipe && echo "---"' -p slim
 
 Splunk search
 sourcetype=compliance_logs "Compliance Elapsed Time" seconds>6000
