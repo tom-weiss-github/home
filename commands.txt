@@ -15,6 +15,9 @@ This command is useful to explore if some directory or file is the major contrib
 exhaustion.  Starting from '/', examine which folders are using the most space and traverse to the
 culprit.
 
+netstat -uln | grep udp | sort -k2 -n | tail -n10
+Check UDP receive buffers (column 2).
+
 free -g | grep Mem | tr -s " " | cut -d " " -f 2,3 | tr " " "/"
 free | grep Mem | awk '{print $3/$2 * 100.0}'
 knife ssh "name:gl*vm* OR name:sqe*vm*" "free -g | grep Mem | tr -s \" \" | cut -d \" \" -f 2,3,4" -a ipaddress --concurrency 5
