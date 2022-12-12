@@ -126,6 +126,9 @@ eknife search node "deployed_cookbooks:ps_client AND chef_environment:ext-prod-*
 Find all the cookbook emails.
 find deploy/chef/cookbooks -name contact_info.rb | xargs grep email | cut -d"=" -f 2 | sed 's/"//' | sed 's/"//' | sort | uniq | xclip
 
+Find all the cookbooks whose contact email is tt-risk-backend-team.
+find deploy/chef/cookbooks/ -name contact_info.rb | xargs grep email | grep tt-risk-backend | cut -d"/" -f 4
+
 Similar to the command above, but also include the cookbooks.
 for COOKBOOK in `find deploy/chef/cookbooks -name contact_info.rb` ; do cb=`echo $COOKBOOK | sed s:deploy/chef/cookbooks/::g | sed s:/attributes/contact_info.rb::g`; email=`echo $COOKBOOK | xargs grep email | cut -d"=" -f 2 | sed 's/"//' | sed 's/"//' | sort | uniq`; echo $cb,$email; done
 

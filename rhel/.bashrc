@@ -141,6 +141,7 @@ export BUMP_COOKBOOK_VERSION_AUTO_EXECUTE=1
 export BUMP_COOKBOOK_VERSION_ALLOW_MULTIBUMP=1
 export KNIFE_SSH_ENABLE_INTERNAL_POOL=1
 export KNIFE_SSH_UPGRADE_CHEF=16.10.8
+export KNIFE_SSH_COMMAND_SEVERITY=debug
 export FEATURE_TEST_EMAIL=tom.weiss@tradingtechnologies.com
 export FEATURE_TEST_COMPANY="Deployment Team"
 export FEATURE_TEST_USER=tweiss
@@ -1599,6 +1600,13 @@ function fixfix()
 {
     # Convert FIX delimiter into something more readable.
     cat ${1} | tr '\01' "|"
+}
+
+function audit_spares()
+{
+    for DC in ar ch ny sp ln ba fr sg hk bk ty sy se; do
+        /opt/virtualenv/devws3/bin/python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/spare.py -e ext-prod-live -d ${DC} -c invalid | less
+    done
 }
 
 #

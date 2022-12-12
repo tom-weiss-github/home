@@ -26,6 +26,14 @@ Host *.trade.tt
      User tweiss
      ConnectTimeout 20
 
+Host jenkins*
+     StrictHostKeyChecking no
+     UserKnownHostsFile=/dev/null
+     LogLevel=quiet
+     IdentityFile ~/.ssh/id_rsa
+     User tweiss
+     ConnectTimeout 20
+
 Host github.com
      StrictHostKeyChecking no
      UserKnownHostsFile=/dev/null
