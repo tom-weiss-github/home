@@ -134,6 +134,7 @@ if [ -f $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/bashrc/chef.bash ]; th
 fi
 # export BUMP_COOKBOOK_VERSION_ALTERNATE_REPO=~/dev-root/cookbooks
 # export USE_PYTHON3=1
+export CHEF_LICENSE=accept-silent
 export REQUEST_BUILD_SUPPRESS_TIPS=1
 export DEPLOY_ONE_OFF_HIDE_EXPIRE_MSG=1
 export DEPLOY_ONE_OFF_NO_WARN_HIDE_DAILY=1
