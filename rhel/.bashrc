@@ -345,6 +345,11 @@ set_display()
     echo DISPLAY is $DISPLAY.
 }
 
+function ja_test()
+{
+    jsonattr -s ${1} -j '{"jenkins_agent": {"verify_prod_pypi_access": false}}'
+}
+
 function csvs()
 {
     find /tmp/compliance_* -name "*$1*csv" | xargs -n 1 -i ls -sh \{\}
