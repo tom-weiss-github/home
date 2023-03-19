@@ -112,7 +112,7 @@ export UPLOAD_RC_VERSION_HERE=/home/tweiss/dev-root/__deploy_alternate
 export PATH=$PATH:~/Downloads/meld-1.6.1/bin
 export PATH=$PATH:/opt/redis/redis-2.8.17/src
 export PATH=$PATH:/opt/scala-2.9.3/bin/
-export PATH=$JAVA_HOME/bin:$PATH
+# export PATH=$JAVA_HOME/bin:$PATH
 export INTAD_USER=tweiss
 export INTAD_SSH_KEY=~/.ssh/id_rsa
 export BCV_ENABLE_LDAP=1
@@ -149,8 +149,12 @@ export FEATURE_TEST_USER=tweiss
 # To run ringer:
 # cp ringer.conf/srl_config_ringer.xml from some machine in int-dev-sim
 # cp deploy/chef/cookbooks/srlabs/files/default/smds.lic /etc/debesys/
-export JAVA_HOME=/usr/java/jdk1.7.0_51
-export JRE_HOME=$JAVA_HOME/jre
+# export JAVA_HOME=/usr/java/jdk1.7.0_51
+# export JRE_HOME=$JAVA_HOME/jre
+export JAVA_HOME=/usr/java/jdk1.8.0_181
+export JRE_HOME=/usr/java/jdk1.8.0_181/jre
+export JAVA_8_181_HOME=/usr/java/jdk1.8.0_181
+export JAVA_8_265_HOME=/usr/java/jdk1.8.0_265/openjdk-8u265-b01
 # run /usr/java/jdk1.7.0_17/bin/java -Dversion="0.0.0" -cp ./ringer/target/Ringer.jar Ringer --srl-config /etc/debesys/srl_config_ringer.xml -v -o
 export MY_ONE_OFF_VERSION=0.88.88
 export ENABLE_POST_TO_SERVICENOW=1
@@ -1613,6 +1617,8 @@ function audit_spares()
     for DC in ar ch ny sp ln ba fr sg hk bk ty sy se; do
         /opt/virtualenv/devws3/bin/python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/spare.py -e ext-prod-live -d ${DC} -c invalid | less
     done
+
+    knife search node "chef_environment:ext-prod-sparepool AND n:*vm*" -a tags -a run_list -a creation_info.date --config ~/.chef/knife.external.rb | less
 }
 
 #
