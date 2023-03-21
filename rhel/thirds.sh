@@ -111,6 +111,7 @@ if [[ ! -z $emacs_id && $emacs_count == 1 ]]; then
         wmctrl -r $emacs_id -i -e 0,1050,0,1190,1386
     elif [[ $current_monitor == "work" ]]; then
         wmctrl -r $emacs_id -i -e 0,1250,0,1220,1386
+        wmctrl -r $emacs_id -i -e 0,1250,0,1220,1386 # second one cause sometimes first needs help
     fi
     wmctrl -r $emacs_id -i -b add,maximized_vert
 fi
@@ -121,9 +122,11 @@ if [[ ! -z $browser_id && $browser_count == 1 ]]; then
     if [[ $current_monitor == "home" ]]; then
         # don't think this one is needed wmctrl -r $browser_id -i -e 0,2240,0,1200,1367
         wmctrl -r $browser_id -i -e 0,2250,0,1250,1367
+        wmctrl -r $browser_id -i -e 0,2250,0,1250,1367
         # 0:?  2250:position from left  0:?  1250:width  1367:?
     elif [[ $current_monitor == "work" ]]; then
         wmctrl -r $browser_id -i -e 0,2450,0,1420,1367
+        wmctrl -r $browser_id -i -e 0,2250,0,1250,1367
     fi
     wmctrl -r $browser_id -i -b add,maximized_vert
     # Give browser focus after we are done.
