@@ -126,6 +126,7 @@ if [[ ! -z $browser_id && $browser_count == 1 ]]; then
         # 0:?  2250:position from left  0:?  1250:width  1367:?
     elif [[ $current_monitor == "work" ]]; then
         wmctrl -r $browser_id -i -e 0,2450,0,1420,1367
+        sleep 0.3
         wmctrl -r $browser_id -i -e 0,2450,0,1420,1367
     fi
     wmctrl -r $browser_id -i -b add,maximized_vert
