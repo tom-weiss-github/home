@@ -391,6 +391,37 @@ function kitchenauth()
     $(/opt/virtualenv/devws3/bin/python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/aws_authenticator.py --account deb --role dev --env)
 }
 
+function vpn()
+{
+    if [ -z "$1" ]; then
+        echo vpn on|off|status
+        return
+    fi
+
+    if [[ $1 == "on" ]]; then
+        /usr/bin/globalprotect connect
+
+        # Update status.
+        if [[ -f /home/tweiss/set_vpn_status.sh ]]; then
+            /home/tweiss/set_vpn_status.sh
+        fi
+    fi
+
+    if [[ $1 == "off" ]]; then
+        /usr/bin/globalprotect disconnect
+
+        # Update status.
+        if [[ -f /home/tweiss/set_vpn_status.sh ]]; then
+            /home/tweiss/set_vpn_status.sh
+        fi
+    fi
+
+    if [[ $1 == "status" ]]; then
+        /usr/bin/globalprotect show --status
+    fi
+}
+
+
 function setchefconfig()
 {
     if [ -z "$1" ]; then
