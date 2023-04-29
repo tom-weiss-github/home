@@ -159,6 +159,7 @@ export JAVA_8_265_HOME=/usr/java/jdk1.8.0_265/openjdk-8u265-b01
 export MY_ONE_OFF_VERSION=0.88.88
 export ENABLE_POST_TO_SERVICENOW=1
 export BUMP_COOKBOOK_EMAIL_ON_PYTHON_PACKAGE_EXCEPTION=1
+export PYTHONWARNINGS="ignore"
 
 alias exc="knife search node \"chef_environment:ext-prod-live AND recipe:exchange_compliance*\" -a run_list --config ~/.chef/knife.external.rb"
 alias nocolor="sed 's/\x1b\[[0-9;]*m//g'"
@@ -400,20 +401,10 @@ function vpn()
 
     if [[ $1 == "on" ]]; then
         /usr/bin/globalprotect connect
-
-        # Update status.
-        if [[ -f /home/tweiss/set_vpn_status.sh ]]; then
-            /home/tweiss/set_vpn_status.sh
-        fi
     fi
 
     if [[ $1 == "off" ]]; then
         /usr/bin/globalprotect disconnect
-
-        # Update status.
-        if [[ -f /home/tweiss/set_vpn_status.sh ]]; then
-            /home/tweiss/set_vpn_status.sh
-        fi
     fi
 
     if [[ $1 == "status" ]]; then
