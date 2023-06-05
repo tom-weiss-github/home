@@ -60,7 +60,7 @@ if [[ $HOSTNAME == jchi* ]]; then
     export NPM_CONFIG_PREFIX=~/.npm-global
     export PATH=~/.npm-global/bin:$PATH
 
-    PROXY_URL="proxy-ch-ext-prod-coreinfra.trade.tt"
+    PROXY_URL="proxy-jch-ext-prod-coreinfra.trade.tt"
     PROXY_PORT="3128"
     export http_proxy="http://$PROXY_URL:$PROXY_PORT"
     export https_proxy="http://$PROXY_URL:$PROXY_PORT"
