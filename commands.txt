@@ -18,6 +18,10 @@ culprit.
 netstat -uln | grep udp | sort -k2 -n | tail -n10
 Check UDP receive buffers (column 2).
 
+! ls -l /usr/bin/chef-client | grep /var/debesys/chef-client -q
+Invert/negate the exit code of a command.
+
+
 free -g | grep Mem | tr -s " " | cut -d " " -f 2,3 | tr " " "/"
 free | grep Mem | awk '{print $3/$2 * 100.0}'
 knife ssh "name:gl*vm* OR name:sqe*vm*" "free -g | grep Mem | tr -s \" \" | cut -d \" \" -f 2,3,4" -a ipaddress --concurrency 5
@@ -162,6 +166,10 @@ Replace all occurences of 'replaceme' with 'withme' in 'file'.
 
 Find and replace text in files.
 
+
+ssh 10.113.2.40 "grep 'setup report list' /var/log/debesys/compliance_setup_reports_1.log*" > ~/companies_uat.txt
+ssh 10.113.2.37 "grep 'setup report list' /var/log/debesys/compliance_setup_reports_1.log*" > ~/companies_prod.txt
+Get all company ids
 
 If 6875cae through 2e02f97 (including both endpoints) are the commits I want to cherry pick,
 then 6875cae^..2e02f97 is the option to 'git cherry-pick'.
@@ -311,6 +319,8 @@ Show all message to and from ip and port.
 sudo tcpdump -vvv -s 0 -i 6 -n port 53
 Show all DNS lookups on the current machine.
 
+port 389 for ldap
+
 Wireshark Filters
 -----------------
 ip.src == 10.140.18.67 || ip.dst == 10.140.18.67
@@ -405,6 +415,8 @@ Shows more details about packages.
 
 rpm -q --queryformat "%{EPOCH} : %{NAME} - %{VERSION} - %{RELEASE} . %{ARCH}\n" gdb
 Query local machine for information about which gdb is installed.
+
+sudo rpm -e packagename
 
 repoquery -q --queryformat "%{EPOCH} : %{NAME} - %{VERSION} - %{RELEASE} . %{ARCH}\n" gdb
 Query repos in /etc/yum.repos.d/ for packages.

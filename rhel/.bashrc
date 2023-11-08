@@ -149,6 +149,7 @@ export DEPLOY_ONE_OFF_NO_WARN_HIDE_DAILY=1
 export BUMP_COOKBOOK_VERSION_AUTO_EXECUTE=1
 export BUMP_COOKBOOK_VERSION_ALLOW_MULTIBUMP=1
 export KNIFE_SSH_ENABLE_INTERNAL_POOL=1
+export KNIFE_SSH_REBOOT=1
 # export KNIFE_SSH_UPGRADE_CHEF=16.10.8
 export KNIFE_SSH_COMMAND_SEVERITY=debug
 export FEATURE_TEST_EMAIL=tom.weiss@tradingtechnologies.com
@@ -439,7 +440,7 @@ function setchefconfig()
         chef_config=~/.chef/knife.external.rb
     elif [[ $1 == ty* || $1 == sp* || $1 == bk* || $1 == ba* ]]; then
         chef_config=~/.chef/knife.external.rb
-    elif [[ $1 == se* ]]; then
+    elif [[ $1 == se* || $1 == tw* ]]; then
         chef_config=~/.chef/knife.external.rb
     elif [[ $1 == *"ip-10-210"* ]]; then
         chef_config=~/.chef/knife.external.rb
@@ -1471,7 +1472,7 @@ function check_envs()
 
 function awsauth()
 {
-    $(/opt/virtualenv/devws/bin/python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/aws_authenticator.py --account deb --role read --env)
+    $(/opt/virtualenv/devws3/bin/python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/aws_authenticator.py --account deb --role read --env)
 }
 
 function cpr()
@@ -1482,7 +1483,7 @@ function cpr()
 
 function chg()
 {
-    printf "/opt/virtualenv/devws3/bin/python \$DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/update_environment.py --support-locks -r  -c  -e ext- \\n\\n/opt/virtualenv/devws3/bin/python \$DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/knife_ssh.py --knife-config ~/.chef/knife.external.rb --audit-runlist --concurrency 50 -a -e  -r  --test-run" | xclip
+    printf "/opt/virtualenv/devws3/bin/python \$DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/commander.py --knife-config ~/.chef/knife.external.rb -e -c -s -r -C '' --test-run\\n\\n/opt/virtualenv/devws3/bin/python \$DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/update_environment.py --support-locks -r  -c  -e ext- \\n\\n/opt/virtualenv/devws3/bin/python \$DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/knife_ssh.py --knife-config ~/.chef/knife.external.rb --audit-runlist --concurrency 50 -a -e  -r  --test-run\\n\\n/opt/virtualenv/devws3/bin/python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/modify_runlist.py -o ext -s -r run1 run2 runN --chgnum \\n\\n/opt/virtualenv/devws3/bin/python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/add_json_attribute.py -o ext -e ext- -s  -r -j ''\\n\\n/opt/virtualenv/devws3/bin/python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/view_changes.py -c cb@x.y.z -e ext-prod- -r\\n\\n" | xclip
 }
 
 function xbump()
@@ -1644,8 +1645,8 @@ function fixfix()
 
 function audit_spares()
 {
-    for DC in ar ch ny sp ln ba fr sg hk bk ty sy se; do
-        /opt/virtualenv/devws3/bin/python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/spare.py -e ext-prod-live -d ${DC} -c invalid | less
+    for DC in ar ch ny sp ln ba fr sg hk bk ty sy se tw; do
+        /opt/virtualenv/devws3/bin/python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/spare.py -e ext-prod-live -d ${DC} -c invalid --tenancy genpool | less
     done
 
     knife search node "chef_environment:ext-prod-sparepool AND n:*vm*" -a tags -a run_list -a creation_info.date --config ~/.chef/knife.external.rb | less
