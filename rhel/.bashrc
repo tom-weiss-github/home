@@ -152,6 +152,7 @@ export KNIFE_SSH_ENABLE_INTERNAL_POOL=1
 export KNIFE_SSH_REBOOT=1
 # export KNIFE_SSH_UPGRADE_CHEF=16.10.8
 export KNIFE_SSH_COMMAND_SEVERITY=debug
+export KNIFE_SSH_ROLLING_UPGRADE=1
 export FEATURE_TEST_EMAIL=tom.weiss@tradingtechnologies.com
 export FEATURE_TEST_COMPANY="Deployment Team"
 export FEATURE_TEST_USER=tweiss
@@ -1646,7 +1647,7 @@ function fixfix()
 function audit_spares()
 {
     for DC in ar ch ny sp ln ba fr sg hk bk ty sy se tw; do
-        /opt/virtualenv/devws3/bin/python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/spare.py -e ext-prod-live -d ${DC} -c invalid --tenancy genpool | less
+        /opt/virtualenv/devws3/bin/python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/spare.py -e ext-prod-live -d ${DC} -c cb_placeholder --tenancy genpool | less
     done
 
     knife search node "chef_environment:ext-prod-sparepool AND n:*vm*" -a tags -a run_list -a creation_info.date --config ~/.chef/knife.external.rb | less

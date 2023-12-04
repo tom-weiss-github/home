@@ -75,3 +75,8 @@ fi
 
 # Created by `pipx` on 2021-05-26 15:07:17
 export PATH="$PATH:/home/tweiss/.local/bin"
+
+if [[ $HOSTNAME == gld* ]]; then
+    # from Axe Setup
+    eval "$(direnv hook bash)"
+fi
