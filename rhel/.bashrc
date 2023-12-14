@@ -135,6 +135,7 @@ if [ -f ~/github_token ]; then
     export GITHUB_TOKEN=$(head -n 1 ~/github_token)
 fi
 export PDS_REPO_ROOT=~/dev-root/pds
+export LSS_SERVER_REPO_ROOT=~/dev-root/lss_server
 export DEPLOYMENT_SCRIPTS_REPO_ROOT=~/dev-root/scripts
 if [ -f $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/bashrc/chef.bash ]; then
     source $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/bashrc/chef.bash

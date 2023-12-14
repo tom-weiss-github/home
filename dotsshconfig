@@ -1,7 +1,9 @@
-Host 10.*
+Host *
      StrictHostKeyChecking no
      UserKnownHostsFile=/dev/null
      LogLevel=quiet
+
+Host 10.*
      IdentityFile ~/.ssh/id_rsa
      User tweiss
      ConnectTimeout 20
@@ -9,9 +11,6 @@ Host 10.*
      ServerAliveCountMax 2
 
 Host 172.*
-     StrictHostKeyChecking no
-     UserKnownHostsFile=/dev/null
-     LogLevel=quiet
      IdentityFile ~/.ssh/id_rsa
      User tweiss
      ConnectTimeout 20
@@ -19,22 +18,11 @@ Host 172.*
      ServerAliveCountMax 2
 
 Host *.trade.tt
-     StrictHostKeyChecking no
-     UserKnownHostsFile=/dev/null
-     LogLevel=quiet
      IdentityFile ~/.ssh/id_rsa
      User tweiss
      ConnectTimeout 20
 
 Host jenkins*
-     StrictHostKeyChecking no
-     UserKnownHostsFile=/dev/null
-     LogLevel=quiet
      IdentityFile ~/.ssh/id_rsa
      User tweiss
      ConnectTimeout 20
-
-Host github.com
-     StrictHostKeyChecking no
-     UserKnownHostsFile=/dev/null
-     LogLevel=quiet
