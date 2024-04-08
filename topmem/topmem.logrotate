@@ -1,0 +1,11 @@
+"/var/log/topmem.log" {
+  daily
+  dateformat -%Y%m%d-%s
+  size 1M
+  su root root
+  rotate 10
+  nomail
+  noolddir
+  missingok
+  dateext
+}

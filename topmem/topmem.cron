@@ -1,0 +1,6 @@
+CRON_TZ=America/Chicago
+
+SHELL=/bin/bash
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+HOME=/
+* * * * * root /home/tweiss/topmem.sh
