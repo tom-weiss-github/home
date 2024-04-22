@@ -298,7 +298,6 @@ alias another="cd ~/dev-root/another"
 alias edcfg="$myemacs -nw /etc/debesys/cme_oc_config.conf"
 #alias run='`git rev-parse --show-toplevel`/run'
 alias dpython=/opt/virtualenv/devws/bin/python2
-alias ttknife='/opt/virtualenv/devws/bin/python `git rev-parse --show-toplevel`/ttknife'
 alias envvers='knife environment list | xargs -n 1 -i knife environment show \{\} -a cookbook_versions'
 #alias lszk='`git rev-parse --show-toplevel`/run python `git rev-parse --show-toplevel`/darwin/python/lszk'
 #alias rmzk='`git rev-parse --show-toplevel`/run python `git rev-parse --show-toplevel`/darwin/python/rmzk'
@@ -847,54 +846,6 @@ function aws_keys()
     fi
 }
 
-function external()
-{
-    usage="external on|off"
-    if [ -z "$1" ]; then
-        echo $usage
-        return
-    fi
-
-    if [ "on" == "$1" ]; then
-        export PRE_EXTERNAL_PS1=$PS1
-        export PRE_EXTERNAL_TERMINAL_TITLE=$CURRENT_TERMINAL_TITLE
-        export PS1="\[\033[0;31m\]EXTERNAL DEBESYS\[\033[0;0m\] \h\[\033[1;30m\]\$(__git_ps1) \[\033[0;0m\]\w \n>"
-        rename_terminal_title "EXTERNAL DEBESYS"
-        alias ttknife='/opt/virtualenv/devws/bin/python `git rev-parse --show-toplevel`/ttknife -C ~/.chef/knife.external.rb'
-        alias ttknife
-        echo
-        echo '######## ##     ## ######## ######## ########  ##    ##    ###    ##'
-        echo '##        ##   ##     ##    ##       ##     ## ###   ##   ## ##   ##'
-        echo '##         ## ##      ##    ##       ##     ## ####  ##  ##   ##  ##'
-        echo '######      ###       ##    ######   ########  ## ## ## ##     ## ##'
-        echo '##         ## ##      ##    ##       ##   ##   ##  #### ######### ##'
-        echo '##        ##   ##     ##    ##       ##    ##  ##   ### ##     ## ##'
-        echo '######## ##     ##    ##    ######## ##     ## ##    ## ##     ## ########'
-        echo
-        # http://patorjk.com/software/taag/#p=display&h=1&v=1&f=Banner3&t=EXTERNAL
-        aws_keys ~/amazon_keys_ttnet.sh
-        export EXTERNAL_DEBESYS="enabled"
-    elif [ "off" == "$1" ]; then
-        if [ ! -z "$PRE_EXTERNAL_PS1" ]; then
-            export PS1=$PRE_EXTERNAL_PS1
-        fi
-
-        if [ $TMUX_PANE ]; then
-            rename_terminal_title "bash"
-        else
-            if [ ! -z "PRE_EXTERNAL_TERMINAL_TITLE" ]; then
-                rename_terminal_title "$PRE_EXTERNAL_TERMINAL_TITLE"
-            fi
-        fi
-
-        alias ttknife='/opt/virtualenv/devws/bin/python `git rev-parse --show-toplevel`/ttknife'
-        alias ttknife
-        aws_keys ~/amazon_keys.sh
-        export EXTERNAL_DEBESYS="disabled"
-    else
-        echo $usage
-    fi
-}
 
 function tns()
 {
@@ -910,22 +861,16 @@ function tns()
 
 function rmchefnode()
 {
-    local hm=~
-    local config="-C $hm/.chef/knife.rb"
-    if [ "$EXTERNAL_DEBESYS" == "enabled" ]; then
-        config=" -C $hm/.chef/knife.external.rb"
-    fi
-
     if [ -z "$1" ]; then
         echo Usage: You must pass the node name.
         return
     fi
 
-    echo "ttknife $config node delete --yes $1"
-    /opt/virtualenv/devws/bin/python `git rev-parse --show-toplevel`/ttknife $config node delete --yes "$1"
+    echo "knife node delete --yes $1 --config ~/.chef/knife.rb"
+    knife node delete --yes "$1" --config ~/.chef/knife.rb
 
-    echo "ttknife $config client delete --yes $1"
-    /opt/virtualenv/devws/bin/python `git rev-parse --show-toplevel`/ttknife $config client delete --yes "$1"
+    echo "knife client delete --yes $1 --config ~/.chef/knife.rb"
+    knife  client delete --yes "$1" --config ~/.chef/knife.rb
 }
 
 function search_chef_environment()
