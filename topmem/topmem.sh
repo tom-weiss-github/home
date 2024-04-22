@@ -13,4 +13,4 @@ ps -e -orss=,args= |awk '{print $1 " " $2 }'| awk '{tot[$2]+=$1;count[$2]++} END
 echo "" >> $OUTPUT
 echo "--------------------PROCESS MEMORY WITH ARGUMENTS--------------------" >> $OUTPUT
 date --utc +%FT%TZ >> $OUTPUT
-ps -e -orss=,args= | sort -n | tail -n 13 | awk '{ hr=$1/1024; printf("%13.2fM", hr); print "\t" $2 " " $3 " " $4 " " $5 " " $6 " " $7 " " $8 " " $9 " " $10}' | tac >> $OUTPUT
+ps -e -orss=,args= | sort -n | tail -n 100 | awk '{ hr=$1/1024; printf("%13.2fM", hr); print "\t" $2 " " $3 " " $4 " " $5 " " $6 " " $7 " " $8 " " $9 " " $10}' | tac >> $OUTPUT
