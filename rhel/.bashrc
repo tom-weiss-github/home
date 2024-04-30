@@ -57,9 +57,6 @@ if [[ -f /usr/share/bash-completion/completions/git ]]; then
 fi
 
 if [[ $HOSTNAME == jchi* ]]; then
-    export NPM_CONFIG_PREFIX=~/.npm-global
-    export PATH=~/.npm-global/bin:$PATH
-
     PROXY_URL="proxy-jch-ext-prod-coreinfra.trade.tt"
     PROXY_PORT="3128"
     export http_proxy="http://$PROXY_URL:$PROXY_PORT"
@@ -1578,6 +1575,9 @@ function replication()
     if [[ $HOSTNAME == jchi* ]]; then
         echo "mount /home/tweiss/jch76vm40"
         mount /home/tweiss/jch76vm40
+    elif [[ $HOSTNAME == jln* ]]; then
+        echo "mount /home/tweiss/jln76vm40"
+        mount /home/tweiss/jln76vm40
     else
         echo "sudo mount.cifs -o user=tweiss //CHIJCHFS01.int.tt.local/Share /mnt/CHIJCHFS01"
         sudo mount.cifs -o user=tweiss //CHIJCHFS01.int.tt.local/Share /mnt/CHIJCHFS01
