@@ -21,6 +21,9 @@ Check UDP receive buffers (column 2).
 ! ls -l /usr/bin/chef-client | grep /var/debesys/chef-client -q
 Invert/negate the exit code of a command.
 
+fping -a -A -c 5 10.111.0.46 10.111.0.78 10.111.0.34 10.111.0.62
+Ping multiple servers in one command to check if they are reachable.
+
 
 free -g | grep Mem | tr -s " " | cut -d " " -f 2,3 | tr " " "/"
 free | grep Mem | awk '{print $3/$2 * 100.0}'

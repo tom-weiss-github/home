@@ -25,6 +25,10 @@ if [ -f ~/amazon_keys.sh ]; then
     source ~/amazon_keys.sh
 fi
 
+if [[ -f ~/machine_local_envs.sh ]]; then
+    source ~/machine_local_envs.sh
+fi
+
 function set_branch()
 {
     local branch=`__git_ps1`
