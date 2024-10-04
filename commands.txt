@@ -200,6 +200,9 @@ values, the second command gives the total number.
 cat /dir/file | sed -n -e '/2017-04-11/,$p' | xclip -i
 Send the contents of file to the clipboard once the string 2017-04-11 is encountered.
 
+sed -i 's/net_new_4/ip-10-210-21-218/g' /tmp/1
+Update file in place with sed.
+
 for i in {1..10}; do command; done
 Run a command in a loop on the command line.
 
@@ -509,6 +512,13 @@ export PS1="\h \w ROOT \n>"Set root's prompt in .bashrc:
 
 Backup dev workstation
 # rm dws-backup-tweiss.tar.gz; tar -cvpzf dws-backup-tweiss.tar.gz /home/tweiss --exclude=dev-root --exclude=githome --exclude=secdefnodecollection --exclude=jdks --exclude=.cache --exclude=.ivy2 --exclude=secdefcollection --exclude=emacs24_centos6.4 --exclude=emacs24 --exclude=share --exclude=.vagrant.d
+
+Overloaded Machines
+cmdr -e int-dev-cert -p slim --ex -C 'load=$(cat /proc/loadavg | cut -d " " -f 1); cores=$(nproc --all); if (( $(echo "$load > $cores" | bc -l) )); then echo CPU overloaded $cores cores $load load; echo -n $(hostname --short); cat /etc/motd | grep recipe | grep -v "Run List" | sed -E "s/recipe\[//g" | sed -E "s/].*//g" | tr "\n" " " | tr -s " "; fi'
+
+Busy/Overloaded Machines
+cmdr -e int-dev-cert -p slim --ex -C 'load=$(cat /proc/loadavg | cut -d " " -f 1); cores=$(nproc --all); if (( $(echo "$load*2 > $cores" | bc -l) )); then echo CPU busy or overloaded $cores cores $load load; echo -n $(hostname --short); cat /etc/motd | grep recipe | grep -v "Run List" | sed -E "s/recipe\[//g" | sed -E "s/].*//g" | tr "\n" " " | tr -s " "; fi'
+
 
 # Safe shutdown via ssh that tells me whether I could connect.
 cmdr -e `knife environment list | tr "\n" " "` -q "NOT (n:gl* OR n:sqe*)" -C "echo sudo shutdown -P now | sudo /usr/bin/at -M now + 1 minutes" --test-run

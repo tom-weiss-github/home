@@ -37,7 +37,8 @@ terminator='terminator.Terminator'
 # emacs='emacs-24_3.Emacs' Worked for compiled CentOS 6.
 emacs='emacs.Emacs'
 # browser='chromium.Chromium'
-browser='Navigator.firefox'
+# browser='Navigator.firefox'
+browser='google-chrome.Google-chrome'
 
 
 terminator_count=`wmctrl -lx | grep -o $terminator | wc -l`

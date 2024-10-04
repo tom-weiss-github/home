@@ -125,8 +125,9 @@ export PATH=$PATH:/opt/scala-2.9.3/bin/
 export INTAD_USER=tweiss
 export INTAD_SSH_KEY=~/.ssh/id_rsa
 export BCV_ENABLE_LDAP=1
+export SAML_BS=true
 export VCD_ORG=Dev_General
-export JENKINS_USER=tweiss
+export JENKINS_USER=tom.weiss@tradingtechnologies.com
 export TTID_EMAIL=tom.weiss+--ttsa@tradingtechnologies.com
 export TT_EMAIL=tom.weiss@tradingtechnologies.com
 if [ -f ~/jenkins_token ]; then
@@ -395,6 +396,11 @@ function ecnow()
 function eknifessh ()
 {
     eknife ssh "$1" "$2" --ssh-user $INTAD_USER --identity-file $INTAD_SSH_KEY -a ipaddress
+}
+
+function nodespretty()
+{
+    echo "$@" | tr " " "\n" | xargs -I '{}' -n 1 -i sh -c 'knife node show $1 -a chef_environment -a platform -a platform_version -a run_list -a tags; echo ""' - {}
 }
 
 function kitchenauth()
