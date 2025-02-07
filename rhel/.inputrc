@@ -15,3 +15,7 @@
 "\e[B": history-search-forward
 set show-all-if-ambiguous on
 set completion-ignore-case on
+
+# The number of possible completions that determines when the user should be asked
+# whether to list possibilies.  A negative value means Readline should never ask.
+set completion-query-items 500

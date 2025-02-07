@@ -60,15 +60,21 @@ if [[ -f /usr/share/bash-completion/completions/git ]]; then
     source /usr/share/bash-completion/completions/git
 fi
 
-if [[ $HOSTNAME == jchi* ]]; then
+if [[ $HOSTNAME == jch* ]]; then
     PROXY_URL="proxy-jch-ext-prod-coreinfra.trade.tt"
     PROXY_PORT="3128"
-    export http_proxy="http://$PROXY_URL:$PROXY_PORT"
-    export https_proxy="http://$PROXY_URL:$PROXY_PORT"
-    export HTTP_PROXY="http://$PROXY_URL:$PROXY_PORT"
-    export HTTPS_PROXY="http://$PROXY_URL:$PROXY_PORT"
-    export ALL_PROXY="http://$PROXY_URL:$PROXY_PORT"
 fi
+
+if [[ $HOSTNAME == jln* ]]; then
+    PROXY_URL="proxy-jch-ext-prod-coreinfra.trade.tt"
+    PROXY_PORT="3128"
+fi
+
+export http_proxy="http://$PROXY_URL:$PROXY_PORT"
+export https_proxy="http://$PROXY_URL:$PROXY_PORT"
+export HTTP_PROXY="http://$PROXY_URL:$PROXY_PORT"
+export HTTPS_PROXY="http://$PROXY_URL:$PROXY_PORT"
+export ALL_PROXY="http://$PROXY_URL:$PROXY_PORT"
 
 # History across terminal sessions.
 export HISTSIZE=20000
@@ -362,6 +368,26 @@ set_display()
     echo DISPLAY is $DISPLAY.
 }
 
+function ckhost()
+{
+    if [ -z "$1" ]; then
+        echo Check if hosts exist.
+        echo Usage: host? h1 h2 ... h2
+        return 1
+    fi
+
+    for host in "$@"
+    do
+        echo "Checking $host..."
+        knife node show $host > /dev/null 2>&1
+        if [[ $? -ne 0 ]]; then
+            echo "$host not found in Chef."
+        else
+            echo "$host found in Chef."
+        fi
+    done
+}
+
 function ja_test()
 {
     jsonattr -s ${1} -j '{"jenkins_agent": {"verify_prod_pypi_access": false}}'
@@ -447,6 +473,8 @@ function setchefconfig()
     elif [[ $1 == sy* || $1 == sg* || $1 == ln* || $1 == hk* ]]; then
         chef_config=~/.chef/knife.external.rb
     elif [[ $1 == ty* || $1 == sp* || $1 == bk* || $1 == ba* ]]; then
+        chef_config=~/.chef/knife.external.rb
+    elif [[ $1 == jsg* || $1 == jch* || $1 == jln* ]]; then
         chef_config=~/.chef/knife.external.rb
     elif [[ $1 == se* || $1 == tw* ]]; then
         chef_config=~/.chef/knife.external.rb
@@ -1589,9 +1617,25 @@ function replication()
         echo "mount /home/tweiss/jln76vm40"
         mount /home/tweiss/jln76vm40
     else
-        echo "sudo mount.cifs -o user=tweiss //CHIJCHFS01.int.tt.local/Share /mnt/CHIJCHFS01"
-        sudo mount.cifs -o user=tweiss //CHIJCHFS01.int.tt.local/Share /mnt/CHIJCHFS01
+        #echo "sudo mount.cifs -o user=tweiss //CHIJCHFS01.int.tt.local/Share /mnt/CHIJCHFS01"
+        #sudo mount.cifs -o user=tweiss //CHIJCHFS01.int.tt.local/Share /mnt/CHIJCHFS01
+        echo "sudo mkdir -p /mnt/cch1vm34"
+        sudo mkdir -p /mnt/cch1vm34
+        echo "sudo mount.cifs -o vers=2.1,user=tweiss //cch1vm34/Replication /mnt/cch1vm34"
+        sudo mount.cifs -o vers=2.1,user=tweiss //cch1vm34/Replication /mnt/cch1vm34
     fi
+}
+
+function dupe_devws()
+{
+    if [ -z "$1" ]; then
+        echo 'Invalid usage of dupe_devws: dupe_devws existing.'
+        return
+    fi
+
+    knife node show $1 -a cpu.total -a memory.total -a devws_base.intad_user
+    echo "nutanix -a -v -o -c gld --cpu 4 --memory 8 --version rh7.9 -f Mackinac"
+    echo "devwspy ./deploy/chef/scripts/chef_bootstrap.py --servers  --workstation --workstation-owner  --environment int-dev-workstation --creator tweiss -vo"
 }
 
 function fixfix()
