@@ -60,21 +60,23 @@ if [[ -f /usr/share/bash-completion/completions/git ]]; then
     source /usr/share/bash-completion/completions/git
 fi
 
-if [[ $HOSTNAME == jch* ]]; then
-    PROXY_URL="proxy-jch-ext-prod-coreinfra.trade.tt"
-    PROXY_PORT="3128"
-fi
+if [[ $HOSTNAME == jch* || $HOSTNAME == jln* ]]; then
+    if [[ $HOSTNAME == jch* ]]; then
+        PROXY_URL="proxy-jch-ext-prod-coreinfra.trade.tt"
+        PROXY_PORT="3128"
+    fi
 
-if [[ $HOSTNAME == jln* ]]; then
-    PROXY_URL="proxy-jch-ext-prod-coreinfra.trade.tt"
-    PROXY_PORT="3128"
-fi
+    if [[ $HOSTNAME == jln* ]]; then
+        PROXY_URL="proxy-jch-ext-prod-coreinfra.trade.tt"
+        PROXY_PORT="3128"
+    fi
 
-export http_proxy="http://$PROXY_URL:$PROXY_PORT"
-export https_proxy="http://$PROXY_URL:$PROXY_PORT"
-export HTTP_PROXY="http://$PROXY_URL:$PROXY_PORT"
-export HTTPS_PROXY="http://$PROXY_URL:$PROXY_PORT"
-export ALL_PROXY="http://$PROXY_URL:$PROXY_PORT"
+    export http_proxy="http://$PROXY_URL:$PROXY_PORT"
+    export https_proxy="http://$PROXY_URL:$PROXY_PORT"
+    export HTTP_PROXY="http://$PROXY_URL:$PROXY_PORT"
+    export HTTPS_PROXY="http://$PROXY_URL:$PROXY_PORT"
+    export ALL_PROXY="http://$PROXY_URL:$PROXY_PORT"
+fi
 
 # History across terminal sessions.
 export HISTSIZE=20000
@@ -127,6 +129,7 @@ export UPLOAD_RC_VERSION_HERE=/home/tweiss/dev-root/__deploy_alternate
 export PATH=$PATH:~/Downloads/meld-1.6.1/bin
 export PATH=$PATH:/opt/redis/redis-2.8.17/src
 export PATH=$PATH:/opt/scala-2.9.3/bin/
+export PATH=/opt/virtualenv/gittools/bin:$PATH # For jlnsdeployment
 # export PATH=$JAVA_HOME/bin:$PATH
 export INTAD_USER=tweiss
 export INTAD_SSH_KEY=~/.ssh/id_rsa
