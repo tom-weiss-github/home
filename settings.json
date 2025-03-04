@@ -55,6 +55,7 @@
     {
         "defaults": 
         {
+            "bellStyle": "none",
             "colorScheme": "Tom1",
             "font": 
             {
