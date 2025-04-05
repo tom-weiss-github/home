@@ -80,3 +80,5 @@ export PATH="$PATH:/home/tweiss/.local/bin"
 #     # from Axe Setup
 #     eval "$(direnv hook bash)"
 # fi
+
+tmux a -d
