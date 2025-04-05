@@ -183,9 +183,9 @@
 
 ;; Dimensions & Position
 ;; =====================
-(if window-system
-    (progn (set-frame-height (selected-frame) 39)    ;; Why 39?  Because it allows the emacs window to be entirely in screen
-           (set-frame-width (selected-frame)  120))) ;; on my laptop.
+;;(if window-system
+;;    (progn (set-frame-height (selected-frame) 71)    ;; Why 39?  Because it allows the emacs window to be entirely in screen
+;;           (set-frame-width (selected-frame) 110))) ;; on my laptop.
 ;; (setq default-frame-alist
 ;;       '((top . 5) (left . 3)
 ;;         (width . 220) (height . 63)))
