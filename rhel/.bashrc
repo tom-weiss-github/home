@@ -209,7 +209,7 @@ alias h='history | tail -n 50'
 alias hg='history | grep'
 alias rwbr='~/githome/setxtitle.sh $(__git_ps1)'
 alias vm16='ssh tweiss@10.202.0.16 -i ~/.ssh/id_rsa'
-alias clk='python ~/githome/world_time.py'
+alias clk='/usr/bin/python ~/githome/world_time.py'
 alias gdb='gdb -n'
 alias gt='gnome-terminal &'
 alias push='echo git push origin $b; git push origin $b'
@@ -1654,6 +1654,13 @@ function audit_spares()
     done
 
     knife search node "chef_environment:ext-prod-sparepool AND n:*vm*" -a tags -a run_list -a creation_info.date --config ~/.chef/knife.external.rb | less
+
+
+    echo ""
+    echo "Infomation for VM Decom:"
+    echo "Short Desription: Decommission VMs no longer needed."
+    echo "Justification: As part of periodic audits, these VMs were identified as no longer needed.  They are current in the sparepool and are not being actively used.  In most cases these VMs were created and associated with a change that was canceled."
+    echo "Not executing this change means that we will continue to keep these VMs running which will unnecessarily consume compute, memory, and license costs."
 }
 
 #

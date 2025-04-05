@@ -213,6 +213,13 @@ watch -n 1 ntpstat
 Run a command over and over (once per second).  In this case the command will
 indicate if ntp is synchronized.
 
+Check system power off and start times.
+who -b
+system boot  2025-02-16 15:25
+
+last -x | grep shutdown
+shutdown system down  3.10.0-1160.el7. Sat Feb 15 08:40 - 15:25 (1+06:45)
+
 service ntpd stop
 ntpd -gq
 service ntpd start
