@@ -64,11 +64,6 @@ fi
 # sudo echo .bash_profile ran at $(date) >> /var/log/profiles
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
-# For setting machine specific environment settings.
-if [[ -f ~/environment ]]; then
-    source ~/environment
-fi
-
 if [[ -n "${CD_HERE}" ]]; then
     cd ${CD_HERE}
 fi
@@ -76,9 +71,11 @@ fi
 # Created by `pipx` on 2021-05-26 15:07:17
 export PATH="$PATH:/home/tweiss/.local/bin"
 
-# if [[ $HOSTNAME == gld* ]]; then
-#     # from Axe Setup
-#     eval "$(direnv hook bash)"
-# fi
+# When I ssh to my glados-d workstation, attach to my tmux session automatically.
+if [[ $HOSTNAME == gld* ]]; then
+    if [[ -z $TMUX ]]; then
+        tmux a -d
+    fi
+fi
 
-tmux a -d
+echo "sourced ~/.bash_profile"
