@@ -16,6 +16,10 @@
             "id": "User.paste"
         },
         {
+            "command": "find",
+            "id": "User.find"
+        },
+        {
             "command": 
             {
                 "action": "splitPane",
@@ -23,10 +27,6 @@
                 "splitMode": "duplicate"
             },
             "id": "User.splitPane.A6751878"
-        },
-        {
-            "command": "find",
-            "id": "User.find"
         }
     ],
     "alwaysShowTabs": false,
@@ -45,12 +45,12 @@
             "keys": "ctrl+0"
         },
         {
-            "id": "User.find",
-            "keys": "ctrl+shift+f"
-        },
-        {
             "id": null,
             "keys": "ctrl+v"
+        },
+        {
+            "id": "User.find",
+            "keys": "ctrl+shift+f"
         },
         {
             "id": "User.copy.644BA8F2",
@@ -93,15 +93,29 @@
                 "name": "Command Prompt"
             },
             {
-                "guid": "{b453ae62-4e3d-5e58-b989-0a998ec441b8}",
-                "hidden": false,
-                "name": "Azure Cloud Shell",
-                "source": "Windows.Terminal.Azure"
-            },
-            {
                 "guid": "{3ec1f1b8-124d-5293-b847-6348e904e52d}",
                 "hidden": false,
                 "name": "Ubuntu-24.04",
+                "source": "Microsoft.WSL"
+            },
+            {
+                "commandline": "C:\\WINDOWS\\system32\\wsl.exe -d FedoraLinux-42 --cd ~",
+                "cursorShape": "filledBox",
+                "font": 
+                {
+                    "size": 13
+                },
+                "guid": "{3e598be6-a4c6-4987-8488-a01def815a08}",
+                "hidden": false,
+                "icon": "none",
+                "name": "Fedora",
+                "pathTranslationStyle": "wsl",
+                "suppressApplicationTitle": true
+            },
+            {
+                "guid": "{6292ebb7-a5c2-55de-82ec-4b883be166bf}",
+                "hidden": false,
+                "name": "FedoraLinux-42",
                 "source": "Microsoft.WSL"
             }
         ]
