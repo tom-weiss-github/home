@@ -435,6 +435,22 @@
 ;; C-h S (to search)
 
 
+;; Disable the bell.  First noticed this running Emacs via Ubuntu WSL2 via X.
+;;(setq visible-bell 1)
+(setq ring-bell-function 'ignore)
+
+(defun resize-and-move-frame (width height x-pos y-pos)
+  "Resize and move the selected frame to a specific geometry."
+  (interactive "nFrame width (in characters): \nnFrame height (in characters): \nnFrame X position (in pixels): \nnFrame Y position (in pixels): ")
+  (set-frame-size (selected-frame) width height)
+  (set-frame-position (selected-frame) x-pos y-pos))
+
+(defun resize-home ()
+  "Resize and set position to the preferred values on home office monitor."
+  (interactive)
+  (set-frame-size (selected-frame) 110 71)
+  (set-frame-position (selected-frame) 1150 0))
+
 ;; JUMP TO MATCHING PAREN: When standing _on_ paren, press '%' (shift-5)
 ;;(global-set-key "%" 'match-paren)
 ;;(defun match-paren (arg)
