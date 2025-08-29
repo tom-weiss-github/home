@@ -30,6 +30,7 @@
         }
     ],
     "alwaysShowTabs": false,
+    "confirmCloseAllTabs": false,
     "copyFormatting": "none",
     "copyOnSelect": true,
     "defaultProfile": "{3ec1f1b8-124d-5293-b847-6348e904e52d}",
@@ -132,5 +133,6 @@
         }
     ],
     "showTabsInTitlebar": false,
-    "themes": []
+    "themes": [],
+    "wordDelimiters": " \\()\"',:;<>~!@#$%^&*|+=[]{}~?\u2502"
 }
