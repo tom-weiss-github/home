@@ -32,6 +32,7 @@ RED='\033[91m'
 BOLD='\033[1m'
 ENDC='\033[0m'
 
+# The ~/display_check file is a trigger so that only happens on machines where I want it.
 if [[ -z "$TMUX" && -f ~/display_check ]]; then
     # The TMUX environment variable is not set, we're not inside tmux.
     if [[ $DISPLAY = *"10.0"* ]]; then
@@ -44,6 +45,14 @@ if [[ -z "$TMUX" && -f ~/display_check ]]; then
     echo ps -ef | grep sshd | grep tweiss@
     ps -ef | grep sshd | grep tweiss@
     echo "Run killmyssh to kill all current sessions."
+
+    ssh_count=$(ps -ef | grep sshd | grep tweiss@pts | wc -l)
+    if [[ ssh_count -eq 1 ]]; then
+        echo "This is the first ssh connection, starting tmux..."
+        tmux a -d
+    else
+        echo "There are ${ssh_count} ssh connections, not starting tmux."
+    fi
 fi
 
 # On git 1.7.1 merges did not open the editor, but when I switched to 1.9.1 they do.
@@ -72,10 +81,11 @@ fi
 export PATH="$PATH:/home/tweiss/.local/bin"
 
 # When I ssh to my glados-d workstation, attach to my tmux session automatically.
-if [[ $HOSTNAME == gld* ]]; then
-    if [[ -z $TMUX ]]; then
-        tmux a -d
-    fi
-fi
+# I can count the number of tweiss@pts in the ssh command above.  If there is only one then attach tmux.
+# if [[ $HOSTNAME == gld* ]]; then
+#     if [[ -z $TMUX ]]; then
+#         tmux a -d
+#     fi
+# fi
 
-echo "sourced ~/.bash_profile"
+# echo "sourced ~/.bash_profile"

@@ -180,7 +180,6 @@ export JAVA_8_265_HOME=/usr/java/jdk1.8.0_265/openjdk-8u265-b01
 # run /usr/java/jdk1.7.0_17/bin/java -Dversion="0.0.0" -cp ./ringer/target/Ringer.jar Ringer --srl-config /etc/debesys/srl_config_ringer.xml -v -o
 export MY_ONE_OFF_VERSION=0.88.88
 export ENABLE_POST_TO_SERVICENOW=1
-export BUMP_COOKBOOK_EMAIL_ON_PYTHON_PACKAGE_EXCEPTION=1
 export PYTHONWARNINGS="ignore"
 
 alias exc="knife search node \"chef_environment:ext-prod-live AND recipe:exchange_compliance*\" -a run_list --config ~/.chef/knife.external.rb"
@@ -1497,49 +1496,6 @@ function xbump()
     done
 }
 
-function eftxfer()
-{
-    usage="eftxfer COMPANY_ID\n"
-    if [[ -z "$1" ]]; then
-        printf "$usage"
-        return
-    fi
-
-    homedir=~
-    eval homedir=$homedir
-
-    if [[ ! -d $homedir/compliance/${1} ]]; then
-        echo "Directory $homedir/compliance/${1} not found!"
-        return
-    fi
-
-    if [[ ! -f $homedir/.ssh/scp_private_key.pem ]]; then
-        echo "Missing authentication key $homedir/.ssh/scp_private_key.pem!"
-        return
-    fi
-
-    transfer_count=`/bin/ls -1 $homedir/compliance/${1} | wc -l`
-    echo "Transferring $transfer_count files from $homedir/compliance/${1} to /TT_NextGen/tt_company_${1} in 10 seconds."
-    for i in $(seq 1 10); do echo -n ".";  sleep 1; done
-    echo ""
-
-    echo "progress" > /tmp/transfer.${1}.sftp
-    echo "cd /TT_NextGen/tt_company_${1}" >> /tmp/transfer.${1}.sftp
-    echo "put $homedir/compliance/${1}/*" >> /tmp/transfer.${1}.sftp
-
-    sftp -oIdentityFile=$homedir/.ssh/scp_private_key.pem Debesys@10.111.0.200 < /tmp/transfer.${1}.sftp
-
-    echo ""
-    echo "Transfer completed."
-    echo ""
-    echo "Your EFT compliance restore is complete (${transfer_count} files were restored)."
-    echo "Restores happen in chunks of a month (you may get more files than requested)."
-    echo "The files are available in your company's EFT folder (company id ${1}).  Please"
-    echo "make sure to collect these files as they will automatically be purged after 30 days."
-    echo "Also please ensure newly created files are being regularly collected."
-
-}
-
 function dedicated()
 {
     commands="The following commands were used to generate the data:\n"
@@ -1816,4 +1772,4 @@ alias killmyssh='ps -ef | grep sshd | grep tweiss@ | tr -s " " | cut -d" " -f 2 
 # Created by `pipx` on 2021-05-26 15:07:17
 export PATH="$PATH:/home/tweiss/.local/bin"
 
-echo "sourced ~/.bashrc"
+# echo "sourced ~/.bashrc"

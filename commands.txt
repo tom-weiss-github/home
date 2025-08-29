@@ -542,3 +542,7 @@ for commits_ago in $(seq 1 100); do
     fi
     echo There were ${count} sy vms on $(git show -s --format=%ci HEAD).
 done
+
+
+cmdr -e ext-prod-live ext-prod-md-pp -d hong_kong -C '/usr/sbin/ifconfig vlan774; exit $((! $?))' --test-run
+# The exit part is useful to invert/reverse the exit code.
