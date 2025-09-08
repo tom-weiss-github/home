@@ -451,6 +451,12 @@
   (set-frame-size (selected-frame) 110 71)
   (set-frame-position (selected-frame) 1150 0))
 
+(defun resize-work ()
+  "Resize and set position to the preferred values on work office monitor."
+  (interactive)
+  (set-frame-size (selected-frame) 124 80)
+  (set-frame-position (selected-frame) 1278 0))
+
 ;; JUMP TO MATCHING PAREN: When standing _on_ paren, press '%' (shift-5)
 ;;(global-set-key "%" 'match-paren)
 ;;(defun match-paren (arg)
