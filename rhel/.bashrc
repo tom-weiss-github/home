@@ -1772,4 +1772,44 @@ alias killmyssh='ps -ef | grep sshd | grep tweiss@ | tr -s " " | cut -d" " -f 2 
 # Created by `pipx` on 2021-05-26 15:07:17
 export PATH="$PATH:/home/tweiss/.local/bin"
 
+function menu()
+{
+    PS3="Please select an option: " # PS3 is the prompt string for the select command
+    options=("SSH to gld1vm89 (RH7)" "tmux and mount workstation" "SSH to gld2vm30 (RH9)" "Exit Menu")
+
+    select opt in "${options[@]}"
+    do
+        case $opt in
+            "SSH to gld1vm89 (RH7)")
+                autossh -X 10.195.1.89
+                break
+                ;;
+            "tmux and mount workstation")
+                tmux list-session | grep --quiet my_session
+                exit_code=$?
+                if [[ $exit_code -eq 0 ]]; then
+                    tmux a -d -t my_session
+                else
+                    # tmux new-session -d -s my_session \; split-window -v \; split-window -v \; select-layout even-vertical \; attach-session
+                    tmux new-session -d -s my_session  '~/githome/mount_workstation.sh; exec $SHELL' \; split-window -v 'tail -f /var/log/syslog | grep mount; exec $SHELL' \; split-window -v \; select-layout even-vertical \; attach-session
+                fi
+                break
+                ;;
+            "SSH to gld2vm30 (RH9)")
+                autossh -X 10.195.2.30
+                break
+                ;;
+            "Exit Menu")
+                echo "Exiting the menu. Goodbye!"
+                break # 'break' exits the select loop
+                ;;
+            *)
+                echo "---"
+                echo "Invalid option $REPLY. Please enter the number corresponding to your choice."
+                echo "---"
+                ;;
+        esac
+    done
+}
+
 # echo "sourced ~/.bashrc"

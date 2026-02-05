@@ -2,6 +2,8 @@
 logger_prefix="mount_workstation"
 output_file=/tmp/sshfs_output
 
+echo "running mount_workstation.sh"
+
 while true; do
     ssh 10.195.1.89 true > /dev/null 2>&1
     exit_code=$?
