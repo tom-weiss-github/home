@@ -25,6 +25,11 @@ if [ -f ~/amazon_keys.sh ]; then
     source ~/amazon_keys.sh
 fi
 
+if [[ -f ~/.bashrc.d/claude-env.sh ]]; then
+    source ~/.bashrc.d/claude-env.sh
+fi
+export PATH=$PATH:~/node_modules/.bin
+
 if [[ -f ~/machine_local_envs.sh ]]; then
     source ~/machine_local_envs.sh
 fi
