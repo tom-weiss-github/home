@@ -21,14 +21,19 @@ jira = Jira(
 
 def get_current_sprints(board_id):
     """
-    Returns a list of sprint names.
+    board_id: The Jira board id (use the Jira website to find the id).
+
+    Returns a dictionary whose keys are sprint names (prefixes) and value is a list of sprints.
     """
-    result = []
+    result = dict()
     sprints = jira.get_all_sprint(board_id, state='active,future')
     for sprint in sprints.get('values', []):
         # print("name='{}' state='{}'".format(sprint.get('name'),
         #                                     sprint.get('state')))
-        result.append(sprint.get('name'))
+        title, enddate = sprint.get('name').rsplit(' ', 1)
+        if title not in result:
+            result[title] = list()
+        result[title].append(sprint.get('name'))
     return result
 
 
@@ -80,17 +85,23 @@ if __name__ == "__main__":
 
     if args.action == 'list':
         for board in args.boards:
-            print("")
-            print("Board {}\n{}\n".format(board, "\n".join(get_current_sprints(board))))
+            sprints = get_current_sprints(board)
+            print("\nBoard {}".format(board))
+            for sprint,sprint_names in sprints.items():
+                print("\n".join(sprint_names))
+
     elif args.action == 'create':
         for board in args.boards:
-            last_sprint_name = get_current_sprints(board)[-1]
-            next_sprint_name = create_next_sprint_name(last_sprint_name)
-            print("Board {}'s latest is '{}', next is '{}'.".format(
-                board, last_sprint_name, next_sprint_name))
-            answer = input("Continue (y/n): ")
-            if answer in ['y', 'yes']:
-                print("Creating sprint '{}'".format(next_sprint_name))
-                create_new_sprint(board, next_sprint_name)
-            else:
-                print("(no action taken)")
+            sprints = get_current_sprints(board)
+            for sprint,sprint_names in sprints.items():
+                last_sprint_name = sprint_names[-1]
+                next_sprint_name = create_next_sprint_name(last_sprint_name)
+
+                print("Board {}'s latest is '{}', next is '{}'.".format(
+                    board, last_sprint_name, next_sprint_name))
+                answer = input("Continue (y/n): ")
+                if answer in ['y', 'yes']:
+                    print("Creating sprint '{}'".format(next_sprint_name))
+                    create_new_sprint(board, next_sprint_name)
+                else:
+                    print("(no action taken)")
