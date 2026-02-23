@@ -8,8 +8,6 @@ USERNAME = "tom.weiss@tradingtechnologies.com"
 with open("/home/tweiss/jira_token") as tfile:
     API_TOKEN = tfile.readline().strip()
 
-BOARD_ID = 217
-
 # Initialize Jira connection
 jira = Jira(
     url=JIRA_URL,
@@ -104,4 +102,4 @@ if __name__ == "__main__":
                     print("Creating sprint '{}'".format(next_sprint_name))
                     create_new_sprint(board, next_sprint_name)
                 else:
-                    print("(no action taken)")
+                    print("(no action taken)\n")
