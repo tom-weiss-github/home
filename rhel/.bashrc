@@ -1780,7 +1780,7 @@ export PATH="$PATH:/home/tweiss/.local/bin"
 function menu()
 {
     PS3="Please select an option: " # PS3 is the prompt string for the select command
-    options=("SSH to gld1vm89 (RH7)" "tmux and mount workstation" "SSH to gld2vm30 (RH9)" "Exit Menu")
+    options=("SSH to gld1vm89 (RH7)" "tmux and mount workstation" "SSH to gld2vm30 (RH9)" "SSH to jchitweiss (RH7 jumpbox)" "Exit Menu")
 
     select opt in "${options[@]}"
     do
