@@ -146,8 +146,8 @@
         }
     ],
     "showTabsInTitlebar": false,
+    "startupActions": "new-tab -p \"Ubuntu-24.04\" --title gld2vm30 ; new-tab -p \"Ubuntu-24.04\"; new-tab -p \"Ubuntu-24.04\" --title jumpbox; focus-tab -t 0",
     "themes": [],
     "warning.confirmCloseAllTabs": false,
-	"startupActions": "new-tab -p \"Ubuntu-24.04\" --title gld1vm89 ; new-tab -p \"Ubuntu-24.04\"; new-tab -p \"Ubuntu-24.04\" --title gld2vm30; focus-tab -t 0",
-    "wordDelimiters": " \\()\"',:;<>~!@#$%^&*|+=[]{}~?\u2502"
+    "wordDelimiters": " \\()\"',;<>~!@#$%^&*|+=[]{}~?\u2502"
 }
