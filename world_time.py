@@ -1,15 +1,12 @@
 # -*- mode: python -*-
 
-# The mode can be on the second line:
-#!/usr/bin/env python2.7
-# -*- mode: python -*-
-
-import datetime
 import time
 import re
 import sys
 import argparse
 import os
+from zoneinfo import ZoneInfo
+from datetime import datetime
 
 def print_time(location, a_time, dst="", delta=""):
     print("{0:12s} {1:02d}:{2:02d}:{3:02d} {4:02d}/{5:02d}/{6:04d} {7} {8}".format(
@@ -17,9 +14,11 @@ def print_time(location, a_time, dst="", delta=""):
             a_time.day, a_time.year, delta, dst))
 
 def print_tz_time(place, timezone, dst_info):
-    os.environ['TZ'] = timezone
-    now = datetime.datetime.now()
-    print_time(place, now, dst_info, time.strftime('%z'))
+    now = datetime.now(ZoneInfo(timezone))
+    my_tz = now.astimezone(ZoneInfo("America/Chicago")).utcoffset().total_seconds()
+    yo_tz = now.astimezone(ZoneInfo(timezone)).utcoffset().total_seconds()
+    delta = (yo_tz - my_tz) / 3600
+    print_time(place, now, dst_info, delta)
 
 if 1 == time.localtime().tm_isdst:
     is_dst_in_effect = True
