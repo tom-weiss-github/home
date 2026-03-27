@@ -1804,6 +1804,10 @@ function menu()
                 autossh -X 10.195.2.30
                 break
                 ;;
+            "SSH to jchitweiss (RH7 jumpbox)")
+                autossh -X 10.211.73.25
+                break
+                ;;
             "Exit Menu")
                 echo "Exiting the menu. Goodbye!"
                 break # 'break' exits the select loop
