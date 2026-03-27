@@ -8,8 +8,6 @@ USERNAME = "tom.weiss@tradingtechnologies.com"
 with open("/home/tweiss/jira_token") as tfile:
     API_TOKEN = tfile.readline().strip()
 
-BOARD_ID = 217
-
 # Initialize Jira connection
 jira = Jira(
     url=JIRA_URL,
@@ -30,7 +28,14 @@ def get_current_sprints(board_id):
     for sprint in sprints.get('values', []):
         # print("name='{}' state='{}'".format(sprint.get('name'),
         #                                     sprint.get('state')))
-        title, enddate = sprint.get('name').rsplit(' ', 1)
+
+        # This code is built to support names like 'Deployment DDMMMYYYY', if others are found,
+        # we'll skip them.
+        sprint_name = sprint.get('name')
+        if len(sprint_name.rsplit(' ', 1)) != 2:
+            # print("skipping {}".format(sprint_name))
+            continue
+        title, enddate = sprint_name.rsplit(' ', 1)
         if title not in result:
             result[title] = list()
         result[title].append(sprint.get('name'))
@@ -104,4 +109,4 @@ if __name__ == "__main__":
                     print("Creating sprint '{}'".format(next_sprint_name))
                     create_new_sprint(board, next_sprint_name)
                 else:
-                    print("(no action taken)")
+                    print("(no action taken)\n")
