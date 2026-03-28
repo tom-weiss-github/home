@@ -120,6 +120,8 @@ export LBM_LICENSE_FILENAME=~/29WestLicense.txt
 export MANAGER="Tom Weiss"
 export DEPT=""
 
+export LANG=en_US.UTF-8
+
 # Cause the dynamic linker to resolve all symbols at program startup.  Useful to ensure uncalled
 # functions won't fail resolution at runtime.  I had to turn off this because the ringer development
 # in scala caused an LBM symbol to not be recognized and failed to run.  To unset use:
