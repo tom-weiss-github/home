@@ -17,6 +17,16 @@ jira = Jira(
 )
 
 
+def is_valid_date(date_string):
+    try:
+        # Use %d%b%Y for DDMMMYYYY format
+        datetime.strptime(date_string, "%d%b%Y")
+        return True
+    except ValueError:
+        # Returns False if format is incorrect or date is invalid
+        return False
+
+
 def get_current_sprints(board_id):
     """
     board_id: The Jira board id (use the Jira website to find the id).
@@ -32,9 +42,17 @@ def get_current_sprints(board_id):
         # This code is built to support names like 'Deployment DDMMMYYYY', if others are found,
         # we'll skip them.
         sprint_name = sprint.get('name')
+        try:
+            date_suffix = sprint_name.rsplit(' ', 1)[-1]
+            if not is_valid_date(date_suffix):
+                continue
+        except:
+            continue
+
         if len(sprint_name.rsplit(' ', 1)) != 2:
             # print("skipping {}".format(sprint_name))
             continue
+
         title, enddate = sprint_name.rsplit(' ', 1)
         if title not in result:
             result[title] = list()
@@ -62,14 +80,15 @@ def create_new_sprint(board_id, sprint_name, days_duration=14):
 
     # Format dates for Jira API (ISO 8601)
     start_str = start_date.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
+
     end_str = end_date.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
 
     try:
         response = jira.create_sprint(
             board_id=board_id,
             name=sprint_name,
-            start_date=start_str,
-            end_date=end_str
+            start_date=None,
+            end_date=None
         )
         print(f"Successfully created sprint: {sprint_name} (ID: {response['id']})")
         return response

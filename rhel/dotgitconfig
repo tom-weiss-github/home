@@ -19,7 +19,8 @@
 	pager = less -F -X
 
 [diff]
-        tool = meld
+        # tool = meld
+        tool = kdiff3
 
 [difftool]
         prompt = false
