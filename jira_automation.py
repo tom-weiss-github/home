@@ -87,8 +87,8 @@ def create_new_sprint(board_id, sprint_name, days_duration=14):
         response = jira.create_sprint(
             board_id=board_id,
             name=sprint_name,
-            start_date=None,
-            end_date=None
+            start_date=start_str,
+            end_date=end_str
         )
         print(f"Successfully created sprint: {sprint_name} (ID: {response['id']})")
         return response
