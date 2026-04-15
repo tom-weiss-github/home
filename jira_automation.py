@@ -35,6 +35,12 @@ def get_current_sprints(board_id):
         if len(sprint_name.rsplit(' ', 1)) != 2:
             # print("skipping {}".format(sprint_name))
             continue
+
+        final_token = sprint_name.rsplit(' ')[-1]
+        if len(final_token) != 9:
+            # print("skipping {}".format(sprint_name))
+            continue
+
         title, enddate = sprint_name.rsplit(' ', 1)
         if title not in result:
             result[title] = list()

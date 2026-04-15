@@ -220,6 +220,7 @@ alias gdb='gdb -n'
 alias gt='gnome-terminal &'
 alias push='echo git push origin $b; git push origin $b'
 alias swarm="/opt/virtualenv/devws/bin/python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/swarm.py --verbose "
+alias _def='cd ~/dev-root/__deploy_default'
 alias rr='cd `git rev-parse --show-toplevel`'
 # alias vc="$DEPLOYMENT_SCRIPTS_REPO_ROOT/run python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/view_changes.py "
 export TEMP_VM_CHEF_ENV=int-dev-cert
