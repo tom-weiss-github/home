@@ -72,7 +72,7 @@ if [[ $HOSTNAME == jch* || $HOSTNAME == jln* ]]; then
     fi
 
     if [[ $HOSTNAME == jln* ]]; then
-        PROXY_URL="proxy-jch-ext-prod-coreinfra.trade.tt"
+        PROXY_URL="proxy-jln-ext-prod-coreinfra.trade.tt"
         PROXY_PORT="3128"
     fi
 
@@ -1825,3 +1825,18 @@ function menu()
 }
 
 # echo "sourced ~/.bashrc"
+
+
+tfauth ()
+{
+    ARG1=${1:-deb};
+    if [[ $HOSTNAME == jch* || $HOSTNAME == jln* ]]; then
+        ARG1=${1:-prod};
+    fi
+    unset AWS_SESSION_TOKEN;
+    unset AWS_SECRET_ACCESS_KEY;
+    unset AWS_ACCESS_KEY_ID;
+    export TF_VAR_INTAD_USER=$INTAD_USER;
+    export TF_VAR_INTAD_SSH_KEY=$INTAD_SSH_KEY;
+    $(/opt/virtualenv/devws3/bin/python $DEPLOYMENT_SCRIPTS_REPO_ROOT/deploy/chef/scripts/aws_authenticator.py --env --role tf --account "$ARG1")
+}
