@@ -16,7 +16,7 @@
 [core]
 	editor = emacs -nw
 	excludesfile = ~/.gitignore_global
-	pager = less -F -X
+	pager = delta
 
 [diff]
         tool = meld
@@ -61,3 +61,7 @@
 	default = nothing
 [gc]
 	auto = 0
+[interactive]
+	diffFilter = delta --color-only
+[delta]
+	side-by-side = true
