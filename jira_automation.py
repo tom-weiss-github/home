@@ -87,9 +87,9 @@ if __name__ == "__main__":
     descr = ("Tool for managing Jira sprints.")
     parser = argparse.ArgumentParser(description=descr)
     parser.add_argument('-b', '--boards', action='store', nargs="+",
-                        default=["217", "545"],
+                        default=["7576"],
                         help=("A space separated list of board ids, if not provided the default is"
-                              "'217 545'."))
+                              "'217 9238 7576'."))
     parser.add_argument('-a', '--action', action='store', choices=['list', 'create'],
                         help=("The action to take."))
     args = parser.parse_args()
