@@ -1,4 +1,6 @@
 import argparse
+import sys
+import json
 from atlassian import Jira
 from datetime import datetime, timedelta
 
@@ -17,7 +19,7 @@ jira = Jira(
 )
 
 
-def get_current_sprints(board_id):
+def get_current_sprints(board_id, verbose=False):
     """
     board_id: The Jira board id (use the Jira website to find the id).
 
@@ -26,8 +28,9 @@ def get_current_sprints(board_id):
     result = dict()
     sprints = jira.get_all_sprint(board_id, state='active,future')
     for sprint in sprints.get('values', []):
-        # print("name='{}' state='{}'".format(sprint.get('name'),
-        #                                     sprint.get('state')))
+        if verbose:
+            print("name='{}' state='{}' id='{}' originBoardId='{}'".format(
+                sprint.get('name'), sprint.get('state'), sprint.get('id'), sprint.get('originBoardId')))
 
         # This code is built to support names like 'Deployment DDMMMYYYY', if others are found,
         # we'll skip them.
@@ -83,20 +86,43 @@ def create_new_sprint(board_id, sprint_name, days_duration=14):
         print(f"Failed to create sprint: {e}")
 
 
+def delete_sprint(sprint_identifier):
+    sprint_info = None
+    try:
+        sprint_info = jira.get_sprint(sprint_identifier)
+    except Exception as e:
+        print(f"Unable to find sprint {sprint_identifier}.")
+        return
+
+    print("\nSprint '{}' Information:".format(sprint_identifier))
+    print(json.dumps(sprint_info, indent=4))
+    answer = input("\nAre you sure you want to delete this sprint (y/n)? ")
+    if answer in ['y', 'yes']:
+        try:
+            jira.delete_sprint(sprint_identifier)
+            print(f"Successfully delete sprint {sprint_identifier}.")
+        except Exception as e:
+            print(f"Failed to delete sprint {sprint_identifier}: {e}")
+
+
 if __name__ == "__main__":
     descr = ("Tool for managing Jira sprints.")
     parser = argparse.ArgumentParser(description=descr)
     parser.add_argument('-b', '--boards', action='store', nargs="+",
                         default=["7576"],
                         help=("A space separated list of board ids, if not provided the default is"
-                              "'217 9238 7576'."))
-    parser.add_argument('-a', '--action', action='store', choices=['list', 'create'],
+                              "'7576'."))
+    parser.add_argument('-a', '--action', action='store', choices=['list', 'create', 'delete-sprint'],
                         help=("The action to take."))
+    parser.add_argument('--sprint-to-delete', action='store', default=None,
+                        help=("Sprint identifier; required if -a/--action is delete-sprint."))
+    parser.add_argument('-v', '--verbose', action='store_true', default=False,
+                        help=("Prints extra information on various commands."))
     args = parser.parse_args()
 
     if args.action == 'list':
         for board in args.boards:
-            sprints = get_current_sprints(board)
+            sprints = get_current_sprints(board, verbose=args.verbose)
             print("\nBoard {}".format(board))
             for sprint,sprint_names in sprints.items():
                 print("\n".join(sprint_names))
@@ -116,3 +142,9 @@ if __name__ == "__main__":
                     create_new_sprint(board, next_sprint_name)
                 else:
                     print("(no action taken)\n")
+
+    elif args.action == 'delete-sprint':
+        if args.sprint_to_delete is None:
+            print("Error! You must pass --sprint-to-delete (sprint identifier) when -a/--action is 'delete-sprint'.")
+            sys.exit(1)
+        delete_sprint(args.sprint_to_delete)
