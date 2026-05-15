@@ -19,13 +19,12 @@
 	pager = delta
 
 [diff]
-        tool = meld
+        context = 20
 
 [difftool]
         prompt = false
 
 [merge]
-        #tool = meld
         tool = ediff
         conflictstyle = diff3
         # tool = emerge
