@@ -7,7 +7,9 @@
 # ![string] run last command which contained string
 # echo ![string] print last command which contained string
 
-. /etc/profile.d/vte.sh
+if [ -f /etc/profile.d/vte.sh ]; then
+    . /etc/profile.d/vte.sh
+fi
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
